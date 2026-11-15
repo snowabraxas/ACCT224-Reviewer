@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ACCT224 Reviewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EDEA; --paper:#FBFCFA; --ink:#17222D; --muted:#5A6570; --rule:#D3DDD7; --rule2:#E6ECE8;
+  --field:#FFFFFF; --fieldline:#B9C5BE;
+  --ok:#2E7A47; --okbg:#E3F2E8; --bad:#B3261E; --badbg:#FBE7E5;
+  --w2:#1E6E8C; --w3:#6A4AA5; --w4:#A9680C; --w5:#B23452; --w6:#1F7A4D; --w7:#3B4FA6; --w8:#B6552C;
+  --w2s:#DCEDF3; --w3s:#EAE3F5; --w4s:#F6EBD9; --w5s:#F6E0E5; --w6s:#DFF1E6; --w7s:#E2E5F5; --w8s:#F3E3D8;
+  --shadow:0 1px 0 rgba(23,34,45,.06),0 8px 24px -12px rgba(23,34,45,.25);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#11171C; --paper:#1A2229; --ink:#E4EAEE; --muted:#9AA6B0; --rule:#2C3842; --rule2:#232D35;
+    --field:#121A20; --fieldline:#3A4853;
+    --ok:#6FCB8E; --okbg:#173325; --bad:#F08A80; --badbg:#3A1D1B;
+    --w2:#5DB7D8; --w3:#AC90E4; --w4:#E4A64C; --w5:#EE7C95; --w6:#4FBE86; --w7:#9AA7EA; --w8:#E8926B;
+    --w2s:#16323D; --w3s:#2A2340; --w4s:#382A14; --w5s:#3B1C25; --w6s:#13301F; --w7s:#242B4A; --w8s:#3A2418;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11171C; --paper:#1A2229; --ink:#E4EAEE; --muted:#9AA6B0; --rule:#2C3842; --rule2:#232D35;
+  --field:#121A20; --fieldline:#3A4853;
+  --ok:#6FCB8E; --okbg:#173325; --bad:#F08A80; --badbg:#3A1D1B;
+  --w2:#5DB7D8; --w3:#AC90E4; --w4:#E4A64C; --w5:#EE7C95; --w6:#4FBE86; --w7:#9AA7EA; --w8:#E8926B;
+  --w2s:#16323D; --w3s:#2A2340; --w4s:#382A14; --w5s:#3B1C25; --w6s:#13301F; --w7s:#242B4A; --w8s:#3A2418;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--wc,var(--w2));outline-offset:2px}
+.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 64px}
+
+/* header */
+header.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.1;margin:0;font-weight:800;letter-spacing:-.02em}
+.sub{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+.seg{display:inline-flex;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:3px;box-shadow:var(--shadow)}
+.seg button{border:0;background:transparent;padding:8px 14px;border-radius:7px;cursor:pointer;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.testseg{margin:0 0 10px}
+.testseg button{font-size:.92rem}
+.overview{--wc:var(--w2);background:var(--paper);border-left:4px solid var(--wc);border-radius:0 10px 10px 0;box-shadow:var(--shadow);margin:0 0 16px;padding:2px 2px}
+.overview summary{cursor:pointer;list-style:none;font-weight:700;padding:10px 14px;color:var(--wc);display:flex;align-items:center;gap:8px}
+.overview summary::-webkit-details-marker{display:none}
+.overview summary::before{content:"\25B8";display:inline-block;transition:transform .15s}
+.overview[open] summary::before{transform:rotate(90deg)}
+.overview .ov-body{padding:0 16px 14px;max-width:78ch;color:var(--ink)}
+.overview .ov-body p{margin:0}
+.ghost{border:1px solid var(--rule);background:var(--paper);border-radius:8px;padding:8px 12px;cursor:pointer;font-weight:500;color:var(--muted)}
+.ghost:hover{color:var(--ink)}
+
+/* binder tabs */
+.tabs{display:flex;gap:4px;padding-left:14px;position:relative;z-index:2;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{--wc:var(--w2);flex:0 0 auto;border:0;cursor:pointer;background:var(--wc);color:#fff;border-radius:10px 10px 0 0;padding:9px 16px 10px;text-align:left;min-width:150px;opacity:.55;transform:translateY(5px);transition:transform .15s,opacity .15s}
+:root[data-theme="dark"] .tab{color:#0E141A}
+.tab:hover{opacity:.8;transform:translateY(2px)}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab .wk{display:block;font-weight:800;font-size:1.05rem;line-height:1.1}
+.tab .tp{display:block;font-size:.78rem;line-height:1.25;opacity:.95}
+.tab .bar{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.35);margin-top:7px;overflow:hidden}
+.tab .bar i{display:block;height:100%;background:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab{color:#0E141A} :root:not([data-theme="light"]) .tab .bar{background:rgba(0,0,0,.25)} :root:not([data-theme="light"]) .tab .bar i{background:#0E141A}}
+:root[data-theme="dark"] .tab .bar{background:rgba(0,0,0,.25)} :root[data-theme="dark"] .tab .bar i{background:#0E141A}
+
+/* mixed controls */
+.mixbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.chip{--wc:var(--w2);border:2px solid var(--wc);background:transparent;color:var(--wc);border-radius:999px;padding:5px 12px;font-weight:600;cursor:pointer;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--wc);color:var(--paper)}
+.mixbar .spacer{flex:1}
+.count{color:var(--muted);font-size:.92rem}
+
+/* sheet */
+.sheet{--wc:var(--w2);background:var(--paper);border-radius:6px 12px 12px 12px;box-shadow:var(--shadow);position:relative;border-top:6px solid var(--wc);padding:18px 18px 24px 34px;
+  background-image:linear-gradient(to right,transparent 22px,var(--wc) 22px,var(--wc) 25px,transparent 25px);}
+.sheet.mixed{border-radius:12px}
+.pnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.pn{border:1px solid var(--rule);background:var(--field);border-radius:7px;min-width:36px;height:34px;padding:0 8px;cursor:pointer;font-weight:600;position:relative;color:var(--muted)}
+.pn[aria-current="true"]{border-color:var(--wc);color:var(--wc);box-shadow:inset 0 0 0 1px var(--wc)}
+.pn.done{background:var(--wcs,var(--okbg));color:var(--ok);border-color:var(--ok)}
+.pn.qz{border-style:dashed;border-width:1.5px}
+.pn.fl::after{content:"\2691";position:absolute;top:-9px;right:-6px;font-size:.8rem;line-height:1;color:var(--paper);background:var(--ink);border-radius:999px;padding:2px 3px}
+.flag{margin-left:auto;border:1.5px solid var(--rule);background:var(--field);color:var(--muted);border-radius:999px;padding:4px 12px;font-weight:600;font-size:.85rem;cursor:pointer}
+.flag[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip.flagchip{--wc:var(--ink)}
+.notebtn{margin-left:auto}
+.notebtn + .flag{margin-left:0}
+.note-area{margin:12px 0 4px;max-width:78ch;border-left:4px solid var(--wc);background:var(--wcs);border-radius:0 8px 8px 0;padding:10px 12px}
+.note-area[hidden]{display:none}
+.note-area label{display:block;font-weight:700;font-size:.85rem;margin-bottom:4px}
+.note-area textarea{width:100%;border:1.5px solid var(--fieldline);border-radius:7px;background:var(--field);padding:8px 10px;font:inherit;resize:vertical;min-height:72px}
+.note-saved{font-size:.78rem;color:var(--muted);min-height:1em;margin-top:3px}
+.pn.nt::before{content:"\270E";position:absolute;bottom:-8px;right:-6px;font-size:.72rem;line-height:1;background:var(--wc);color:var(--paper);border-radius:999px;padding:2px 3px}
+.notesp{background:var(--paper);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px;margin-bottom:18px}
+.notesp[hidden]{display:none}
+.notesp h3{margin:0 0 4px;font-size:1.1rem}
+.notesp .count{margin:0 0 8px}
+.ni{border-top:1px solid var(--rule);padding:10px 0;display:grid;gap:6px}
+.ni .nt-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.ni .nt-head b{font-weight:700}
+.ni .nt-text{white-space:pre-wrap;margin:0;max-width:78ch;border-left:3px solid var(--wc);padding-left:10px}
+.ni button{justify-self:start}
+.legend{align-self:center;font-size:.78rem;color:var(--muted);margin-left:6px}
+.pn.part{box-shadow:inset 0 -4px 0 var(--wc)}
+button:disabled{opacity:.35;cursor:default}
+.phead{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:6px}
+.tag{display:inline-block;background:var(--wc);color:var(--paper);font-weight:700;font-size:.78rem;border-radius:5px;padding:2px 8px;white-space:nowrap}
+h2{font-size:1.35rem;line-height:1.25;margin:0;font-weight:800;letter-spacing:-.01em}
+.src{color:var(--muted);font-size:.85rem}
+.given{margin:14px 0 6px;max-width:78ch}
+.given p{margin:0 0 10px}
+.given ul{margin:0 0 10px;padding-left:20px}
+.tw{overflow-x:auto;margin:6px 0 14px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;font-size:.9rem;min-width:min(100%,420px)}
+th,td{padding:5px 10px;border-bottom:1px solid var(--rule2);text-align:left;vertical-align:top}
+th{font-weight:700;border-bottom:2px solid var(--rule);background:var(--wcs)}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
+.parts{margin-top:10px;border-top:2px solid var(--rule)}
+.part{padding:16px 0 14px;border-bottom:1px dashed var(--rule)}
+.q{margin:0 0 10px;font-weight:600;max-width:78ch}
+.q b.pl{color:var(--wc);margin-right:6px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px 14px}
+.fld label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:3px;line-height:1.3}
+.inp{display:flex;align-items:stretch;border:1.5px solid var(--fieldline);border-radius:7px;background:var(--field);overflow:hidden}
+.inp span{display:flex;align-items:center;padding:0 8px;color:var(--muted);font-size:.85rem;background:var(--rule2)}
+.inp input,.inp select{border:0;background:transparent;padding:7px 9px;width:100%;min-width:0;text-align:right;outline:none}
+.inp select{text-align:left;cursor:pointer}
+.inp:focus-within{border-color:var(--wc);box-shadow:0 0 0 2px var(--wcs)}
+.fld.ok .inp{border-color:var(--ok);background:var(--okbg)}
+.fld.bad .inp{border-color:var(--bad);background:var(--badbg)}
+.fb{font-size:.8rem;min-height:1.1em;margin-top:2px}
+.fld.ok .fb{color:var(--ok)} .fld.bad .fb{color:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{border:0;background:var(--wc);color:var(--paper);font-weight:700;border-radius:7px;padding:8px 14px;cursor:pointer}
+.btn2{border:1.5px solid var(--wc);background:transparent;color:var(--wc);font-weight:600;border-radius:7px;padding:7px 12px;cursor:pointer}
+.steps{display:none;margin-top:12px;background:var(--wcs);border-radius:8px;padding:12px 14px;font-size:.92rem;max-width:80ch}
+.steps.open{display:block}
+.fx{display:none;margin-top:12px;border:1.5px solid var(--wc);border-radius:8px;padding:10px 14px;font-size:.92rem;max-width:80ch;background:var(--field)}
+.fx.open{display:block}
+.fx .ln{display:grid;grid-template-columns:minmax(150px,1fr) 2.2fr;gap:2px 14px;padding:4px 0;border-bottom:1px solid var(--rule2)}
+.fx .ln:last-child{border-bottom:0}
+.fx .ln b{font-weight:600;color:var(--wc)}
+.xtag{display:inline-block;border:1.5px solid var(--muted);color:var(--muted);font-weight:600;font-size:.75rem;border-radius:5px;padding:1px 7px}
+@media (max-width:600px){.fx .ln{grid-template-columns:1fr}}
+.steps .ln{display:grid;grid-template-columns:minmax(120px,1.1fr) 2fr;gap:2px 14px;padding:3px 0;border-bottom:1px solid color-mix(in srgb,var(--wc) 18%,transparent)}
+.steps .ln:last-child{border-bottom:0}
+.steps .ln b{font-weight:600}
+.steps p{margin:6px 0}
+.steps .note{color:var(--muted);font-size:.85rem}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.foot .btn{min-width:130px}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+.overall{font-size:.85rem;color:var(--muted)}
+@media (max-width:600px){
+  .wrap{padding:14px 10px 56px}
+  .sheet{padding:14px 12px 20px 26px;background-image:linear-gradient(to right,transparent 14px,var(--wc) 14px,var(--wc) 17px,transparent 17px)}
+  .tab{min-width:118px;padding:8px 12px 9px}
+  .fields{grid-template-columns:1fr 1fr}
+  .steps .ln{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>ACCT224 Reviewer</h1>
+      <p class="sub">In-class problems and Connect quiz problems from Modules 2 to 8, rebuilt for practice. Type your answer, check it, then open the worked steps.</p>
+    </div>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Practice mode">
+        <button id="mWeek" aria-pressed="true">Week by week</button>
+        <button id="mMix" aria-pressed="false">Mixed practice</button>
+      </div>
+      <button class="ghost" id="notesBtn" aria-expanded="false">My notes</button>
+      <button class="ghost" id="reset" title="Clear all saved answers">Reset progress</button>
+    </div>
+  </header>
+
+  <section class="notesp" id="notesPanel" hidden aria-label="My notes"></section>
+  <div id="weekUI">
+    <div class="seg testseg" role="group" aria-label="Test coverage" id="testseg"></div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <details class="overview" id="overview"></details>
+  </div>
+  <div id="mixUI" hidden>
+    <div class="mixbar">
+      <span class="count">Include:</span>
+      <span id="chips" style="display:contents"></span>
+      <span class="spacer"></span>
+      <button class="ghost" id="shuffle">Shuffle again</button>
+    </div>
+  </div>
+
+  <main class="sheet" id="sheet"></main>
+  <p class="overall"><span id="overall"></span> <span id="sync"></span></p>
+</div>
+
+<script>
+/* ---------- helpers for building given-data tables ---------- */
+const isNum = s => typeof s === 'string' && /^[\s$(\-–+]*[\d.,]+[%)x×]*\s*(days|times|units)?$/.test(s.trim());
+function tb(head, rows, totRows){
+  totRows = totRows || [];
+  let h = '<div class="tw"><table>';
+  if (head) h += '<thead><tr>' + head.map((c,i)=>`<th class="${i&&isNum('1')?'n':''}">${c}</th>`).join('') + '</tr></thead>';
+  h += '<tbody>' + rows.map((r,ri)=>`<tr class="${totRows.includes(ri)?'tot':''}">` + r.map((c,i)=>`<td class="${i>0 && (isNum(String(c))||c==='') ?'n':''}">${c}</td>`).join('') + '</tr>').join('') + '</tbody></table></div>';
+  return h;
+}
+const L = (a,b) => `<div class="ln"><b>${a}</b><span>${b}</span></div>`;
+const M = ['Jan','Feb','Mar','Apr','May','Jun'];
+const monthFields = (vals, u, extra) => vals.map((v,i)=>Object.assign({l:M[i], a:v, u:u||'$'}, extra||{}));
+
+const WEEK_NUMS=[2,3,4,5,6,7,8];
+const WEEKS = {
+  2:{name:'Week 2', topic:'Financial statements and cash flow', mod:'Module 2'},
+  3:{name:'Week 3', topic:'Ratio analysis', mod:'Module 3'},
+  4:{name:'Week 4', topic:'Forecasting: production and cash flows', mod:'Module 4'},
+  5:{name:'Week 5', topic:'Cash budget, pro forma and RNF', mod:'Module 5'},
+  6:{name:'Week 6', topic:'Working capital financing and interest rates', mod:'Module 6'},
+  7:{name:'Week 7', topic:'Cash, receivables and inventory management', mod:'Module 7'},
+  8:{name:'Week 8', topic:'Sources of short-term financing', mod:'Module 8'}
+};
+const TESTS = {
+  1:{name:'Test 1 Reviewer', weeks:[2,3,4,5]},
+  2:{name:'Test 2 Reviewer', weeks:[6,7,8]}
+};
+const testOf = w => TESTS[1].weeks.includes(w) ? 1 : 2;
+const OVERVIEWS = {
+  2:`<p>The income statement and balance sheet, and how the statement of cash flows is built from the change in each balance-sheet account between two periods. Operating cash flow starts from net income (earnings after tax) and adds back non-cash charges such as amortization; investing and financing activities capture everything else — asset purchases and sales, new debt and share issues, repayments, and dividends paid.</p>`,
+  3:`<p>Ratio analysis: profitability ratios (profit margin, return on assets, return on equity), asset-utilization ratios (turnover and period ratios for receivables, inventory, payables and total assets), liquidity ratios (current and quick ratio) and debt/coverage ratios (debt-to-assets, times interest earned). The DuPont method breaks ROA and ROE into their component ratios so you can see what’s actually driving a change in profitability.</p>`,
+  4:`<p>Forecasting production and cash flows: building a production budget from projected unit sales and a desired ending-inventory policy, costing that production (materials, labour, overhead), and turning the result into a month-by-month schedule of cash receipts (from the collection pattern on credit sales) and cash payments (for materials, labour, overhead and other fixed costs).</p>`,
+  5:`<p>Putting the monthly cash receipts and payments together into a cash budget with a minimum cash balance, borrowing and repaying a line of credit as needed. Then the percent-of-sales method is used to build a pro forma balance sheet and solve for required new funds (RNF) — the external financing a sales increase requires — and the sustainable growth rate (SGR), the fastest a firm can grow without raising new equity.</p>`,
+  6:`<p>Short-term vs. long-term financing strategies for working capital — aggressive, conservative and the matching (hedging) principle — and how to compare the cost of different financing plans. Also: converting many different interest-rate quotes (simple annual rates, monthly rates, rates over a period of days) onto the same annualized basis so they can be compared directly.</p>`,
+  7:`<p>Managing the components of working capital day to day: speeding up cash collection with a lockbox or concentration-banking service, deciding whether to extend more liberal credit to customers (and calculating the return on that investment in receivables), and sizing inventory orders with the economic order quantity (EOQ) model, including the effect of safety stock.</p>`,
+  8:`<p>Sources of short-term financing and their true annualized cost: trade credit (and the cost of forgoing an early-payment discount), interest-bearing bank loans, compensating-balance loans, discounted loans, and commercial paper sold at a discount. Every method reduces to the same style of formula — R = (Interest ÷ Principal) × (365 ÷ Days) — so the alternatives can be compared on an apples-to-apples basis.</p>`
+};
+
+/* ---------- shared data blocks ---------- */
+const KRAMER_IS = tb(['Kramer Corporation income statement, 20XX',''],[
+ ['Sales','$2,000,000'],['Cost of goods sold','1,500,000'],['Gross profit','500,000'],['Selling and administrative expenses','220,000'],['Amortization expense','50,000'],['Operating profit (EBIT)','230,000'],['Interest expense','20,000'],['Earnings before taxes (EBT)','210,000'],['Taxes','99,500'],['Earnings after taxes (EAT)','$110,500']],[9]);
+
+const KRAMER_BS = tb(['Kramer Corporation balance sheet','20XX','20XW'],[
+ ['Cash','40,000','30,000'],['Marketable securities','10,000','10,000'],['Accounts receivable','200,000','170,000'],['Inventory','180,000','160,000'],['Prepaid expenses','20,000','30,000'],['Total current assets','450,000','400,000'],
+ ['Investments (long-term)','50,000','20,000'],['Plant and equipment','1,100,000','1,000,000'],['Less: accumulated amortization','(600,000)','(550,000)'],['Net plant and equipment','500,000','450,000'],['Total assets','1,000,000','870,000'],
+ ['Accounts payable','80,000','45,000'],['Notes payable','100,000','100,000'],['Accrued expenses','30,000','35,000'],['Total current liabilities','210,000','180,000'],['Long-term debt (bonds)','90,000','40,000'],['Total liabilities','300,000','220,000'],
+ ['Preferred stock','50,000','50,000'],['Common stock (100,000 shares)','350,000','350,000'],['Retained earnings','300,000','250,000'],['Shareholders\u2019 equity','700,000','650,000'],['Total liabilities and equity','1,000,000','870,000']],[5,10,14,16,20,21]);
+
+const SOLITUDE_BS = tb(['Solitude Corporation balance sheet','20XX','20XW'],[
+ ['Cash','77,490','29,520'],['Accounts receivable','59,040','66,420'],['Inventory','154,980','132,840'],['Total current assets','291,510','228,780'],
+ ['Equipment','136,530','110,700'],['Less: accumulated amortization','(33,210)','(22,140)'],['Net plant and equipment','103,320','88,560'],['Total assets','394,830','317,340'],
+ ['Accounts payable','62,730','36,900'],['Taxes payable','7,380','14,760'],['Total current liabilities','70,110','51,660'],
+ ['Common stock','243,540','221,400'],['Retained earnings','81,180','44,280'],['Total shareholders\u2019 equity','324,720','265,680'],['Total liabilities and equity','394,830','317,340']],[3,7,10,13,14]);
+
+const SAXTON = `<p>Saxton Company financial statements, 20XX.</p>` +
+ tb(['Balance sheet',''],[['Cash','30,000'],['Marketable securities','50,000'],['Accounts receivable','350,000'],['Inventory','370,000'],['Total current assets','800,000'],['Net plant and equipment','800,000'],['Total assets','1,600,000'],
+ ['Accounts payable','50,000'],['Notes payable','250,000'],['Total current liabilities','300,000'],['Long-term liabilities','300,000'],['Total liabilities','600,000'],['Common stock','400,000'],['Retained earnings','600,000'],['Total liabilities and equity','1,600,000']],[4,6,9,11,14]) +
+ tb(['Income statement',''],[['Sales (all credit)','4,000,000'],['Cost of goods sold','3,000,000'],['Gross profit','1,000,000'],['Selling and admin. expense (includes $50,000 lease payments)','450,000'],['Operating profit','550,000'],['Interest expense','50,000'],['Extraordinary loss','100,000'],['Net income before tax','400,000'],['Taxes (50%)','200,000'],['Net income','200,000']],[9]) +
+ `<p>Use a 365-day year.</p>`;
+
+const GOLDMAN_BASE = `<p>Goldman Corporation sells wheels and casters. Forecast period: January to June.</p>` +
+ tb(['Projected sales','Wheels','Casters'],[['Quantity (units)','1,000','2,000'],['Sales price','$30','$35']]) +
+ tb(['Beginning inventory','Wheels','Casters'],[['Quantity (units)','85','180'],['Cost per unit','$16','$20']]) +
+ tb(['New unit costs','Wheels','Casters'],[['Materials','$10','$12'],['Labour','5','6'],['Overhead','3','4'],['Total','$18','$22']],[3]) +
+ `<p>Desired ending inventory is 10% of unit sales for the period. Inventory uses FIFO (old units are sold first).</p>`;
+
+const HOWARD_BS = tb(['Howard Corporation balance sheet (sales $200,000)',''],[
+ ['Cash','$5,000'],['Accounts receivable','40,000'],['Inventory','25,000'],['Total current assets','70,000'],['Equipment','50,000'],['Total assets','$120,000'],
+ ['Accounts payable','$40,000'],['Accrued expenses','10,000'],['Notes payable','15,000'],['Total liabilities','65,000'],['Common stock','10,000'],['Retained earnings','45,000'],['Total liabilities and equity','$120,000']],[3,5,9,12]) +
+ `<p>All assets, accounts payable and accrued expenses vary directly with sales. Notes payable, common stock and retained earnings do not. After-tax profit margin is 6% and the dividend payout ratio is 50%.</p>`;
+
+/* ---------- problem bank ---------- */
+const P = [
+/* ======================= WEEK 2 ======================= */
+{id:'kramer-val', w:2, t:'Kramer Corporation: per-share valuation', src:'ICQ Module 2, valuation basics',
+ g:`<p>Use Kramer's income statement. Preferred dividends paid were $10,500 and common dividends paid were $50,000. There are 100,000 common shares outstanding and the market price is $12 per share.</p>` + KRAMER_IS,
+ parts:[
+  {q:'Find earnings available to common shareholders and EPS.', f:[{l:'Earnings available to common',a:100000,u:'$'},{l:'EPS',a:1.00,u:'$',tol:.01}],
+   s:L('Available to common','EAT − preferred dividends = 110,500 − 10,500 = $100,000')+L('EPS','100,000 ÷ 100,000 shares = $1.00')},
+  {q:'Find the payout ratio, P/E ratio and dividend yield.', f:[{l:'Payout ratio',a:50,u:'%'},{l:'P/E ratio',a:12,u:'x'},{l:'Dividend yield',a:4.17,u:'%'}],
+   s:L('Dividend per share','50,000 ÷ 100,000 = $0.50')+L('Payout ratio','DPS ÷ EPS = 0.50 ÷ 1.00 = 50%')+L('P/E','Price ÷ EPS = 12 ÷ 1.00 = 12.0×')+L('Dividend yield','DPS ÷ price = 0.50 ÷ 12 = 4.2%')}
+ ]},
+{id:'dover', w:2, t:'Dover River Company: EPS, payout and P/E', src:'ICQ Module 2, Problem 2',
+ g:`<p>Dover River Company has operating profit (EBIT) of $200,000. Interest expense is $10,000, preferred dividends paid were $18,750 and common dividends paid were $30,000. Taxes paid were $38,250. There are 20,000 common shares outstanding.</p>`,
+ parts:[
+  {q:'Calculate earnings available to common shareholders, EPS and common dividends per share.', f:[{l:'Earnings available to common',a:133000,u:'$'},{l:'EPS',a:6.65,u:'$',tol:.01},{l:'Dividends per share',a:1.50,u:'$',tol:.01}],
+   s:L('EBT','200,000 − 10,000 = 190,000')+L('EAT','190,000 − 38,250 = 151,750')+L('Available to common','151,750 − 18,750 = $133,000')+L('EPS','133,000 ÷ 20,000 = $6.65')+L('DPS','30,000 ÷ 20,000 = $1.50')},
+  {q:'Calculate the payout ratio and the increase in retained earnings.', f:[{l:'Payout ratio',a:22.6,u:'%'},{l:'Increase in retained earnings',a:103000,u:'$'}],
+   s:L('Payout','DPS ÷ EPS = 1.50 ÷ 6.65 = 22.6%')+L('Increase in RE','133,000 − 30,000 = $103,000')},
+  {q:'If the share price is $41.23, calculate the P/E ratio.', f:[{l:'P/E ratio',a:6.2,u:'x'}],
+   s:L('P/E','41.23 ÷ 6.65 = 6.2×')}
+ ]},
+{id:'carr', w:2, t:'Carr Auto Wholesalers: percent-of-sales income statement', src:'ICQ Module 2, Problem 10',
+ g:`<p>Sales were $900,000. Cost of goods sold is 65% of sales and selling and administrative expenses are 9% of sales. Amortization is $10,000, interest expense is $8,000 and the tax rate is 30%.</p>
+ <p>Ms. Hood proposes raising selling and administrative expenses to 12% of sales, which would raise sales to $1,000,000 and lower cost of goods sold to 60% of sales. Amortization stays at $10,000, interest rises to $15,000 and the tax rate stays at 30%.</p>`,
+ parts:[
+  {q:'a. Compute operating profit and earnings after taxes under the current plan.', f:[{l:'Operating profit',a:224000,u:'$'},{l:'Earnings after taxes',a:151200,u:'$'}],
+   s:L('COGS','65% × 900,000 = 585,000 → gross profit 315,000')+L('S&A','9% × 900,000 = 81,000')+L('Operating profit','315,000 − 81,000 − 10,000 = 224,000')+L('EBT','224,000 − 8,000 = 216,000')+L('Taxes','30% × 216,000 = 64,800')+L('EAT','$151,200')},
+  {q:'b. Compute revised earnings after taxes under Ms. Hood\u2019s plan and the change in profit.', f:[{l:'Revised EAT',a:178500,u:'$'},{l:'Change in EAT',a:27300,u:'$'},{l:'Effect on profitability',a:'Increase',choice:['Increase','Decrease']}],
+   s:L('Gross profit','1,000,000 − 600,000 = 400,000')+L('Operating profit','400,000 − 120,000 − 10,000 = 270,000')+L('EBT','270,000 − 15,000 = 255,000')+L('Taxes','30% × 255,000 = 76,500')+L('EAT','$178,500')+L('Change','178,500 − 151,200 = +$27,300, so profitability increases')}
+ ]},
+{id:'kramer-cf', w:2, t:'Kramer Corporation: statement of cash flows', src:'ICQ Module 2, in-class example',
+ g:`<p>Prepare Kramer's statement of cash flows for 20XX. EAT was $110,500 and amortization was $50,000. Preferred dividends paid were $10,500. Use the change in retained earnings to work out the common dividends paid.</p>` + KRAMER_BS,
+ parts:[
+  {q:'Changes in non-cash working capital. Enter each cash effect (use a minus sign or brackets for cash used).', f:[{l:'Accounts receivable',a:-30000,u:'$'},{l:'Inventory',a:-20000,u:'$'},{l:'Prepaid expenses',a:10000,u:'$'},{l:'Accounts payable',a:35000,u:'$'},{l:'Accrued expenses',a:-5000,u:'$'},{l:'Net change in working capital',a:-10000,u:'$'}],
+   s:L('Asset rule','An increase in a current asset uses cash; a decrease provides cash')+L('Liability rule','An increase in a current liability provides cash; a decrease uses cash')+L('AR','200,000 − 170,000 = +30,000 increase → (30,000)')+L('Inventory','+20,000 increase → (20,000)')+L('Prepaids','−10,000 decrease → +10,000')+L('AP','+35,000 increase → +35,000')+L('Notes payable','No change → 0')+L('Accrued','−5,000 decrease → (5,000)')+L('Net','(10,000)')},
+  {q:'Cash from operating and investing activities.', f:[{l:'Operating activities',a:150500,u:'$'},{l:'Investing activities',a:-130000,u:'$'}],
+   s:L('Operating','110,500 + 50,000 amortization − 10,000 = $150,500')+L('Investments','50,000 − 20,000 = (30,000)')+L('Plant and equipment (gross)','1,100,000 − 1,000,000 = (100,000)')+L('Investing','(130,000)')},
+  {q:'Cash from financing activities and the net change in cash.', f:[{l:'Common dividends paid',a:50000,u:'$'},{l:'Financing activities',a:-10500,u:'$'},{l:'Net increase in cash',a:10000,u:'$'}],
+   s:L('Total dividends','RE change = 110,500 − dividends → 50,000 = 110,500 − 60,500, so total dividends 60,500')+L('Common dividends','60,500 − 10,500 preferred = 50,000')+L('Financing','+50,000 bonds − 10,500 − 50,000 = (10,500)')+L('Net change','150,500 − 130,000 − 10,500 = $10,000')+L('Check','Cash 30,000 → 40,000 ✓')}
+ ]},
+{id:'solitude', w:2, t:'Solitude Corporation: statement of cash flows', src:'ICQ Module 2, Problem 25',
+ g:`<p>During 20XX net income was $73,800. Equipment was bought for cash and none was sold. Shares were sold for cash. Cash dividends were declared and paid.</p>` + SOLITUDE_BS,
+ parts:[
+  {q:'Find amortization expense and the cash effect of each working capital change.', f:[{l:'Amortization',a:11070,u:'$'},{l:'Accounts receivable',a:7380,u:'$'},{l:'Inventory',a:-22140,u:'$'},{l:'Accounts payable',a:25830,u:'$'},{l:'Taxes payable',a:-7380,u:'$'},{l:'Net change in working capital',a:3690,u:'$'}],
+   s:L('Amortization','Change in accumulated amortization: 33,210 − 22,140 = 11,070')+L('AR','Decrease of 7,380 → +7,380')+L('Inventory','Increase of 22,140 → (22,140)')+L('AP','Increase of 25,830 → +25,830')+L('Taxes payable','Decrease of 7,380 → (7,380)')+L('Net','+3,690')},
+  {q:'Cash from operating, investing and financing activities.', f:[{l:'Operating activities',a:88560,u:'$'},{l:'Investing activities',a:-25830,u:'$'},{l:'Shares issued',a:22140,u:'$'},{l:'Dividends paid',a:-36900,u:'$'},{l:'Financing activities',a:-14760,u:'$'}],
+   s:L('Operating','73,800 + 11,070 + 3,690 = 88,560')+L('Investing','Equipment 136,530 − 110,700 = (25,830)')+L('Shares issued','243,540 − 221,400 = 22,140')+L('Dividends','44,280 + 73,800 − 81,180 = 36,900 paid')+L('Financing','22,140 − 36,900 = (14,760)')},
+  {q:'Net increase in cash for the year.', f:[{l:'Net increase in cash',a:47970,u:'$'}],
+   s:L('Net','88,560 − 25,830 − 14,760 = 47,970')+L('Check','29,520 + 47,970 = 77,490 ✓')}
+ ]},
+{id:'coastal', w:2, t:'Coastal Pipeline Corp.: free cash flow', src:'ICQ Module 2, similar to Problem 35',
+ g:`<p>Coastal Pipeline expects cash flow from operating activities of $8 million. It must spend $1.5 million on capital investments. Common dividends are projected at $0.6 million and preferred dividends at $0.25 million.</p>`,
+ parts:[
+  {q:'What is projected free cash flow? Answer in $ millions to 2 decimals.', f:[{l:'Free cash flow ($ millions)',a:5.65,u:'$M',tol:.005}],
+   s:L('FCF','8.00 − 1.50 − 0.60 − 0.25 = $5.65 million')}
+ ]},
+
+/* ======================= WEEK 3 ======================= */
+{id:'sax-prof', w:3, t:'Saxton Company: profitability ratios', src:'ICQ Module 3, Saxton illustration',
+ g: SAXTON + `<p>Industry averages: profit margin 6.5%, gross margin 28%, ROA 9.75%, ROE 15%, equity multiplier 1.5×.</p>`,
+ parts:[
+  {q:'Calculate profit margin and gross profit margin.', f:[{l:'Profit margin',a:5,u:'%'},{l:'Gross profit margin',a:25,u:'%'},{l:'Profit margin vs industry',a:'Below average',choice:['Above average','Below average']}],
+   s:L('Profit margin','200,000 ÷ 4,000,000 = 5%')+L('Gross margin','1,000,000 ÷ 4,000,000 = 25%')+L('Assessment','5% < 6.5% → below average')},
+  {q:'Calculate ROA, the equity multiplier and ROE.', f:[{l:'Return on assets',a:12.5,u:'%'},{l:'Equity multiplier',a:1.6,u:'x'},{l:'Return on equity',a:20,u:'%'}],
+   s:L('ROA','200,000 ÷ 1,600,000 = 12.5% (or 5% × 2.5 turnover)')+L('Equity multiplier','1,600,000 ÷ 1,000,000 = 1.6×')+L('ROE','12.5% × 1.6 = 20% (or 200,000 ÷ 1,000,000)')}
+ ]},
+{id:'sax-util', w:3, t:'Saxton Company: asset utilization ratios', src:'ICQ Module 3, Saxton illustration',
+ g: SAXTON + `<p>Industry averages: receivables turnover 10×, collection period 36 days, inventory turnover 7×, inventory holding 52 days, AP turnover 12×, AP period 30 days, capital asset turnover 5.4×, total asset turnover 1.5×.</p>`,
+ parts:[
+  {q:'Receivables: turnover and average collection period.', f:[{l:'Receivables turnover',a:11.4,u:'x'},{l:'Average collection period',a:32,u:'days',tol:.6}],
+   s:L('Turnover','4,000,000 ÷ 350,000 = 11.4×')+L('Daily credit sales','4,000,000 ÷ 365 = 10,959')+L('Collection period','350,000 ÷ 10,959 = 32 days')},
+  {q:'Inventory: turnover (use COGS) and holding period.', f:[{l:'Inventory turnover',a:8.1,u:'x'},{l:'Inventory holding period',a:45,u:'days',tol:.6}],
+   s:L('Turnover','3,000,000 ÷ 370,000 = 8.1×')+L('Daily COGS','3,000,000 ÷ 365 = 8,219')+L('Holding period','370,000 ÷ 8,219 = 45 days')},
+  {q:'Payables: turnover and payment period. How does Saxton compare to the industry?', f:[{l:'AP turnover',a:60,u:'x',tol:.1},{l:'AP period',a:6.1,u:'days',tol:.15},{l:'Assessment',a:'Poor',choice:['Good','Poor']}],
+   s:L('AP turnover','3,000,000 ÷ 50,000 = 60.0×')+L('AP period','50,000 ÷ 8,219 = 6.1 days')+L('Assessment','Paying in 6 days vs 30 days industry → poor use of supplier credit')},
+  {q:'Capital asset turnover and total asset turnover.', f:[{l:'Capital asset turnover',a:5.0,u:'x'},{l:'Total asset turnover',a:2.5,u:'x'}],
+   s:L('Capital asset turnover','4,000,000 ÷ 800,000 = 5.0×')+L('Total asset turnover','4,000,000 ÷ 1,600,000 = 2.5×')}
+ ]},
+{id:'sax-liq', w:3, t:'Saxton Company: liquidity and debt ratios', src:'ICQ Module 3, Saxton illustration',
+ g: SAXTON + `<p>Fixed charges are interest plus lease payments.</p>`,
+ parts:[
+  {q:'Liquidity: current ratio and quick ratio.', f:[{l:'Current ratio',a:2.67,u:'x',tol:.01},{l:'Quick ratio',a:1.43,u:'x',tol:.01}],
+   s:L('Current','800,000 ÷ 300,000 = 2.67')+L('Quick','(800,000 − 370,000) ÷ 300,000 = 1.43')},
+  {q:'Debt utilization: debt to total assets, times interest earned and fixed charge coverage.', f:[{l:'Debt to total assets',a:37.5,u:'%'},{l:'Times interest earned',a:11,u:'x'},{l:'Fixed charge coverage',a:6,u:'x'}],
+   s:L('Debt to assets','600,000 ÷ 1,600,000 = 37.5%')+L('TIE','EBIT ÷ interest = 550,000 ÷ 50,000 = 11×')+L('Income before fixed charges and taxes','550,000 + 50,000 lease = 600,000')+L('Fixed charges','50,000 interest + 50,000 lease = 100,000')+L('Fixed charge coverage','600,000 ÷ 100,000 = 6×')}
+ ]},
+{id:'pony', w:3, t:'Pony Express Company: ROA, ROE and profit margin', src:'ICQ Module 3, Problem 16',
+ g:`<p>Pony Express has $750,000 in assets and $300,000 of debt. Income for the year is $55,000.</p>`,
+ parts:[
+  {q:'a. Calculate ROA.  b. Calculate return on shareholders\u2019 equity.', f:[{l:'ROA',a:7.33,u:'%',tol:.02},{l:'ROE',a:12.22,u:'%',tol:.02}],
+   s:L('ROA','55,000 ÷ 750,000 = 7.33%')+L('Equity','750,000 − 300,000 = 450,000')+L('ROE','55,000 ÷ 450,000 = 12.22% (or 7.33% × 1.67 equity multiplier)')},
+  {q:'c. If asset turnover is 2.2 times, what is the profit margin?', f:[{l:'Sales',a:1650000,u:'$'},{l:'Profit margin',a:3.33,u:'%',tol:.04}],
+   s:L('Sales','750,000 × 2.2 = 1,650,000')+L('Profit margin','55,000 ÷ 1,650,000 = 3.3%')}
+ ]},
+{id:'baker', w:3, t:'Baker Oats: DuPont relationship', src:'ICQ Module 3, Problem 17',
+ g:`<p>Baker Oats had asset turnover of 1.6 times and a return on total assets of 11.2%.</p><p>The next year, on the same level of assets, turnover fell to 1.4 times and profit margin was 8%.</p>`,
+ parts:[
+  {q:'a. What was Baker\u2019s profit margin in the first year?', f:[{l:'Profit margin',a:7,u:'%'}],
+   s:L('Rearrange','Profit margin = ROA ÷ asset turnover')+L('Result','11.2% ÷ 1.6 = 7.0%')},
+  {q:'b. What is the new ROA, and how did it change?', f:[{l:'New ROA',a:11.2,u:'%'},{l:'Change',a:'No change',choice:['Increased','Decreased','No change']}],
+   s:L('New ROA','8% × 1.4 = 11.2%')+L('Conclusion','Unchanged: the higher margin offset the lower turnover')}
+ ]},
+{id:'uguess', w:3, t:'U Guessed It Company: build the balance sheet from ratios', src:'ICQ Module 3, Problem 37',
+ g:`<p>Sales (all credit) were $20 million. COGS was 80% of sales. Round balance sheet amounts to the nearest $1,000 and use a 365-day year.</p>` +
+ tb(['Ratio','Value'],[['Sales to total assets','2.0 times'],['Total debt to total assets','40%'],['Current ratio','3.0 times'],['Inventory turnover (COGS basis)','4.0 times'],['Average collection period','18.0 days'],['Capital asset turnover','5.0 times']]),
+ parts:[
+  {q:'Asset side.', f:[{l:'Total assets',a:10000000,u:'$'},{l:'Inventory',a:4000000,u:'$'},{l:'Accounts receivable',a:986000,u:'$',tol:1000},{l:'Capital assets',a:4000000,u:'$'},{l:'Total current assets',a:6000000,u:'$'},{l:'Cash',a:1014000,u:'$',tol:1000}],
+   s:L('Total assets','20M ÷ 2.0 = 10M')+L('COGS','80% × 20M = 16M')+L('Inventory','16M ÷ 4.0 = 4M')+L('AR','18 × (20M ÷ 365 = 54,795) = 986,301 → 986,000')+L('Capital assets','20M ÷ 5.0 = 4M')+L('Current assets','10M − 4M = 6M')+L('Cash','6M − 4M − 986,000 = 1,014,000')},
+  {q:'Liabilities and equity side.', f:[{l:'Total debt',a:4000000,u:'$'},{l:'Current debt',a:2000000,u:'$'},{l:'Long-term debt',a:2000000,u:'$'},{l:'Equity',a:6000000,u:'$'}],
+   s:L('Total debt','10M × 40% = 4M')+L('Current debt','6M ÷ 3.0 = 2M')+L('Long-term debt','4M − 2M = 2M')+L('Equity','10M − 4M = 6M')}
+ ]},
+
+/* ======================= WEEK 4 ======================= */
+{id:'alonso', w:4, t:'Alonso Corporation: expected sales value', src:'ICQ Module 4, Problem 1',
+ g:tb(['Outcome','Probability','Units','Price'],[['A','.30','200','$15'],['B','.50','320','$30'],['C','.20','410','$40']]),
+ parts:[
+  {q:'Compute the expected value of each outcome and total expected sales.', f:[{l:'Outcome A',a:900,u:'$'},{l:'Outcome B',a:4800,u:'$'},{l:'Outcome C',a:3280,u:'$'},{l:'Total expected value',a:8980,u:'$'}],
+   s:L('A','200 × 15 = 3,000 × .30 = 900')+L('B','320 × 30 = 9,600 × .50 = 4,800')+L('C','410 × 40 = 16,400 × .20 = 3,280')+L('Total','$8,980')}
+ ]},
+{id:'biomed', w:4, t:'Biomedical Products: units to produce', src:'ICQ Module 4, Problem 13',
+ g:`<p>Biomedical expects to sell 80,000 units in the first six months. Beginning inventory is 16% of anticipated sales. Ending inventory will equal 20% of projected sales of 92,000 units for the last six months.</p>`,
+ parts:[
+  {q:'How many units should the firm produce in the first six months?', f:[{l:'Desired ending inventory',a:18400,u:'units'},{l:'Beginning inventory',a:12800,u:'units'},{l:'Units to produce',a:85600,u:'units'}],
+   s:L('Ending inventory','20% × 92,000 = 18,400')+L('Beginning inventory','16% × 80,000 = 12,800')+L('Production','80,000 + 18,400 − 12,800 = 85,600')}
+ ]},
+{id:'gold-prod', w:4, t:'Goldman Corporation: production schedule and gross profit', src:'ICQ Module 4, Tables 4-1 to 4-7',
+ g: GOLDMAN_BASE,
+ parts:[
+  {q:'Units to produce and total production cost.', f:[{l:'Wheels to produce',a:1015,u:'units'},{l:'Casters to produce',a:2020,u:'units'},{l:'Total production cost',a:62710,u:'$'}],
+   s:L('Wheels','1,000 + 100 − 85 = 1,015')+L('Casters','2,000 + 200 − 180 = 2,020')+L('Cost','1,015 × 18 = 18,270; 2,020 × 22 = 44,440; total 62,710')},
+  {q:'Cost of goods sold and gross profit (FIFO).', f:[{l:'COGS, wheels',a:17830,u:'$'},{l:'COGS, casters',a:43640,u:'$'},{l:'Total gross profit',a:38530,u:'$'}],
+   s:L('Wheels COGS','85 × 16 = 1,360 + 915 × 18 = 16,470 → 17,830')+L('Casters COGS','180 × 20 = 3,600 + 1,820 × 22 = 40,040 → 43,640')+L('Revenue','30,000 + 70,000 = 100,000')+L('Gross profit','100,000 − 61,470 = 38,530')},
+  {q:'Value of ending inventory.', f:[{l:'Ending inventory',a:6200,u:'$'}],
+   s:L('Available','4,960 beginning + 62,710 produced = 67,670')+L('Ending','67,670 − 61,470 = 6,200')+L('Check','100 × 18 + 200 × 22 = 6,200 ✓')}
+ ]},
+{id:'gold-is', w:4, t:'Goldman Corporation: pro forma income statement', src:'ICQ Module 4, Table 4-8',
+ g:`<p>From the production work: sales $100,000 and cost of goods sold $61,470.</p><ul><li>Selling, general and administrative expenses: $12,000</li><li>Interest expense: $1,500</li><li>Income tax rate: 20%</li><li>Common dividends: $1,500</li></ul>`,
+ parts:[
+  {q:'Build the pro forma income statement for January to June.', f:[{l:'Operating profit (EBIT)',a:26530,u:'$'},{l:'Earnings before taxes',a:25030,u:'$'},{l:'Taxes',a:5006,u:'$'},{l:'Earnings after taxes',a:20024,u:'$'},{l:'Increase in retained earnings',a:18524,u:'$'}],
+   s:L('Gross profit','100,000 − 61,470 = 38,530')+L('EBIT','38,530 − 12,000 = 26,530')+L('EBT','26,530 − 1,500 = 25,030')+L('Taxes','20% × 25,030 = 5,006')+L('EAT','20,024')+L('RE increase','20,024 − 1,500 = 18,524')}
+ ]},
+{id:'gold-rec', w:4, t:'Goldman Corporation: monthly cash receipts', src:'ICQ Module 4, Tables 4-9 and 4-10',
+ g:tb(['Month','Dec','Jan','Feb','Mar','Apr','May','Jun'],[['Sales','$12,000','$15,000','$10,000','$15,000','$25,000','$15,000','$20,000']]) + `<p>20% of sales are collected in the month of sale and 80% in the following month.</p>`,
+ parts:[
+  {q:'Total cash receipts for each month.', f:monthFields([12600,14000,11000,17000,23000,16000]),
+   s:L('Jan','20% × 15,000 = 3,000 + 80% × 12,000 = 9,600 → 12,600')+L('Feb','2,000 + 12,000 = 14,000')+L('Mar','3,000 + 8,000 = 11,000')+L('Apr','5,000 + 12,000 = 17,000')+L('May','3,000 + 20,000 = 23,000')+L('Jun','4,000 + 12,000 = 16,000')}
+ ]},
+{id:'gold-pay', w:4, t:'Goldman Corporation: monthly cash payments', src:'ICQ Module 4, Tables 4-11 to 4-13',
+ g:`<p>Production: 1,015 wheels and 2,020 casters (unit materials $10 / $12, labour $5 / $6, overhead $3 / $4). Costs are spread evenly over six months.</p>
+ <ul><li>Materials are paid the month after purchase. December purchases were $4,500.</li><li>Labour and overhead are paid in the month incurred.</li><li>G&A expense $12,000, spread evenly across six months.</li><li>Interest $1,500 and dividends $1,500, both paid in June.</li><li>Taxes of $5,006 are paid in two equal amounts in March and June.</li><li>Equipment: $8,000 in February and $10,000 in June.</li></ul>`,
+ parts:[
+  {q:'Average monthly manufacturing costs.', f:[{l:'Materials per month',a:5732,u:'$'},{l:'Labour per month',a:2866,u:'$'},{l:'Overhead per month',a:1854,u:'$'}],
+   s:L('Materials','1,015 × 10 + 2,020 × 12 = 34,390 ÷ 6 = 5,732')+L('Labour','5,075 + 12,120 = 17,195 ÷ 6 = 2,866')+L('Overhead','3,045 + 8,080 = 11,125 ÷ 6 = 1,854')},
+  {q:'Total cash payments for each month.', f:monthFields([11220,20452,14955,12452,12452,27953],'$',{tol:5}),
+   s:L('Jan','4,500 + 2,866 + 1,854 + 2,000 = 11,220')+L('Feb','5,732 + 2,866 + 1,854 + 2,000 + 8,000 = 20,452')+L('Mar','12,452 + 2,503 tax = 14,955')+L('Apr, May','5,732 + 2,866 + 1,854 + 2,000 = 12,452')+L('Jun','5,730* + 2,866 + 1,854 + 2,000 + 1,500 + 2,503 + 1,500 + 10,000 = 27,953')+'<p class="note">*June materials adjusted to 5,730 for rounding (34,390 total).</p>'}
+ ]},
+{id:'power', w:4, t:'Power Ridge Corporation: cash receipts schedule', src:'ICQ Module 4, Problem 20',
+ g:tb(['Month','Sep (actual)','Oct','Nov','Dec'],[['Credit sales','$50,000','$40,000','$35,000','$60,000']]) + `<p>20% is collected in the month of sale, 70% the following month and 10% is never collected.</p>`,
+ parts:[
+  {q:'Total cash receipts for October, November and December.', f:[{l:'October',a:43000,u:'$'},{l:'November',a:35000,u:'$'},{l:'December',a:36500,u:'$'}],
+   s:L('Oct','20% × 40,000 = 8,000 + 70% × 50,000 = 35,000 → 43,000')+L('Nov','7,000 + 28,000 = 35,000')+L('Dec','12,000 + 24,500 = 36,500')}
+ ]},
+{id:'donna', w:4, t:'Donna\u2019s Fashions: production and cash payments', src:'ICQ Module 4, Problem 21',
+ g:tb(['Month','Jan','Feb','Mar','Apr','May','Jun','Jul'],[['Unit sales','1,000','800','900','1,400','1,550','1,800','1,400']]) +
+ `<ul><li>Ending inventory = 120% of next month\u2019s expected sales. January beginning inventory is 1,200 units.</li><li>Materials cost $14 per unit, paid the month after production. December production was 800 units.</li><li>Labour is $7 per unit, paid in the month incurred.</li><li>Overhead is $8,000 per month. Interest of $10,000 is paid in March and bonuses of $15,500 in June.</li></ul>`,
+ parts:[
+  {q:'Units to be produced each month.', f:monthFields([760,920,1500,1580,1850,1320],'units'),
+   s:L('Jan','1,000 + 960 (120% × 800) − 1,200 = 760')+L('Feb','800 + 1,080 − 960 = 920')+L('Mar','900 + 1,680 − 1,080 = 1,500')+L('Apr','1,400 + 1,860 − 1,680 = 1,580')+L('May','1,550 + 2,160 − 1,860 = 1,850')+L('Jun','1,800 + 1,680 − 2,160 = 1,320')},
+  {q:'Total cash payments each month.', f:monthFields([24520,25080,41380,40060,43070,58640]),
+   s:L('Jan','800 × 14 = 11,200 + 760 × 7 = 5,320 + 8,000 = 24,520')+L('Feb','10,640 + 6,440 + 8,000 = 25,080')+L('Mar','12,880 + 10,500 + 8,000 + 10,000 = 41,380')+L('Apr','21,000 + 11,060 + 8,000 = 40,060')+L('May','22,120 + 12,950 + 8,000 = 43,070')+L('Jun','25,900 + 9,240 + 8,000 + 15,500 = 58,640')}
+ ]},
+
+/* ======================= WEEK 5 ======================= */
+{id:'gold-budget', w:5, t:'Goldman Corporation: cash budget with borrowing', src:'ICQ Module 5, Tables 4-14 and 4-15',
+ g:tb(['Month','Jan','Feb','Mar','Apr','May','Jun'],[['Total receipts','$12,600','$14,000','$11,000','$17,000','$23,000','$16,000'],['Total payments','11,220','20,452','14,955','12,452','12,452','27,953']]) +
+ `<p>January beginning cash is $5,000. Policy: keep a minimum balance of $5,000. Borrow to cover any shortfall and repay loans as soon as cash rises above the minimum.</p>`,
+ parts:[
+  {q:'Net cash flow for each month.', f:monthFields([1380,-6452,-3955,4548,10548,-11953]),
+   s:L('Formula','Receipts − payments')+L('Jan to Jun','1,380; (6,452); (3,955); 4,548; 10,548; (11,953)')},
+  {q:'Monthly loan (+) or repayment (−).', f:monthFields([0,5072,3955,-4548,-4479,5884]),
+   s:L('Jan','5,000 + 1,380 = 6,380 → no loan')+L('Feb','6,380 − 6,452 = (72) → borrow 5,072')+L('Mar','5,000 − 3,955 = 1,045 → borrow 3,955 (loan 9,027)')+L('Apr','5,000 + 4,548 = 9,548 → repay 4,548 (loan 4,479)')+L('May','5,000 + 10,548 = 15,548 → repay the remaining 4,479')+L('Jun','11,069 − 11,953 = (884) → borrow 5,884')},
+  {q:'Ending cash balance each month and the June cumulative loan.', f:monthFields([6380,5000,5000,5000,11069,5000]).concat([{l:'Cumulative loan, end of June',a:5884,u:'$'}]),
+   s:L('Ending cash','Beginning + net cash flow + loan (− repayment)')+L('May','5,000 + 10,548 − 4,479 = 11,069')+L('June loan balance','0 after May + 5,884 = 5,884')+'<p class="note">Table 4-14 in the solution shows June net flow as (11,955); 16,000 − 27,953 gives (11,953), which ties to the 5,884 loan.</p>'}
+ ]},
+{id:'gold-bs', w:5, t:'Goldman Corporation: pro forma balance sheet', src:'ICQ Module 5, Tables 4-16 and 4-17',
+ g:tb(['Balance sheet, 31 December',''],[['Cash','$5,000'],['Marketable securities','3,200'],['Accounts receivable','9,600'],['Inventory','4,960'],['Plant and equipment','27,740'],['Total assets','$50,500'],['Accounts payable','$4,500'],['Notes payable','0'],['Long-term debt','15,000'],['Common stock','10,500'],['Retained earnings','20,500'],['Total liabilities and equity','$50,500']],[5,11]) +
+ `<p>Use earlier results: June ending cash $5,000, June sales $20,000 (80% collected in July), ending inventory $6,200, equipment purchases $18,000, June material purchases $5,732 (unpaid), cumulative loan $5,884, increase in retained earnings $18,524. Other accounts do not change.</p>`,
+ parts:[
+  {q:'Pro forma balances at 30 June.', f:[{l:'Accounts receivable',a:16000,u:'$'},{l:'Inventory',a:6200,u:'$'},{l:'Plant and equipment',a:45740,u:'$'},{l:'Total assets',a:76140,u:'$'},{l:'Accounts payable',a:5732,u:'$'},{l:'Notes payable',a:5884,u:'$'},{l:'Retained earnings',a:39024,u:'$'}],
+   s:L('AR','20,000 × 80% = 16,000')+L('Inventory','6,200')+L('P&E','27,740 + 18,000 = 45,740')+L('Total assets','5,000 + 3,200 + 16,000 + 6,200 + 45,740 = 76,140')+L('AP','June materials purchased, paid in July = 5,732')+L('Notes payable','5,884')+L('RE','20,500 + 18,524 = 39,024')+L('Check','5,732 + 5,884 + 15,000 + 10,500 + 39,024 = 76,140 ✓')}
+ ]},
+{id:'howard-rnf', w:5, t:'Howard Corporation: percent-of-sales and RNF', src:'ICQ Module 5, Tables 4-18 and 4-19',
+ g: HOWARD_BS + `<p>Sales are expected to rise from $200,000 to $300,000.</p>`,
+ parts:[
+  {q:'Spontaneous changes and required new funds.', f:[{l:'Increase in assets',a:60000,u:'$'},{l:'Increase in spontaneous liabilities',a:25000,u:'$'},{l:'Increase in retained earnings',a:9000,u:'$'},{l:'Required new funds',a:26000,u:'$'}],
+   s:L('A/S₁','120,000 ÷ 200,000 = 60%; × 100,000 = 60,000')+L('L/S₁','(40,000 + 10,000) ÷ 200,000 = 25%; × 100,000 = 25,000')+L('PS₂(1 − D)','6% × 300,000 × 50% = 9,000')+L('RNF','60,000 − 25,000 − 9,000 = 26,000')},
+  {q:'Ratios after the expansion (RNF added to notes payable).', f:[{l:'Debt to total assets',a:0.64,u:'',tol:.006},{l:'Debt to equity',a:1.81,u:'',tol:.01},{l:'Current ratio',a:0.91,u:'',tol:.006}],
+   s:L('Total liabilities after','60,000 + 15,000 + 15,000 + 26,000 = 116,000')+L('Equity after','10,000 + 54,000 = 64,000')+L('Debt/assets','116,000 ÷ 180,000 = 0.64 (was 0.54)')+L('Debt/equity','116,000 ÷ 64,000 = 1.81 (was 1.18)')+L('Current ratio','105,000 ÷ 116,000 = 0.91 (was 1.08)')}
+ ]},
+{id:'howard-sgr', w:5, extra:true, t:'Howard Corporation: sustainable growth rate', src:'ICQ Module 5 slides, Table 4-20',
+ g: HOWARD_BS + `<p>Find the growth rate Howard can sustain without raising its debt ratios. D/E is total debt to equity.</p>`,
+ parts:[
+  {q:'Compute debt to equity and the SGR.', f:[{l:'Debt to equity',a:1.18,u:'',tol:.006},{l:'SGR',a:12.24,u:'%',tol:.04}],
+   s:L('D/E','65,000 ÷ 55,000 = 1.1818')+L('Numerator','0.06 × 0.5 × 2.1818 = 0.06545')+L('Denominator','0.60 − 0.06545 = 0.53455')+L('SGR','0.06545 ÷ 0.53455 = 12.24%')},
+  {q:'At the SGR, what is the sales increase and the RNF?', f:[{l:'Sales increase',a:24480,u:'$',tol:15},{l:'RNF',a:1834,u:'$',tol:5}],
+   s:L('ΔS','200,000 × 12.24% = 24,480')+L('Assets','60% × 24,480 = 14,688')+L('Liabilities','25% × 24,480 = 6,120')+L('RE','6% × 224,480 × 50% = 6,734')+L('RNF','14,688 − 6,120 − 6,734 = 1,834 (added to notes payable)')}
+ ]},
+{id:'prince', w:5, t:'Prince Charles Island Company: collections and cash budget', src:'ICQ Module 5, similar to Problem 28',
+ g:tb(['Month','Sep','Oct','Nov','Dec'],[['Sales','$6,000','$10,000','$16,000','$12,000']]) +
+ `<p>Cash sales are 20% and credit sales 80%. Of receivables, 40% are collected the month after sale and 60% two months after. Cash payments are $13,000 in November and $6,000 in December. November beginning cash is $5,000, which is also the minimum balance.</p>`,
+ parts:[
+  {q:'Total cash receipts for November and December.', f:[{l:'November receipts',a:9280,u:'$'},{l:'December receipts',a:12320,u:'$'}],
+   s:L('Nov','Cash 3,200 + 40% × 8,000 = 3,200 + 60% × 4,800 = 2,880 → 9,280')+L('Dec','Cash 2,400 + 40% × 12,800 = 5,120 + 60% × 8,000 = 4,800 → 12,320')},
+  {q:'Loan or repayment and ending cash.', f:[{l:'Nov loan (+) / repayment (−)',a:3720,u:'$'},{l:'Nov ending cash',a:5000,u:'$'},{l:'Dec loan (+) / repayment (−)',a:-3720,u:'$'},{l:'Dec ending cash',a:7600,u:'$'}],
+   s:L('Nov','5,000 + (9,280 − 13,000) = 1,280 → borrow 3,720 → 5,000')+L('Dec','5,000 + 6,320 = 11,320 → repay 3,720 → 7,600')}
+ ]},
+{id:'longbranch', w:5, t:'Longbranch Western Wear: external financing needs', src:'ICQ Module 5, Problem 32',
+ g:tb(['Income statement',''],[['Sales','200,000'],['Expenses','158,000'],['EBIT','42,000'],['Interest','2,000'],['EBT','40,000'],['Taxes','20,000'],['EAT','20,000'],['Dividends','10,000']]) +
+ tb(['Balance sheet',''],[['Cash','5,000'],['Accounts receivable','10,000'],['Inventory','15,000'],['Current assets','30,000'],['Capital assets','70,000'],['Total assets','100,000'],['Accounts payable','5,000'],['Accrued wages','1,000'],['Accrued taxes','2,000'],['Current liabilities','8,000'],['Notes payable','7,000'],['Long-term debt','15,000'],['Common stock','20,000'],['Retained earnings','50,000'],['Total liabilities and equity','100,000']],[3,5,9,14]) +
+ `<p>Sales are expected to rise 20%. No capital asset expansion is needed. Only current assets and current liabilities vary with sales. Any surplus funds first pay off notes payable, then long-term debt.</p>`,
+ parts:[
+  {q:'a. Using the RNF formula, does Longbranch need external funds?', f:[{l:'Profit margin',a:10,u:'%'},{l:'Payout ratio',a:50,u:'%'},{l:'RNF (negative = surplus)',a:-7600,u:'$'}],
+   s:L('Profit margin','20,000 ÷ 200,000 = 10%')+L('Payout','10,000 ÷ 20,000 = 50%')+L('ΔS','20% × 200,000 = 40,000')+L('RNF','(30/200)(40,000) − (8/200)(40,000) − 0.10 × 240,000 × 0.5')+L('','= 6,000 − 1,600 − 12,000 = (7,600), a surplus')},
+  {q:'b. Pro forma balance sheet with the surplus applied to debt.', f:[{l:'Current assets',a:36000,u:'$'},{l:'Total assets',a:106000,u:'$'},{l:'Current liabilities',a:9600,u:'$'},{l:'Notes payable',a:0,u:'$'},{l:'Long-term debt',a:14400,u:'$'},{l:'Retained earnings',a:62000,u:'$'}],
+   s:L('Current assets','30,000 × 1.2 = 36,000')+L('Total assets','36,000 + 70,000 = 106,000')+L('Current liabilities','8,000 × 1.2 = 9,600')+L('Surplus 7,600','Pay off notes 7,000, then 600 off long-term debt → 14,400')+L('RE','50,000 + 12,000 = 62,000')},
+  {q:'c. Ratios for year 2.', f:[{l:'Current ratio',a:3.75,u:'x',tol:.01},{l:'Total debt to assets',a:22.6,u:'%',tol:.06}],
+   s:L('Current ratio','36,000 ÷ 9,600 = 3.75× (unchanged from year 1)')+L('Debt/assets','(9,600 + 0 + 14,400) ÷ 106,000 = 22.6% (was 30.0%)')}
+ ]}/* ======================= CONNECT QUIZ PROBLEMS ======================= */
+,
+{id:'q-tallgrass', w:2, t:'Tallgrass Touring: EPS after a share issue', src:'Connect quiz, Module 2 Q1',
+ g:`<p>Tallgrass Touring had earnings after taxes of $410,000 in 20XX with 301,000 common shares outstanding. On January 1, 20XY it issued 30,000 new common shares, and after-tax earnings rise 25% as a result.</p>`,
+ parts:[
+  {q:'Compute EPS for 20XX and 20XY (2 decimals).', f:[{l:'EPS 20XX',a:1.36,u:'$',tol:.01},{l:'EPS 20XY',a:1.55,u:'$',tol:.01}],
+   s:L('20XX','410,000 ÷ 301,000 = $1.36')+L('New EAT','410,000 × 125% = 512,500')+L('New shares','301,000 + 30,000 = 331,000')+L('20XY','512,500 ÷ 331,000 = $1.55')}
+ ]},
+{id:'q-maris', w:2, t:'Maris Corporation: statement of cash flows', src:'Connect quiz, Module 2 Q2',
+ g:tb(['Maris income statement, 20XX',''],[['Sales','$5,000,000'],['Cost of goods sold','3,150,000'],['Gross profit','1,850,000'],['Selling and administrative expense','660,000'],['Amortization expense','320,000'],['Operating income','870,000'],['Interest expense','55,000'],['Earnings before taxes','815,000'],['Taxes','420,000'],['Earnings after taxes','395,000'],['Preferred stock dividends','20,000'],['Earnings available to common','$375,000']],[11]) +
+ tb(['Statement of retained earnings, 20XX',''],[['Retained earnings, January 1','$880,000'],['Add: earnings available to common','375,000'],['Deduct: cash dividends declared and paid','200,000'],['Retained earnings, December 31','$1,055,000']],[3]) +
+ tb(['Maris balance sheet','20XX','20XW'],[['Cash','120,000','108,000'],['Accounts receivable (net)','470,000','458,000'],['Inventory','600,000','572,000'],['Prepaid expenses','19,000','38,000'],['Total current assets','1,209,000','1,176,000'],['Investments (long-term securities)','100,000','105,000'],['Plant and equipment','2,400,000','1,800,000'],['Less: accumulated depreciation','(1,080,000)','(760,000)'],['Net plant and equipment','1,320,000','1,040,000'],['Total assets','2,629,000','2,321,000'],
+ ['Accounts payable','238,000','157,000'],['Notes payable','500,000','500,000'],['Accrued expenses','46,000','64,000'],['Total current liabilities','784,000','721,000'],['Bonds payable','170,000','100,000'],['Total liabilities','954,000','821,000'],['Preferred stock','120,000','120,000'],['Common stock','500,000','500,000'],['Retained earnings','1,055,000','880,000'],['Total shareholders\u2019 equity','1,675,000','1,500,000'],['Total liabilities and equity','2,629,000','2,321,000']],[4,9,13,15,19,20]),
+ parts:[
+  {q:'Changes in non-cash working capital (cash effect, minus for cash used).', f:[{l:'Accounts receivable',a:-12000,u:'$'},{l:'Inventory',a:-28000,u:'$'},{l:'Prepaid expenses',a:19000,u:'$'},{l:'Accounts payable',a:81000,u:'$'},{l:'Accrued expenses',a:-18000,u:'$'},{l:'Net change in working capital',a:42000,u:'$'}],
+   s:L('AR','470,000 − 458,000 = increase 12,000 → (12,000)')+L('Inventory','Increase 28,000 → (28,000)')+L('Prepaids','Decrease 19,000 → +19,000')+L('AP','Increase 81,000 → +81,000')+L('Notes payable','No change')+L('Accrued','Decrease 18,000 → (18,000)')+L('Net','+42,000')},
+  {q:'Operating and investing activities.', f:[{l:'Amortization expense',a:320000,u:'$'},{l:'Operating activities',a:757000,u:'$'},{l:'Investments',a:5000,u:'$'},{l:'Plant and equipment',a:-600000,u:'$'},{l:'Investing activities',a:-595000,u:'$'}],
+   s:L('Operating','395,000 + 320,000 = 715,000 + 42,000 = 757,000')+L('Investments','Decrease 105,000 → 100,000 = +5,000')+L('P&E','2,400,000 − 1,800,000 = (600,000)')+L('Investing','(595,000)')},
+  {q:'Financing activities and net change in cash.', f:[{l:'Bonds payable',a:70000,u:'$'},{l:'Preferred dividends',a:-20000,u:'$'},{l:'Common dividends',a:-200000,u:'$'},{l:'Financing activities',a:-150000,u:'$'},{l:'Net increase in cash',a:12000,u:'$'}],
+   s:L('Bonds','170,000 − 100,000 = +70,000')+L('Dividends','(20,000) preferred, (200,000) common')+L('Financing','(150,000)')+L('Net','757,000 − 595,000 − 150,000 = 12,000; cash 108,000 → 120,000 ✓')}
+ ]},
+{id:'q-waif', w:2, t:'Waif Corporation: statement of cash flows', src:'Connect quiz, Module 2 Q3',
+ g:tb(['Waif balance sheet','20XX','20XW'],[['Cash','$54,500','$17,400'],['Accounts receivable','64,800','52,200'],['Inventory','142,200','149,300'],['Land','60,000','87,000'],['Plant and equipment','206,000','158,000'],['Less: accumulated depreciation','(55,000)','(33,000)'],['Net plant and equipment','151,000','125,000'],['Total assets','$472,500','$430,900'],
+ ['Accounts payable','$27,000','$37,000'],['Bonds payable','118,000','158,000'],['Common stock','170,000','130,000'],['Retained earnings','157,500','105,900'],['Total liabilities and equity','$472,500','$430,900']],[7,12]) +
+ `<p>During 20XX: net income was $91,000; bonds were retired by issuing new common stock; no equipment was sold; cash dividends were paid.</p>`,
+ parts:[
+  {q:'Operating activities.', f:[{l:'Amortization expense',a:22000,u:'$'},{l:'Accounts receivable',a:-12600,u:'$'},{l:'Inventory',a:7100,u:'$'},{l:'Accounts payable',a:-10000,u:'$'},{l:'Net change in working capital',a:-15500,u:'$'},{l:'Operating activities',a:97500,u:'$'}],
+   s:L('Amortization','55,000 − 33,000 = 22,000')+L('Before WC','91,000 + 22,000 = 113,000')+L('AR','Increase 12,600 → (12,600)')+L('Inventory','Decrease 7,100 → +7,100')+L('AP','Decrease 10,000 → (10,000)')+L('Operating','113,000 − 15,500 = 97,500')},
+  {q:'Investing and financing activities, and the net change in cash.', f:[{l:'Plant and equipment',a:-48000,u:'$'},{l:'Sale of land',a:27000,u:'$'},{l:'Investing activities',a:-21000,u:'$'},{l:'Dividends paid',a:-39400,u:'$'},{l:'Financing activities',a:-39400,u:'$'},{l:'Net increase in cash',a:37100,u:'$'}],
+   s:L('P&E','206,000 − 158,000 = (48,000)')+L('Land','87,000 → 60,000 = +27,000 sale')+L('Investing','(21,000)')+L('Bonds and stock','(40,000) retired + 40,000 issued = 0')+L('Dividends','105,900 + 91,000 − 157,500 = 39,400')+L('Net','97,500 − 21,000 − 39,400 = 37,100; 17,400 → 54,500 ✓')}
+ ]},
+{id:'q-inland', w:2, t:'Inland Fisheries Corp.: free cash flow', src:'Connect quiz, Module 2 Q4',
+ g:`<p>Inland Fisheries expects operating cash flow of $16 million. Capital investments will be $8.5 million, common dividends $0.65 million and preferred dividends $0.20 million.</p>`,
+ parts:[
+  {q:'Projected free cash flow ($ millions, 2 decimals).', f:[{l:'Free cash flow ($ millions)',a:6.65,u:'$M',tol:.005}],
+   s:L('FCF','16.00 − 8.50 − 0.65 − 0.20 = $6.65 million')}
+ ]},
+{id:'q-thermo', w:2, t:'Thermo Dynamics: earnings from retained earnings', src:'Connect quiz, Module 2 Q5',
+ g:`<p>Thermo Dynamics had retained earnings of $450,000 on December 31, 20XX and $400,000 on December 31, 20XW. It paid dividends of $25,000 in 20XX. There are 20,000 common shares outstanding and the share price is $30.</p>`,
+ parts:[
+  {q:'Earnings, EPS, payout ratio (nearest whole %) and P/E.', f:[{l:'Earnings during 20XX',a:75000,u:'$'},{l:'EPS',a:3.75,u:'$',tol:.01},{l:'Payout ratio',a:33,u:'%',tol:.5},{l:'P/E ratio',a:8,u:'x'}],
+   s:L('Earnings','(450,000 − 400,000) + 25,000 = 75,000')+L('EPS','75,000 ÷ 20,000 = $3.75')+L('Payout','25,000 ÷ 75,000 = 33%')+L('P/E','30 ÷ 3.75 = 8×')}
+ ]},
+{id:'q-dental', w:2, t:'Dental Drilling Company: income statement', src:'Connect quiz, Module 2 Q6',
+ g:tb(['Item',''],[['Selling and administrative expenses','$112,000'],['Amortization expense','73,000'],['Sales','489,000'],['Interest expense','45,000'],['Cost of goods sold','156,000'],['Taxes','47,000']]),
+ parts:[
+  {q:'Prepare the income statement.', f:[{l:'Gross profit',a:333000,u:'$'},{l:'Operating profit',a:148000,u:'$'},{l:'Earnings before taxes',a:103000,u:'$'},{l:'Earnings after taxes',a:56000,u:'$'}],
+   s:L('Gross profit','489,000 − 156,000 = 333,000')+L('Operating profit','333,000 − 112,000 − 73,000 = 148,000')+L('EBT','148,000 − 45,000 = 103,000')+L('EAT','103,000 − 47,000 = 56,000')}
+ ]},
+
+{id:'q-breakaway', w:3, t:'Breakaway All-Sport Supply: net income and ROA', src:'Connect quiz, Module 3 Q1',
+ g:`<p>A new store will have annual sales of $1,372,800 and turn over its assets 3.2 times per year. Profit margin will be 13%.</p>`,
+ parts:[
+  {q:'Net income and return on assets (2 decimals).', f:[{l:'Net income',a:178464,u:'$'},{l:'Return on assets',a:41.60,u:'%',tol:.02}],
+   s:L('Net income','1,372,800 × 0.13 = 178,464')+L('Assets','1,372,800 ÷ 3.2 = 429,000')+L('ROA','178,464 ÷ 429,000 = 41.60%')}
+ ]},
+{id:'q-waistnot', w:3, t:'Waist-Not Foods: divisional profit margin', src:'Connect quiz, Module 3 Q2',
+ g:`<p>Division A earned $178,000 on sales of $2,680,000. Division B earned $32,600 on sales of $386,000.</p>`,
+ parts:[
+  {q:'Profit margin for each division and which is superior.', f:[{l:'Division A',a:6.64,u:'%',tol:.01},{l:'Division B',a:8.45,u:'%',tol:.01},{l:'Superior division',a:'Division B',choice:['Division A','Division B']}],
+   s:L('A','178,000 ÷ 2,680,000 = 6.64%')+L('B','32,600 ÷ 386,000 = 8.45%')+L('Conclusion','Division B has the higher margin')}
+ ]},
+{id:'q-fernandes', w:3, t:'Fernandes Corporation: DuPont analysis', src:'Connect quiz, Module 3 Q3',
+ g:`<p>Fernandes has a profit margin of 6.0% and an ROA of 14.00%.</p>`,
+ parts:[
+  {q:'a. Asset turnover.  b. ROE if debt-to-total-assets is 50%.  c. ROE if debt-to-total-assets falls to 45%.', f:[{l:'Asset turnover',a:2.33,u:'x',tol:.01},{l:'ROE at 50% debt',a:28.00,u:'%',tol:.02},{l:'ROE at 45% debt',a:25.45,u:'%',tol:.03}],
+   s:L('Turnover','14% ÷ 6% = 2.33×')+L('Equity multiplier at 50%','1 ÷ (1 − 0.50) = 2.00 → ROE 14% × 2 = 28.00%')+L('Equity multiplier at 45%','1 ÷ 0.55 = 1.818 → ROE 14% × 1.818 = 25.45%')}
+ ]},
+{id:'q-kapoor', w:3, t:'Kapoor Corporation: coverage ratios', src:'Connect quiz, Module 3 Q4',
+ g:tb(['Kapoor Corporation',''],[['Sales','$259,000'],['Cost of goods sold','209,000'],['Gross profit','50,000'],['Fixed charges (other than interest)','24,500'],['Income before interest and taxes','25,500'],['Interest','19,000'],['Income before taxes','6,500'],['Taxes','2,275'],['Income after taxes','$4,225']],[8]),
+ parts:[
+  {q:'Times interest earned and fixed charge coverage (2 decimals).', f:[{l:'Times interest earned',a:1.34,u:'x',tol:.01},{l:'Fixed charge coverage',a:1.15,u:'x',tol:.01}],
+   s:L('TIE','25,500 ÷ 19,000 = 1.34×')+L('Fixed charge coverage','(25,500 + 24,500) ÷ (19,000 + 24,500) = 50,000 ÷ 43,500 = 1.15×')}
+ ]},
+{id:'q-unitedworld', w:3, t:'United World Corporation: divisional ROS and ROA', src:'Connect quiz, Module 3 Q5',
+ g:tb(['','Computers','Magazines','Cable TV'],[['Sales','$20,040,000','$5,980,000','$4,730,000'],['Net income (after taxes)','1,700,000','592,000','402,000'],['Assets','8,340,000','8,760,000','3,570,000']]),
+ parts:[
+  {q:'Return on sales for each division; which is lowest?', f:[{l:'Computers',a:8.48,u:'%',tol:.01},{l:'Magazines',a:9.90,u:'%',tol:.01},{l:'Cable TV',a:8.50,u:'%',tol:.01},{l:'Lowest',a:'Computers',choice:['Computers','Magazines','Cable TV']}],
+   s:L('Computers','1,700,000 ÷ 20,040,000 = 8.48%')+L('Magazines','592,000 ÷ 5,980,000 = 9.90%')+L('Cable TV','402,000 ÷ 4,730,000 = 8.50%')},
+  {q:'ROA for each division; which is highest?', f:[{l:'Computers',a:20.38,u:'%',tol:.01},{l:'Magazines',a:6.76,u:'%',tol:.01},{l:'Cable TV',a:11.26,u:'%',tol:.01},{l:'Highest',a:'Computers',choice:['Computers','Magazines','Cable TV']}],
+   s:L('Computers','1,700,000 ÷ 8,340,000 = 20.38%')+L('Magazines','592,000 ÷ 8,760,000 = 6.76%')+L('Cable TV','402,000 ÷ 3,570,000 = 11.26%')},
+  {q:'c. Corporate ROA.  d. New corporate ROA if the $3,570,000 in cable TV is redeployed into computers at the computer division\u2019s ROA.', f:[{l:'Corporate ROA',a:13.03,u:'%',tol:.01},{l:'New corporate ROA',a:14.61,u:'%',tol:.01}],
+   s:L('Corporate','2,694,000 ÷ 20,670,000 = 13.03%')+L('Redeployed return','20.38% × 3,570,000 = 727,566')+L('New NI','1,700,000 + 592,000 + 727,566 = 3,019,566')+L('New ROA','3,019,566 ÷ 20,670,000 = 14.61%')}
+ ]},
+{id:'q-grande', w:3, t:'Grande Corporation: balance sheet items from ratios', src:'Connect quiz, Module 3 Q6',
+ g:tb(['Item','Value'],[['Sales (credit)','$2,510,000'],['Cash','228,000'],['Inventory','935,000'],['Current liabilities','779,000'],['Asset turnover','1.05 times'],['Current ratio','2.80 times'],['Debt-to-assets ratio','40%'],['Receivables turnover','5 times']]) +
+ `<p>Current assets are cash, marketable securities, accounts receivable and inventory.</p>`,
+ parts:[
+  {q:'Calculate the balance sheet items.', f:[{l:'Accounts receivable',a:502000,u:'$'},{l:'Marketable securities',a:516200,u:'$'},{l:'Capital assets',a:209276,u:'$',tol:2},{l:'Long-term debt',a:177190,u:'$',tol:2}],
+   s:L('AR','2,510,000 ÷ 5 = 502,000')+L('Current assets','2.80 × 779,000 = 2,181,200')+L('Marketable securities','2,181,200 − (228,000 + 502,000 + 935,000) = 516,200')+L('Total assets','2,510,000 ÷ 1.05 = 2,390,476')+L('Capital assets','2,390,476 − 2,181,200 = 209,276')+L('Total debt','40% × 2,390,476 = 956,190')+L('Long-term debt','956,190 − 779,000 = 177,190')}
+ ]},
+{id:'q-snider', w:3, t:'Snider Corporation: the 13 basic ratios', src:'Connect quiz, Module 3 Q7',
+ g:tb(['Snider balance sheet',''],[['Cash','$50,000'],['Marketable securities','20,000'],['Accounts receivable (net)','160,000'],['Inventory','200,000'],['Total current assets','430,000'],['Investments','60,000'],['Plant and equipment','600,000'],['Accumulated amortization','(190,000)'],['Net plant and equipment','410,000'],['Total assets','$900,000'],
+ ['Accounts payable','$90,000'],['Notes payable','70,000'],['Accrued taxes','10,000'],['Total current liabilities','170,000'],['Bonds payable','150,000'],['Total liabilities','320,000'],['Preferred stock','100,000'],['Common stock','270,000'],['Retained earnings','210,000'],['Total shareholders\u2019 equity','580,000'],['Total liabilities and equity','$900,000']],[4,9,13,15,19,20]) +
+ tb(['Snider income statement',''],[['Sales (on credit)','$1,980,000'],['Cost of goods sold','1,280,000'],['Gross profit','700,000'],['Selling and administrative expenses (includes $35,000 lease payments)','475,000'],['Operating profit (EBIT)','225,000'],['Interest expense','25,000'],['Earnings before taxes','200,000'],['Taxes','80,000'],['Earnings after taxes','$120,000']],[8]) +
+ `<p>Use 365 days. Round days to whole numbers and other answers to 2 decimals.</p>`,
+ parts:[
+  {q:'Profitability ratios.', f:[{l:'Profit margin',a:6.06,u:'%',tol:.01},{l:'Return on assets',a:13.33,u:'%',tol:.01},{l:'Return on equity',a:20.69,u:'%',tol:.01}],
+   s:L('Profit margin','120,000 ÷ 1,980,000 = 6.06%')+L('ROA','120,000 ÷ 900,000 = 13.33%')+L('ROE','120,000 ÷ 580,000 = 20.69%')},
+  {q:'Asset utilization ratios (inventory turnover on COGS).', f:[{l:'Receivables turnover',a:12.38,u:'x',tol:.01},{l:'Average collection period',a:29,u:'days',tol:.6},{l:'Inventory turnover',a:6.40,u:'x',tol:.01},{l:'Inventory holding period',a:57,u:'days',tol:.6},{l:'Total asset turnover',a:2.20,u:'x',tol:.01}],
+   s:L('Receivables turnover','1,980,000 ÷ 160,000 = 12.38×')+L('Collection period','160,000 ÷ (1,980,000 ÷ 365 = 5,425) = 29 days')+L('Inventory turnover','1,280,000 ÷ 200,000 = 6.40×')+L('Holding period','200,000 ÷ (1,280,000 ÷ 365 = 3,507) = 57 days')+L('Total asset turnover','1,980,000 ÷ 900,000 = 2.20×')+'<p class="note">Also from the explanation: AP turnover 14.22×, AP period 25.67 days, capital asset turnover 4.83×.</p>'},
+  {q:'Liquidity and debt utilization ratios.', f:[{l:'Current ratio',a:2.53,u:'x',tol:.01},{l:'Quick ratio',a:1.35,u:'x',tol:.01},{l:'Debt to total assets',a:35.56,u:'%',tol:.02},{l:'Times interest earned',a:9,u:'x',tol:.01},{l:'Fixed charge coverage',a:4.33,u:'x',tol:.01}],
+   s:L('Current','430,000 ÷ 170,000 = 2.53')+L('Quick','(430,000 − 200,000) ÷ 170,000 = 1.35')+L('Debt to assets','320,000 ÷ 900,000 = 35.56%')+L('TIE','225,000 ÷ 25,000 = 9.00×')+L('Fixed charge coverage','(225,000 + 35,000) ÷ (25,000 + 35,000) = 4.33×')}
+ ]},
+
+{id:'q-brampton', w:4, t:'Brampton Truck Parts: expected sales value', src:'Connect quiz, Module 4 Q1',
+ g:tb(['Outcome','Probability','Units','Price'],[['A','0.30','360','$22'],['B','0.40','620','31'],['C','0.30','1,060','36']]),
+ parts:[
+  {q:'Expected value of each outcome and the total.', f:[{l:'Outcome A',a:2376,u:'$'},{l:'Outcome B',a:7688,u:'$'},{l:'Outcome C',a:11448,u:'$'},{l:'Total expected value',a:21512,u:'$'}],
+   s:L('A','360 × 22 = 7,920 × 0.30 = 2,376')+L('B','620 × 31 = 19,220 × 0.40 = 7,688')+L('C','1,060 × 36 = 38,160 × 0.30 = 11,448')+L('Total','21,512')}
+ ]},
+{id:'q-digitex', w:4, t:'Digitex Inc.: units to produce', src:'Connect quiz, Module 4 Q2',
+ g:`<p>March sales were 24,000 units and a 30% increase is expected in April. Ending inventory is kept at 5% of April\u2019s expected unit sales. April beginning inventory was 1,200 units.</p>`,
+ parts:[
+  {q:'How many units should be produced in April?', f:[{l:'Projected April sales',a:31200,u:'units'},{l:'Desired ending inventory',a:1560,u:'units'},{l:'Units to produce',a:31560,u:'units'}],
+   s:L('Sales','24,000 × 1.30 = 31,200')+L('Ending inventory','5% × 31,200 = 1,560')+L('Production','31,200 + 1,560 − 1,200 = 31,560')}
+ ]},
+{id:'q-whistler', w:4, t:'Whistler Workwear: cash receipts schedule', src:'Connect quiz, Module 4 Q3',
+ g:tb(['Month','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],[['Credit sales','$41,000','$39,000','$56,000','$65,000','$47,000','$62,000','$73,000','$77,000']]) +
+ `<p>10% is uncollectible, 40% is collected in the month of sale, 30% the following month and 20% two months after sale.</p>`,
+ parts:[
+  {q:'Total cash receipts, March to August.', f:['Mar','Apr','May','Jun','Jul','Aug'].map((m,i)=>({l:m,a:[42300,50600,49500,51900,57200,65100][i],u:'$'})),
+   s:L('Mar','40% × 56,000 = 22,400 + 30% × 39,000 = 11,700 + 20% × 41,000 = 8,200 → 42,300')+L('Apr','26,000 + 16,800 + 7,800 = 50,600')+L('May','18,800 + 19,500 + 11,200 = 49,500')+L('Jun','24,800 + 14,100 + 13,000 = 51,900')+L('Jul','29,200 + 18,600 + 9,400 = 57,200')+L('Aug','30,800 + 21,900 + 12,400 = 65,100')}
+ ]},
+{id:'q-highsight', w:4, t:'HighSight Limited: cash payments schedule', src:'Connect quiz, Module 4 Q4',
+ g:`<p>Sales of $440,000 are expected from January through April. Materials are 60% of sales, purchased in equal amounts each month, and paid one month after purchase. December purchases were $40,000. Fixed overhead is $26,000 per month.</p>` +
+ tb(['Month','Jan','Feb','Mar','Apr'],[['Labour','$30,000','$33,000','$30,000','$35,000']]),
+ parts:[
+  {q:'Monthly purchases and total cash payments.', f:[{l:'Monthly purchases',a:66000,u:'$'}].concat(['Jan','Feb','Mar','Apr'].map((m,i)=>({l:m+' payments',a:[96000,125000,122000,127000][i],u:'$'}))),
+   s:L('Purchases','440,000 × 60% = 264,000 ÷ 4 = 66,000')+L('Jan','40,000 + 30,000 + 26,000 = 96,000')+L('Feb','66,000 + 33,000 + 26,000 = 125,000')+L('Mar','66,000 + 30,000 + 26,000 = 122,000')+L('Apr','66,000 + 35,000 + 26,000 = 127,000')}
+ ]},
+{id:'q-boswell', w:4, t:'Boswell Corporation: production and cash payments', src:'Connect quiz, Module 4 Q5',
+ g:tb(['Month','Mar','Apr','May','Jun'],[['Unit sales','26,000','28,000','25,500','24,000']]) +
+ `<ul><li>Ending inventory = 3 × next month\u2019s expected sales; February ending inventory follows this policy.</li><li>Materials are $8 per unit, paid the month after production. 25,000 units were produced in February.</li><li>Labour is $12 per unit, paid in the month incurred.</li><li>Fixed overhead is $22,000 per month. Dividends of $22,000 are paid in May.</li></ul>`,
+ parts:[
+  {q:'Units to be produced.', f:['Mar','Apr','May'].map((m,i)=>({l:m,a:[32000,20500,21000][i],u:'units'})),
+   s:L('Mar','26,000 + 84,000 − 78,000 = 32,000')+L('Apr','28,000 + 76,500 − 84,000 = 20,500')+L('May','25,500 + 72,000 − 76,500 = 21,000')},
+  {q:'Total cash payments.', f:['Mar','Apr','May'].map((m,i)=>({l:m,a:[606000,524000,460000][i],u:'$'})),
+   s:L('Mar','25,000 × 8 = 200,000 + 32,000 × 12 = 384,000 + 22,000 = 606,000')+L('Apr','256,000 + 246,000 + 22,000 = 524,000')+L('May','164,000 + 252,000 + 22,000 + 22,000 = 460,000')}
+ ]},
+
+{id:'q-jimdaniels', w:5, t:'Jim Daniels Health Products: receipts, payments and cash budget', src:'Connect quiz, Module 5 Q1',
+ g:tb(['Month','Nov (actual)','Dec (actual)','Jan','Feb','Mar','Apr'],[['Sales','$380,000','$400,000','$460,000','$500,000','$520,000','$510,000']]) +
+ `<ul><li>30% of sales are cash, 70% credit. Of credit sales, 20% is collected the month after sale and 80% two months after.</li><li>Materials are 40% of sales, bought to cover the current month\u2019s sales and paid in the month received.</li><li>Labour is 35% of sales and selling and administrative expense is 6% of sales, both paid in the month of sale.</li><li>Overhead is $32,500 cash per month; amortization is $10,900 per month.</li><li>Taxes of $8,900 paid in January; dividends of $6,500 paid in March.</li><li>January beginning cash is $98,000; minimum cash balance is $93,000.</li></ul>`,
+ parts:[
+  {q:'Total cash receipts.', f:['Jan','Feb','Mar'].map((m,i)=>({l:m,a:[406800,438400,483600][i],u:'$'})),
+   s:L('Jan','Cash 138,000 + 20% × 280,000 = 56,000 + 80% × 266,000 = 212,800 → 406,800')+L('Feb','150,000 + 64,400 + 224,000 = 438,400')+L('Mar','156,000 + 70,000 + 257,600 = 483,600')},
+  {q:'Total cash payments.', f:['Jan','Feb','Mar'].map((m,i)=>({l:m,a:[414000,437500,460200][i],u:'$'})),
+   s:L('Jan','184,000 + 161,000 + 27,600 + 32,500 + 8,900 = 414,000')+L('Feb','200,000 + 175,000 + 30,000 + 32,500 = 437,500')+L('Mar','208,000 + 182,000 + 31,200 + 32,500 + 6,500 = 460,200')+'<p class="note">Amortization is excluded because it is not a cash expense.</p>'},
+  {q:'Cash budget: monthly loan (+) or repayment (−) and ending cash.', f:[{l:'Jan loan',a:2200,u:'$'},{l:'Feb loan',a:-900,u:'$'},{l:'Mar loan',a:-1300,u:'$'},{l:'Jan ending cash',a:93000,u:'$'},{l:'Feb ending cash',a:93000,u:'$'},{l:'Mar ending cash',a:115100,u:'$'}],
+   s:L('Jan','98,000 − 7,200 = 90,800 → borrow 2,200')+L('Feb','93,000 + 900 = 93,900 → repay 900 (loan 1,300)')+L('Mar','93,000 + 23,400 = 116,400 → repay 1,300 → 115,100')}
+ ]},
+{id:'q-carter', w:5, t:'Carter Paint Company: RNF and pro forma balance sheet', src:'Connect quiz, Module 5 Q2',
+ g:tb(['Balance sheet ($ millions)',''],[['Cash','$7'],['Accounts receivable','13'],['Inventory','18'],['Current assets','38'],['Capital assets','38'],['Total assets','$76'],['Accounts payable','$7'],['Accrued wages','6'],['Accrued taxes','5'],['Current liabilities','18'],['Long-term debt','10'],['Common stock','15'],['Retained earnings','33'],['Total liabilities and equity','$76']],[3,5,9,13]) +
+ `<p>Sales last year were $100 million. All assets and current liabilities vary with sales (capital assets are at full capacity). Profit margin is 6% and the payout ratio is 30%. Sales grow 10%. Financing adjustments go to long-term debt.</p>`,
+ parts:[
+  {q:'a. Required new funds ($ millions, 3 decimals).', f:[{l:'RNF ($ millions)',a:1.18,u:'$M',tol:.002}],
+   s:L('ΔS','10% × 100 = 10')+L('RNF','0.76(10) − 0.18(10) − 0.06(110)(0.70)')+L('','= 7.60 − 1.80 − 4.62 = $1.180 million')},
+  {q:'b. Pro forma balance sheet ($ millions, 2 decimals).', f:[{l:'Current assets',a:41.8,u:'$M',tol:.005},{l:'Total assets',a:83.6,u:'$M',tol:.005},{l:'Current liabilities',a:19.8,u:'$M',tol:.005},{l:'Long-term debt',a:11.18,u:'$M',tol:.005},{l:'Retained earnings',a:37.62,u:'$M',tol:.005}],
+   s:L('Assets','Each × 1.10: cash 7.70, AR 14.30, inventory 19.80, capital 41.80 → 83.60')+L('Current liabilities','18 × 1.10 = 19.80')+L('Long-term debt','10 + 1.18 = 11.18')+L('RE','33 + 4.62 = 37.62')},
+  {q:'c. Current ratio and total debt to assets, year 1 and year 2 (1 decimal).', f:[{l:'Current ratio Y1',a:2.1,u:'x',tol:.06},{l:'Current ratio Y2',a:2.1,u:'x',tol:.06},{l:'Debt to assets Y1',a:36.8,u:'%',tol:.06},{l:'Debt to assets Y2',a:37.1,u:'%',tol:.06}],
+   s:L('Current ratio','38 ÷ 18 = 2.1; 41.8 ÷ 19.8 = 2.1')+L('Debt/assets Y1','(18 + 10) ÷ 76 = 36.8%')+L('Debt/assets Y2','(19.8 + 11.18) ÷ 83.6 = 37.1%')}
+ ]},
+{id:'q-harvard', w:5, t:'Harvard Prep Shops: external financing', src:'Connect quiz, Module 5 Q3',
+ g:tb(['Balance sheet ($ millions)',''],[['Cash','$5'],['Accounts receivable','24'],['Inventory','69'],['Plant and equipment','160'],['Total assets','$258'],['Accounts payable','$16'],['Accrued expenses','12'],['Other payables','14'],['Common stock','40'],['Retained earnings','176'],['Total liabilities and equity','$258']],[4,10]) +
+ `<p>Sales were $300 million with a net profit margin of 30% and a payout ratio of 30%. Sales will rise 30%. All items keep their percent-of-sales relationship except common stock and retained earnings.</p>`,
+ parts:[
+  {q:'a. RNF ($ millions) and whether external financing is needed.', f:[{l:'RNF ($ millions)',a:-17.1,u:'$M',tol:.005},{l:'External financing needed?',a:'No',choice:['Yes','No']}],
+   s:L('ΔS','30% × 300 = 90')+L('RNF','(258/300)(90) − (42/300)(90) − 0.30(390)(0.70)')+L('','= 77.40 − 12.60 − 81.90 = (17.10), a surplus, so no')},
+  {q:'b. RNF if profit margin rises to 35% and payout to 65%.', f:[{l:'RNF ($ millions)',a:17.03,u:'$M',tol:.005}],
+   s:L('RE increase','0.35 × 390 × 0.35 = 47.78')+L('RNF','77.40 − 12.60 − 47.78 = $17.03 million')}
+ ]}
+,
+{id:'garza', w:6, t:'Garza Electronics: level production and inventory financing cost', src:'ICQ Module 6, Problem 3',
+ g:`<p>Garza Electronics expects to sell 500 units in January, 250 in February and 1,000 in March. January's beginning inventory is 700 units. Expected sales for the whole year are 7,200 units, and Garza has decided on a level monthly production schedule of 600 units (7,200 \u00f7 12 months).</p>`,
+ parts:[
+  {q:'Expected ending inventory for January, February and March.', f:[{l:'January ending inventory',a:800,u:'units'},{l:'February ending inventory',a:1150,u:'units'},{l:'March ending inventory',a:750,u:'units'}],
+   s:L('Formula','Ending inventory = Beginning inventory + Production \u2212 Sales')+L('January','700 + 600 \u2212 500 = 800')+L('February','800 + 600 \u2212 250 = 1,150')+L('March','1,150 + 600 \u2212 1,000 = 750')},
+  {q:'Garza can borrow at 6% per year and each unit of inventory costs $100. What is the total financing cost of carrying this inventory, January to March?', f:[{l:'Monthly financing rate',a:0.50,u:'%',tol:.01},{l:'January financing cost',a:400,u:'$'},{l:'February financing cost',a:575,u:'$'},{l:'March financing cost',a:375,u:'$'},{l:'Total financing cost',a:1350,u:'$'}],
+   s:L('Monthly rate','6.0% \u00f7 12 months = 0.50%')+L('January','800 units \u00d7 $100 \u00d7 0.50% = $400')+L('February','1,150 \u00d7 $100 \u00d7 0.50% = $575')+L('March','750 \u00d7 $100 \u00d7 0.50% = $375')+L('Total','400 + 575 + 375 = $1,350')+'<p class="note">Type 0.50% as 0.005 in your calculator, or type 0.5 then the % key.</p>'}
+ ]},
+{id:'gabriel', w:6, t:'Gabriel Health Services: short-term versus long-term financing cost', src:'ICQ Module 6, Problem 11',
+ g:`<p>Gabriel Health Services Ltd. requires $1.5 million in financing over the next two years. It can borrow at a long-term rate of 5% per year for the full two years. Alternatively, it could use one-year financing each year: forecasts suggest 3.5% in year 1 and 6.25% in year 2.</p>`,
+ parts:[
+  {q:'Total interest cost under each plan, in whole dollars (not millions).', f:[{l:'Long-term plan total',a:150000,u:'$'},{l:'Short-term plan total',a:146250,u:'$'},{l:'Less costly plan',a:'Short-term',choice:['Long-term','Short-term']}],
+   s:L('Long-term','$1,500,000 \u00d7 5.00% \u00d7 2 years = $150,000')+L('Short-term, year 1','$1,500,000 \u00d7 3.50% \u00d7 1 year = $52,500')+L('Short-term, year 2','$1,500,000 \u00d7 6.25% \u00d7 1 year = $93,750')+L('Short-term total','52,500 + 93,750 = $146,250')+L('Conclusion','Short-term is less costly by $3,750, but its year 2 rate is a forecast, not a guarantee')},
+  {q:'If year 2\u2019s short-term rate turns out to be 7.25% instead, what is the new short-term total, and is short-term still less costly?', f:[{l:'Year 2 cost at 7.25%',a:108750,u:'$'},{l:'New short-term total',a:161250,u:'$'},{l:'Still less costly?',a:'No',choice:['Yes','No']}],
+   s:L('Year 2','$1,500,000 \u00d7 7.25% \u00d7 1 year = $108,750')+L('New total','52,500 + 108,750 = $161,250')+L('Compare','$161,250 > $150,000 long-term, so short-term is now more expensive')+'<p class="note">This is the risk of short-term financing: the rate in a later year is not locked in, so the cost can swing above the long-term alternative.</p>'}
+ ]},
+{id:'termstructure', w:6, t:'Expectations hypothesis: multi-year expected returns', src:'ICQ Module 6, Problem 25',
+ g:tb(['Security duration and start date','Observed yield for the period'],[['1-year T-bill at beginning of year 1','5%'],['1-year T-bill at beginning of year 2','8%'],['1-year T-bill at beginning of year 3','7%'],['1-year T-bill at beginning of year 4','10%']]) +
+ `<p>Using the expectations hypothesis, find the annual expected return for securities with maturities of two, three and four years. Round final answers to 2 decimal places; do not round intermediate calculations.</p>`,
+ parts:[
+  {q:'[a] Close estimate: simple average of the relevant one-year yields.', f:[{l:'2-year security',a:6.50,u:'%',tol:.02},{l:'3-year security',a:6.67,u:'%',tol:.02},{l:'4-year security',a:7.50,u:'%',tol:.02}],
+   s:L('2-year','(5% + 8%) \u00f7 2 = 6.50%')+L('3-year','(5% + 8% + 7%) \u00f7 3 = 6.67%')+L('4-year','(5% + 8% + 7% + 10%) \u00f7 4 = 7.50%')+'<p class="note">Calculator trap: typing 5% + 8% \u00f7 2 without brackets divides only the 8% first. Use brackets around the whole sum.</p>'},
+  {q:'[b] Exact calculation: geometric mean using roots.', f:[{l:'2-year security',a:6.49,u:'%',tol:.02},{l:'3-year security',a:6.66,u:'%',tol:.02},{l:'4-year security',a:7.48,u:'%',tol:.02}],
+   s:L('Formula','Exact rate = [(1+r\u2081)(1+r\u2082)\u22ef(1+r\u2099)]^(1/n) \u2212 1')+L('2-year','[(1.05)(1.08)]^(1/2) \u2212 1 = 0.0649 = 6.49%')+L('3-year','[(1.05)(1.08)(1.07)]^(1/3) \u2212 1 = 0.0666 = 6.66%')+L('4-year','[(1.05)(1.08)(1.07)(1.10)]^(1/4) \u2212 1 = 0.0748 = 7.48%')+'<p class="note">Calculator trap: multiply every bracket together first, THEN apply the root, THEN subtract 1. Doing the root on only the last number before multiplying gives a wrong, much larger answer.</p>'}
+ ]},
+{id:'hip-plans', w:6, t:'HIP Corporation: short-term vs long-term financing plans', src:'ICQ Module 6, Financing Plans for Current and Total Assets',
+ g:tb(['HIP Corporation balance sheet','Assets'],[['Temporary current assets','$300,000'],['Permanent current assets','100,000'],['Capital assets','600,000'],['Total assets','$1,000,000']],[3]) +
+ `<p>Short-term interest is 6% and long-term interest is 10%. Three financing plans are compared:</p>
+ <ul><li><b>Plan A</b> finances all current assets (temporary and permanent) with short-term funds, and capital assets with long-term funds.</li>
+ <li><b>Plan B</b> uses only $200,000 of short-term financing, with the rest financed long-term.</li>
+ <li><b>Plan C (perfectly hedged)</b> matches temporary current assets with short-term funds, and matches permanent current assets plus capital assets with long-term funds.</li></ul>`,
+ parts:[
+  {q:'Plan A: the short-term/long-term split and total financing cost.', f:[{l:'Short-term %',a:40,u:'%'},{l:'Long-term %',a:60,u:'%'},{l:'Short-term cost',a:24000,u:'$'},{l:'Long-term cost',a:60000,u:'$'},{l:'Total financing cost',a:84000,u:'$'}],
+   s:L('Short-term %','(300,000 + 100,000) \u00f7 1,000,000 = 40%')+L('Long-term %','600,000 \u00f7 1,000,000 = 60%')+L('Short-term cost','400,000 \u00d7 6% = 24,000')+L('Long-term cost','600,000 \u00d7 10% = 60,000')+L('Total','84,000')},
+  {q:'Plan B: the short-term/long-term split and total financing cost.', f:[{l:'Short-term %',a:20,u:'%'},{l:'Long-term %',a:80,u:'%'},{l:'Short-term cost',a:12000,u:'$'},{l:'Long-term cost',a:80000,u:'$'},{l:'Total financing cost',a:92000,u:'$'}],
+   s:L('Short-term %','200,000 \u00f7 1,000,000 = 20%')+L('Long-term %','800,000 \u00f7 1,000,000 = 80%')+L('Short-term cost','200,000 \u00d7 6% = 12,000')+L('Long-term cost','800,000 \u00d7 10% = 80,000')+L('Total','92,000')},
+  {q:'Plan C: classify each asset type by basis of financing, find the percentages, then the total financing cost.', f:[{l:'Short-term total (temporary CA)',a:300000,u:'$'},{l:'Long-term total (permanent CA + capital)',a:700000,u:'$'},{l:'Short-term %',a:30,u:'%'},{l:'Long-term %',a:70,u:'%'},{l:'Short-term cost',a:18000,u:'$'},{l:'Long-term cost',a:70000,u:'$'},{l:'Total financing cost',a:88000,u:'$'}],
+   s:L('Perfectly hedged rule','Short-term funds match only temporary (self-liquidating) current assets; everything else, including permanent current assets, is long-term')+L('Short-term basis','Temporary current assets = 300,000')+L('Long-term basis','Permanent current assets 100,000 + capital assets 600,000 = 700,000')+L('Short-term %','300,000 \u00f7 1,000,000 = 30%')+L('Long-term %','700,000 \u00f7 1,000,000 = 70%')+L('Short-term cost','300,000 \u00d7 6% = 18,000')+L('Long-term cost','700,000 \u00d7 10% = 70,000')+L('Total','88,000')},
+  {q:'Effect on earnings. EBIT is $200,000 for all three plans; the tax rate is 50%.', f:[{l:'Earnings, Plan A',a:58000,u:'$'},{l:'Earnings, Plan B',a:54000,u:'$'},{l:'Earnings, Plan C',a:56000,u:'$'},{l:'Plan with the least effect on earnings',a:'Plan A',choice:['Plan A','Plan B','Plan C']},{l:'Plan with the most effect on earnings',a:'Plan B',choice:['Plan A','Plan B','Plan C']}],
+   s:L('Plan A','EBIT 200,000 \u2212 interest 84,000 = 116,000 EBT \u00d7 50% tax = 58,000 earnings')+L('Plan B','200,000 \u2212 92,000 = 108,000 \u00d7 50% = 54,000')+L('Plan C','200,000 \u2212 88,000 = 112,000 \u00d7 50% = 56,000')+L('Why','Plan A relies most on cheaper short-term debt, so it has the highest earnings (least negative effect); Plan B relies most on costlier long-term debt, so it has the lowest earnings (most effect)')+'<p class="note">Plan C, the perfectly hedged plan, is not the lowest-cost plan. Its purpose is to balance risk by matching how long financing is needed against how long it\u2019s borrowed for, not to maximize earnings.</p>'}
+ ]}
+,
+{id:'lear', w:6, t:'Lear Inc.: cost of two financing plans', src:'Connect quiz, Module 6 Q1',
+ g:`<p>Lear Inc. has $800,000 in current assets, $350,000 of which are considered permanent current assets. In addition, the firm has $600,000 invested in capital assets. Short-term financing currently costs 5%, long-term financing costs 10%. EBIT is $200,000 and the tax rate is 30%.</p>`,
+ parts:[
+  {q:'a. Lear finances all capital assets and half of its permanent current assets with long-term financing. Find Lear\u2019s earnings after taxes under this plan.', f:[{l:'Long-term financed amount',a:775000,u:'$'},{l:'Short-term financed amount',a:625000,u:'$'},{l:'Interest expense',a:108750,u:'$'},{l:'Earnings before taxes',a:91250,u:'$'},{l:'Taxes',a:27375,u:'$'},{l:'Earnings after taxes',a:63875,u:'$'}],
+   s:L('Temporary current assets','800,000 \u2212 350,000 = 450,000')+L('Long-term financed','Capital assets 600,000 + half of permanent CA (175,000) = 775,000')+L('Short-term financed','Temporary CA 450,000 + remaining half permanent CA (175,000) = 625,000')+L('Interest','775,000 \u00d7 10% + 625,000 \u00d7 5% = 77,500 + 31,250 = 108,750')+L('EBT','200,000 \u2212 108,750 = 91,250')+L('Taxes','30% \u00d7 91,250 = 27,375')+L('EAT','91,250 \u2212 27,375 = 63,875')},
+  {q:'b. As an alternative, Lear finances all capital assets and all permanent current assets, plus half of temporary current assets, with long-term financing. Same rates apply. Find earnings after taxes under this plan.', f:[{l:'Long-term financed amount',a:1175000,u:'$'},{l:'Short-term financed amount',a:225000,u:'$'},{l:'Interest expense',a:128750,u:'$'},{l:'Earnings before taxes',a:71250,u:'$'},{l:'Taxes',a:21375,u:'$'},{l:'Earnings after taxes',a:49875,u:'$'}],
+   s:L('Long-term financed','Capital assets 600,000 + permanent CA 350,000 + half temporary CA (225,000) = 1,175,000')+L('Short-term financed','Remaining half of temporary CA = 225,000')+L('Interest','1,175,000 \u00d7 10% + 225,000 \u00d7 5% = 117,500 + 11,250 = 128,750')+L('EBT','200,000 \u2212 128,750 = 71,250')+L('Taxes','30% \u00d7 71,250 = 21,375')+L('EAT','71,250 \u2212 21,375 = 49,875')+'<p class="note">Plan b uses more long-term (higher-cost) financing than plan a, so interest expense rises and earnings after taxes fall.</p>'}
+ ]},
+{id:'gocbonds', w:6, t:'Government of Canada bonds: anticipated one-year forward rates', src:'Connect quiz, Module 6 Q2',
+ g:tb(['Coupon','Maturity','Price','Yield'],[['8.25%','Mar. 1, 20YY + 1','$102.75','5.78%'],['3.75%','Mar. 1, 20YY + 2','$95.70','5.85%'],['5.75%','Mar. 1, 20YY + 3','$98.65','6.22%']]) +
+ `<p>As of the close of business March 1, 20YY. Round final answers to 2 decimal places; do not round intermediate calculations.</p>`,
+ parts:[
+  {q:'Calculate the anticipated one-year interest rate for the 2nd year and the 3rd year, using the expectations hypothesis.', f:[{l:'2nd year rate',a:5.92,u:'%',tol:.04},{l:'3rd year rate',a:6.96,u:'%',tol:.04}],
+   s:L('Idea','A multi-year yield is the geometric average of the one-year rates expected over its life, so each forward rate can be backed out from two adjacent yields')+L('2nd year formula','(1 + y\u2082)\u00b2 \u00f7 (1 + y\u2081) \u2212 1')+L('2nd year','(1.0585)\u00b2 \u00f7 1.0578 \u2212 1 = 1.12042225 \u00f7 1.0578 \u2212 1 = 0.0592 = 5.92%')+L('3rd year formula','(1 + y\u2083)\u00b3 \u00f7 (1 + y\u2082)\u00b2 \u2212 1')+L('3rd year','(1.0622)\u00b3 \u00f7 (1.0585)\u00b2 \u2212 1 = 1.19844716 \u00f7 1.12042225 \u2212 1 = 0.0696 = 6.96%')}
+ ]},
+{id:'vincent', w:6, t:'Vincent Black Lightning: fixed vs. variable short-term financing cost', src:'Connect quiz, Module 6 Q3',
+ g:`<p>Vincent Black Lightning requires $950,000 in financing over the next three years. The firm can borrow the funds for three years at a fixed 7% per year. Alternatively, short-term financing is forecast to cost 3% in year 1, 5% in year 2 and 11% in year 3.</p>`,
+ parts:[
+  {q:'a. Total three-year interest cost under each plan.  b. Which plan is less costly?', f:[{l:'Fixed cost financing total',a:199500,u:'$'},{l:'Variable short-term financing total',a:180500,u:'$'},{l:'Less costly plan',a:'Short-term plan',choice:['Fixed cost plan','Short-term plan']}],
+   s:L('Fixed cost','950,000 \u00d7 7% \u00d7 3 years = 199,500')+L('Variable, year 1','950,000 \u00d7 3% = 28,500')+L('Variable, year 2','950,000 \u00d7 5% = 47,500')+L('Variable, year 3','950,000 \u00d7 11% = 104,500')+L('Variable total','28,500 + 47,500 + 104,500 = 180,500')+L('Compare','180,500 < 199,500, so the short-term plan is less costly, though its rates are forecasts rather than guaranteed')}
+ ]},
+{id:'ruth', w:6, t:'Ruth Sporting Goods: level production, inventory and financing cost', src:'Connect quiz, Module 6 Q4',
+ g:tb(['Month','Units sold'],[['March','3,600'],['April','7,600'],['May','12,200'],['June','10,200'],['Total','33,600']],[4]) +
+ `<p>Ruth\u2019s production manager rejects matching production to sales each month, and instead uses level production of 8,400 units per month (33,600 \u00f7 4 months). Assume no beginning inventory in March.</p>`,
+ parts:[
+  {q:'a. Complete the table: units sold, units produced, the change in inventory and the ending inventory for each month.', f:['March','April','May','June'].flatMap((m,i)=>[
+    {l:m+': units sold',a:[3600,7600,12200,10200][i],u:'units'},
+    {l:m+': units produced',a:8400,u:'units'},
+    {l:m+': change in inventory',a:[4800,800,-3800,-1800][i],u:'units'},
+    {l:m+': ending inventory',a:[4800,5600,1800,0][i],u:'units'}
+   ]),
+   s:L('Change in inventory','Units produced \u2212 units sold')+L('Ending inventory','Previous ending inventory + this month\u2019s change (0 to start in March)')+L('March','8,400 \u2212 3,600 = +4,800; ending 0 + 4,800 = 4,800')+L('April','8,400 \u2212 7,600 = +800; ending 4,800 + 800 = 5,600')+L('May','8,400 \u2212 12,200 = (3,800); ending 5,600 \u2212 3,800 = 1,800')+L('June','8,400 \u2212 10,200 = (1,800); ending 1,800 \u2212 1,800 = 0')+'<p class="note">Ending inventory returns to zero in June because total production (33,600) exactly equals total sales for the season.</p>'},
+  {q:'b. If inventory costs $20 per unit and is financed through the bank at 6% per annum, what is the monthly financing cost and the total for the four months?', f:[{l:'March financing cost',a:480,u:'$'},{l:'April financing cost',a:560,u:'$'},{l:'May financing cost',a:180,u:'$'},{l:'June financing cost',a:0,u:'$'},{l:'Total financing cost',a:1220,u:'$'}],
+   s:L('Monthly rate','6% \u00f7 12 months = 0.50%')+L('March','4,800 units \u00d7 $20 \u00d7 0.50% = $480')+L('April','5,600 \u00d7 $20 \u00d7 0.50% = $560')+L('May','1,800 \u00d7 $20 \u00d7 0.50% = $180')+L('June','0 \u00d7 $20 \u00d7 0.50% = $0')+L('Total','480 + 560 + 180 + 0 = $1,220')}
+ ]}
+,
+{id:'concbank', w:7, t:'Concentration banking: is the cash management package worth it?', src:'ICQ Module 7, Problem 7',
+ g:`<p>A concentration banking system would make deposited customer cheques available 3 days sooner on average. Average daily collections are $305,000, and the opportunity cost of funds is 9%. The bank charges $52,500 for the service, plus a compensating balance of $75,000 (an interest-free minimum balance you must keep at that bank).</p>`,
+ parts:[
+  {q:'Is the package worth it? If so, by how much?', f:[{l:'Funds freed up by the speedup',a:915000,u:'$'},{l:'Net funds freed up',a:840000,u:'$'},{l:'Annual benefit at 9%',a:75600,u:'$'},{l:'Annual savings from the package',a:23100,u:'$'},{l:'Accept the package?',a:'Accept',choice:['Accept','Reject']}],
+   s:L('Funds freed up','$305,000 \u00d7 3 days = $915,000')+L('Net funds freed up','915,000 \u2212 compensating balance 75,000 = 840,000')+L('Annual benefit','840,000 \u00d7 9% = 75,600')+L('Annual savings','75,600 \u2212 annual fee 52,500 = 23,100')+L('Conclusion','Accept the package: the incremental benefits ($75,600) exceed the incremental fees ($52,500) by $23,100 a year')}
+ ]},
+{id:'comiskey', w:7, t:'Comiskey Fence Co.: should credit be extended to new customers?', src:'ICQ Module 7, Problems 23 and 24',
+ g:`<p>Comiskey Fence Co. is evaluating extending credit to a new group of customers, who would provide $180,000 in additional credit sales. Collection expenses would rise by $15,700, and production and selling costs are 70% of sales. The company's receivables turnover is 5 times, no other asset buildup is required, and the firm's desired return on investment is 15%.</p>`,
+ parts:[
+  {q:'a. If 12% of the new sales prove uncollectible, should Comiskey extend credit?', f:[{l:'Accounts uncollectible',a:21600,u:'$'},{l:'Annual incremental revenue',a:158400,u:'$'},{l:'Production and selling costs',a:126000,u:'$'},{l:'Annual income before taxes',a:16700,u:'$'},{l:'Investment in accounts receivable',a:36000,u:'$'},{l:'Return on incremental investment',a:46.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+   s:L('Uncollectible','12% \u00d7 180,000 = 21,600')+L('Incremental revenue','180,000 \u2212 21,600 = 158,400')+L('Production and selling','70% \u00d7 180,000 = 126,000')+L('Income before taxes','158,400 \u2212 15,700 \u2212 126,000 = 16,700')+L('Investment in AR','Sales 180,000 \u00f7 turnover 5 = 36,000')+L('Return','16,700 \u00f7 36,000 = 46.4%')+L('Conclusion','Yes, extend credit: 46.4% is well above the 15% desired return')},
+  {q:'b. What if 15% of the new sales prove uncollectible instead?', f:[{l:'Accounts uncollectible',a:27000,u:'$'},{l:'Annual income before taxes',a:11300,u:'$'},{l:'Return on incremental investment',a:31.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+   s:L('Uncollectible','15% \u00d7 180,000 = 27,000 (5,400 more than part a)')+L('Income before taxes','180,000 \u2212 27,000 \u2212 15,700 \u2212 126,000 = 11,300')+L('Return','11,300 \u00f7 36,000 (from part a) = 31.4%')+L('Conclusion','Yes, extend credit: 31.4% is still greater than 15%')},
+  {q:'c. What if receivables turnover drops to 1.5\u00d7, with 12% of accounts uncollectible as in part a?', f:[{l:'New investment in accounts receivable',a:120000,u:'$'},{l:'Return on incremental investment',a:13.92,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
+   s:L('New investment in AR','180,000 \u00f7 1.5 = 120,000')+L('Return','16,700 (from part a) \u00f7 120,000 = 13.92%')+L('Conclusion','No: 13.92% is less than the desired 15%, so credit should not be extended on this basis')},
+  {q:'d. (Problem 24) What if the average collection period is 120 days instead, with 12% uncollectible as in part a?', f:[{l:'Accounts receivable turnover',a:3.04,u:'x',tol:.02},{l:'New investment in accounts receivable',a:59178,u:'$',tol:40},{l:'Return on incremental investment',a:28.22,u:'%',tol:.05},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+   s:L('AR turnover','365 \u00f7 120 days = 3.0417\u00d7')+L('New investment in AR','180,000 \u00f7 3.0417 = 59,178')+L('Return','16,700 (from part a) \u00f7 59,178 = 28.22%')+L('Conclusion','Yes, extend credit: 28.22% is greater than 15%')}
+ ]},
+{id:'gic', w:7, t:'Annual return on an interest-paying security (GIC)', src:'ICQ Module 7, Annual Return example',
+ g:`<p>You lend $100,000 for 90 days through a GIC (Guaranteed Investment Certificate). The borrower pays $4,000 in interest for the 90 days.</p>`,
+ parts:[
+  {q:'What is your annualized return?', f:[{l:'Annual return',a:16.22,u:'%',tol:.05}],
+   s:L('Formula','R\u2090\u2099\u2099\u1d58\u2090\u2097 = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 days)')+L('Calculation','(4,000 \u00f7 100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')}
+ ]},
+{id:'discyield', w:7, t:'Discount security: annualized yield vs. annualized effective yield', src:'ICQ Module 7, Rates of Return (Yield Calculations)',
+ g:`<p>A financial security sells at 99.531% of its maturity value, maturing in 90 days (a discount-traded security).</p>`,
+ parts:[
+  {q:'Find the annualized yield, and the annualized effective yield that accounts for compounding.', f:[{l:'Annualized yield',a:1.91,u:'%',tol:.03},{l:'Annualized effective yield',a:1.92,u:'%',tol:.03}],
+   s:L('Annualized yield formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Annualized yield','[(100 \u2212 99.531) \u00f7 99.531] \u00d7 (365 \u00f7 90) = 0.019110 = 1.91%')+L('Effective yield formula','(1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Effective yield','(1 + 0.004712)^(365\u00f790) \u2212 1 = 0.019248 = 1.92%')+L('Why they differ','The effective yield compounds the 90-day return over the periods in a year; the simple annualized yield does not')}
+ ]},
+{id:'eoq-centennial', w:7, t:'Centennial Company: economic order quantity and total inventory cost', src:'ICQ Module 7, EOQ example',
+ g:`<p>Centennial Company sells 2,000 units a year. Each order costs $8 to place, and the carrying cost of holding inventory is $0.20 per unit per year.</p>`,
+ parts:[
+  {q:'What is the economic order quantity (EOQ)?', f:[{l:'EOQ',a:400,u:'units'}],
+   s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 2,000 \u00d7 8 \u00f7 0.20) = \u221a160,000 = 400 units')},
+  {q:'What is the total cost (TC) of inventory at the EOQ?', f:[{l:'Number of orders',a:5,u:'x'},{l:'Order cost',a:40,u:'$'},{l:'Carrying cost',a:40,u:'$'},{l:'Total inventory cost',a:80,u:'$'}],
+   s:L('Number of orders','2,000 \u00f7 400 = 5 orders')+L('Order cost','5 \u00d7 $8 = $40')+L('Carrying cost','$0.20 \u00d7 (400 \u00f7 2 = 200 average units) = $40')+L('TC','40 + 40 = $80')},
+  {q:'If 50 units of safety stock are desired, what is the new average inventory and new carrying cost?', f:[{l:'New average inventory',a:250,u:'units'},{l:'New carrying cost',a:50,u:'$'}],
+   s:L('Average inventory with safety stock','EOQ \u00f7 2 + safety stock = 200 + 50 = 250 units')+L('New carrying cost','250 \u00d7 $0.20 = $50')}
+ ]},
+{id:'higgins', w:7, t:'Higgins Athletic Wear: EOQ, average inventory and total inventory cost', src:'ICQ Module 7, Problem 41',
+ g:`<p>Higgins Athletic Wear expects sales of 22,500 units a year, carrying costs of $1.50 per unit, and an ordering cost of $3.00 per order.</p>`,
+ parts:[
+  {q:'a. What is the economic order quantity?', f:[{l:'EOQ',a:300,u:'units'}],
+   s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 22,500 \u00d7 3 \u00f7 1.50) = \u221a90,000 = 300 units')},
+  {q:'b. What is average inventory, and the total carrying cost?', f:[{l:'Average inventory',a:150,u:'units'},{l:'Total carrying cost',a:225,u:'$'}],
+   s:L('Average inventory','EOQ \u00f7 2 = 300 \u00f7 2 = 150 units')+L('Total carrying cost','150 \u00d7 $1.50 = $225')},
+  {q:'c. What is the total inventory cost?', f:[{l:'Number of orders',a:75,u:'x'},{l:'Order cost',a:225,u:'$'},{l:'Carrying cost',a:225,u:'$'},{l:'Total inventory cost',a:450,u:'$'}],
+   s:L('Number of orders','22,500 \u00f7 300 = 75 orders')+L('Order cost','75 \u00d7 $3 = $225')+L('Carrying cost','$1.50 \u00d7 150 = $225')+L('TC','225 + 225 = $450')},
+  {q:'d. If an additional 30 units are required as safety stock, what are the new average inventory and new total carrying cost?', f:[{l:'New average inventory',a:180,u:'units'},{l:'New total carrying cost',a:270,u:'$'}],
+   s:L('Average inventory with safety stock','300 \u00f7 2 + 30 = 180 units')+L('New carrying cost','180 \u00d7 $1.50 = $270')}
+ ]}
+,
+{id:'fisk', w:7, t:'Fisk Corporation: EOQ after a drop in ordering cost', src:'Connect quiz, Module 7 Q1',
+ g:`<p>Fisk Corporation anticipates sales of 56,000 units a year, an ordering cost of $8 per order, and carrying costs of $1.40 per unit. In the second year, Fisk finds it can reduce ordering costs to $2 per order; carrying costs stay at $1.40 per unit.</p>`,
+ parts:[
+  {q:'a-1. What is the EOQ for the second year?', f:[{l:'Economic ordering quantity (EOQ)',a:400,u:'units'}],
+   s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 56,000 \u00d7 2 \u00f7 1.40) = \u221a160,000 = 400 units')},
+  {q:'a-2. How many orders will be placed during the second year?', f:[{l:'Number of orders',a:140,u:'x'}],
+   s:L('Formula','Number of orders = Annual sales in units \u00f7 EOQ')+L('Calculation','56,000 \u00f7 400 = 140 orders')},
+  {q:'a-3. What will average inventory be for the second year?', f:[{l:'Average inventory',a:200,u:'units'}],
+   s:L('Formula','Average inventory = EOQ \u00f7 2')+L('Calculation','400 \u00f7 2 = 200 units')},
+  {q:'a-4. What is the total cost of ordering and carrying inventory for the second year?', f:[{l:'Total costs',a:560,u:'$'}],
+   s:L('Formula','TC = (Number of orders \u00d7 Order cost) + (Carrying cost per unit \u00d7 Average inventory)')+L('Calculation','(140 \u00d7 $2) + ($1.40 \u00d7 200) = $280 + $280 = $560')}
+ ]},
+{id:'henderson', w:7, t:'Henderson Office Supplies: liberalizing credit, with and without an inventory buildup', src:'Connect quiz, Module 7 Q2',
+ g:`<p>Henderson Office Supplies is considering a more liberal credit policy to increase sales by $71,000. It expects 9% of the new accounts to be uncollectible, collection costs of 2% of new sales, production costs of 80% of sales, and accounts receivable turnover of 2 times. No other asset buildup is assumed at first.</p>`,
+ parts:[
+  {q:'a. What is the level of investment in accounts receivable to support this sales expansion?', f:[{l:'Investment in accounts receivable',a:35500,u:'$'}],
+   s:L('Formula','Investment in AR = New sales \u00f7 Receivables turnover')+L('Calculation','71,000 \u00f7 2 = $35,500')},
+  {q:'b. What would be Henderson\u2019s incremental before-tax return on investment?', f:[{l:'Incremental income before tax',a:6390,u:'$'},{l:'Return on incremental investment',a:18,u:'%'}],
+   s:L('Uncollectible','9% \u00d7 71,000 = 6,390')+L('Collection costs','2% \u00d7 71,000 = 1,420')+L('Production costs','80% \u00d7 71,000 = 56,800')+L('Income before tax','71,000 \u2212 6,390 \u2212 1,420 \u2212 56,800 = 6,390')+L('Return','6,390 \u00f7 35,500 (from part a) = 18%')},
+  {q:'c. Should Henderson liberalize credit if a 15% before-tax return is required?', f:[{l:'Liberalize credit?',a:'Yes',choice:['Yes','No']}],
+   s:L('Compare','18% (from part b) is greater than the required 15%, so yes, liberalize credit')},
+  {q:'d. Now assume Henderson also needs to increase inventory to support the new sales, with inventory turnover of 5\u00d7 on cost of goods sold. What is the total incremental investment in accounts receivable and inventory?', f:[{l:'Investment in inventory',a:11360,u:'$'},{l:'Total incremental investment',a:46860,u:'$'}],
+   s:L('COGS of the new sales','Production costs from part b = 80% \u00d7 71,000 = 56,800')+L('Investment in inventory','56,800 \u00f7 inventory turnover 5 = 11,360')+L('Total investment','AR 35,500 (part a) + inventory 11,360 = 46,860')},
+  {q:'e. Given the income from part b and the investment from part d, should Henderson extend more liberal credit terms?', f:[{l:'Return on total investment',a:13.64,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
+   s:L('Return','6,390 (part b) \u00f7 46,860 (part d) = 13.64%')+L('Compare','13.64% is less than the required 15%, so no, once the inventory buildup is included the expansion no longer clears the hurdle')}
+ ]},
+{id:'lett', w:7, t:'Lett\u2019s commercial paper: yield and effective annual yield', src:'Connect quiz, Module 7 Q3',
+ g:`<p>Lett\u2019s commercial paper is selling at a discount. It sells for 98.32% of par and matures in 100 days. Use 365 days a year; do not round intermediate calculations.</p>`,
+ parts:[
+  {q:'a. Calculate its yield as quoted in the market.', f:[{l:'Yield',a:6.24,u:'%',tol:.04}],
+   s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.32) \u00f7 98.32] \u00d7 (365 \u00f7 100) = 0.017087 \u00d7 3.65 = 0.0624 = 6.24%')},
+  {q:'b. Calculate its effective annual yield.', f:[{l:'Effective annual yield',a:6.38,u:'%',tol:.04}],
+   s:L('Formula','Effective yield = (1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Calculation','(1.017087)^3.65 \u2212 1 = 0.0638 = 6.38%')+L('Why it\u2019s higher','The effective yield compounds the 100-day return over the 3.65 periods in a year, instead of simply scaling it up')}
+ ]},
+{id:'haynes', w:7, t:'Haynes Bank: is a cash management offer worth accepting?', src:'Connect quiz, Module 7 Q4',
+ g:`<p>Haynes Bank offers to reduce the collection time on your company\u2019s daily cash receipts by two days. The service costs $25,000 per year. Short-term money market rates average 8%, and anticipated annual sales are $45.625 million.</p>`,
+ parts:[
+  {q:'If you anticipate annual sales of $45.625 million, would you accept the bank\u2019s offer?', f:[{l:'Average daily sales',a:125000,u:'$'},{l:'Funds freed up by the speedup',a:250000,u:'$'},{l:'Annual benefit at 8%',a:20000,u:'$'},{l:'Net annual savings (cost)',a:-5000,u:'$'},{l:'Accept the offer?',a:'No',choice:['Yes','No']}],
+   s:L('Average daily sales','$45,625,000 \u00f7 365 = $125,000')+L('Funds freed up','$125,000 \u00d7 2 days = $250,000')+L('Annual benefit','$250,000 \u00d7 8% = $20,000')+L('Net savings','$20,000 \u2212 $25,000 fee = ($5,000)')+L('Conclusion','No: the $25,000 fee costs more than the $20,000 benefit, a net loss of $5,000 a year')}
+ ]}
+,
+{id:'trade_credit8', w:8, t:'Trade credit: average accounts payable balance, and the effect of a sales expansion', src:'ICQ Module 8, worked example',
+ g:`<p>A company has annual purchases of $7,300,000 and pays its suppliers on terms of net 30 days.</p>`,
+ parts:[
+  {q:'a. What is the average daily purchases, and the average accounts payable balance?', f:[{l:'Average daily purchases',a:20000,u:'$'},{l:'Average accounts payable balance',a:600000,u:'$'}],
+   s:L('Average daily purchases','$7,300,000 \u00f7 365 = $20,000')+L('Average A/P balance','$20,000 \u00d7 30 days = $600,000')},
+  {q:'b. Purchases expand by 20% to $8,760,000 (the payment period stays at 30 days). What is the new average accounts payable balance, and how much extra short-term financing does this provide?', f:[{l:'New average daily purchases',a:24000,u:'$'},{l:'New average A/P balance',a:720000,u:'$'},{l:'Increase in short-term financing',a:120000,u:'$'}],
+   s:L('New average daily purchases','$8,760,000 \u00f7 365 = $24,000')+L('New average A/P balance','$24,000 \u00d7 30 days = $720,000')+L('Increase in financing','$720,000 \u2212 $600,000 = $120,000, and it arrives automatically as purchases grow')}
+ ]},
+{id:'cash_discount_ex', w:8, t:'Cost of forgoing a cash discount: 2/10, net 30', src:'ICQ Module 8, worked example',
+ g:`<p>A supplier offers credit terms of 2/10, net 30: a 2% discount if the invoice is paid within 10 days, otherwise the full amount is due in 30 days.</p>`,
+ parts:[
+  {q:'What is the annual cost of forgoing the discount (paying on day 30 instead of day 10)?', f:[{l:'K_DIS',a:37.24,u:'%',tol:.1}],
+   s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (30 \u2212 10)] = 0.0204 \u00d7 18.25 = 0.3724 = 37.24%')}
+ ]},
+{id:'promptly', w:8, t:'Paul Promptly: cost of not taking the cash discount, on his effective terms', src:'ICQ Module 8, Problem 4',
+ g:`<p>Paul Promptly\u2019s suppliers offer trade credit terms of 3/10, net 70. Mr. Promptly never takes the discount, but \u2014 being cautious \u2014 always pays in 60 days rather than waiting the full 70 days allowed.</p>`,
+ parts:[
+  {q:'What is Mr. Promptly\u2019s cost of not taking the cash discount?', f:[{l:'K_DIS',a:22.58,u:'%',tol:.1}],
+   s:L('Note','Because Mr. Promptly pays on day 60 instead of day 70, he only has the use of the funds for 50 extra days (60 \u2212 10), not 60 (70 \u2212 10) \u2014 so his effective terms are 3/10, net 60')+L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (effective net days \u2212 discount days)]')+L('Calculation','[3% \u00f7 97%] \u00d7 [365 \u00f7 (60 \u2212 10)] = 0.0309 \u00d7 7.30 = 0.2258 = 22.58%')}
+ ]},
+{id:'bautista', w:8, t:'Bautista Dog Food Company: net credit position', src:'ICQ Module 8, Problem 9',
+ g:`<p>Bautista Dog Food Company normally takes 20 days to pay for average daily credit purchases of $9,000. Its average daily credit sales are $10,000, and it collects its own accounts in 25 days.</p>`,
+ parts:[
+  {q:'a. What is Bautista\u2019s net credit position?', f:[{l:'Accounts receivable',a:250000,u:'$'},{l:'Accounts payable',a:180000,u:'$'},{l:'Net credit position',a:70000,u:'$'}],
+   s:L('Accounts receivable','$10,000 \u00d7 25 days = $250,000')+L('Accounts payable','$9,000 \u00d7 20 days = $180,000')+L('Net credit position','$250,000 \u2212 $180,000 = +$70,000 (Bautista extends more credit than it receives)')},
+  {q:'b. If Bautista stretches its average payment period from 20 days to 32 days (everything else the same), what is the new net credit position?', f:[{l:'New accounts payable',a:288000,u:'$'},{l:'New net credit position',a:-38000,u:'$'}],
+   s:L('Accounts receivable','Unchanged at $250,000')+L('New accounts payable','$9,000 \u00d7 32 days = $288,000')+L('New net credit position','$250,000 \u2212 $288,000 = ($38,000)')+L('Interpretation','Bautista has improved its cash position: instead of extending $70,000 more credit than it receives, it is now the net recipient of $38,000 in credit')}
+ ]},
+{id:'stephen_rate', w:8, t:'Stephen Corporation: cost of interest-bearing bank financing', src:'ICQ Module 8, worked example',
+ g:`<p>For the next 90 days, Stephen Corporation has a short-term financing need for $100,000.</p>`,
+ parts:[
+  {q:'a. The CFO negotiates a 90-day loan with $4,000 in interest payments. What is the annual interest rate on this financing?', f:[{l:'Annual interest rate',a:16.22,u:'%',tol:.1}],
+   s:L('Formula','R_ANNUAL = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($4,000 \u00f7 $100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')},
+  {q:'b. Instead, suppose the CFO negotiates a 90-day loan at a 16.22% annual interest rate. What is the dollar cost of interest for this loan?', f:[{l:'Interest cost',a:4000,u:'$',tol:5}],
+   s:L('Formula','Interest cost ($) = Principal \u00d7 Rate \u00d7 (Days \u00f7 365)')+L('Calculation','$100,000 \u00d7 16.22% \u00d7 (90 \u00f7 365) = $3,999 \u2248 $4,000')}
+ ]},
+{id:'stephen_comp', w:8, t:'Stephen Corporation: compensating balance loan', src:'ICQ Module 8, worked example',
+ g:`<p>For the next year, Stephen Corporation has a short-term financing need for $8,000. The CFO negotiates a loan with a 20% compensating balance requirement, and must pay $600 in interest.</p>`,
+ parts:[
+  {q:'a. Confirm the amount that must actually be borrowed, so that $8,000 is left usable after the compensating balance is set aside.', f:[{l:'Amount to be borrowed',a:10000,u:'$'}],
+   s:L('Formula','Amount to be borrowed = Amount needed \u00f7 (1 \u2212 compensating balance %)')+L('Calculation','$8,000 \u00f7 (1 \u2212 0.20) = $8,000 \u00f7 0.80 = $10,000')},
+  {q:'b. What is the annual rate on this compensating balance loan?', f:[{l:'Compensating balance required',a:2000,u:'$'},{l:'Annual rate (R_COMP)',a:7.5,u:'%',tol:.1}],
+   s:L('Compensating balance required','20% \u00d7 $10,000 = $2,000')+L('Formula','R_COMP = [Interest \u00f7 (Principal \u2212 Required balance)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$600 \u00f7 ($10,000 \u2212 $2,000)] \u00d7 (365 \u00f7 365) = 0.0750 = 7.50%')+L('Note','An equivalent algebraic form divides by (1 \u2212 c) instead of subtracting the balance directly \u2014 both give the same 7.50%')}
+ ]},
+{id:'stephen_discounted', w:8, t:'Stephen Corporation: discounted loan', src:'ICQ Module 8, worked example',
+ g:`<p>For the next 60 days, Stephen Corporation has a short-term financing need for $35,000. The CFO negotiates to pay $310 in interest, with the interest deducted up front (a discounted loan).</p>`,
+ parts:[
+  {q:'What is the annual rate of interest on this discounted loan?', f:[{l:'Annual rate (R_DIS)',a:5.44,u:'%',tol:.1}],
+   s:L('Formula','R_DIS = [Interest \u00f7 (Principal \u2212 Interest)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$310 \u00f7 ($35,000 \u2212 $310)] \u00d7 (365 \u00f7 60) = 0.008934 \u00d7 6.0833 = 0.0544 = 5.44%')}
+ ]},
+{id:'chapman', w:8, t:'Chapman Records: yield on commercial paper sold at a discount', src:'ICQ Module 8, Problem 27',
+ g:`<p>Chapman Records\u2019 commercial paper is currently selling at 98.512% of maturity value; it matures in 75 days. Use 365 days a year; do not round intermediate calculations.</p>`,
+ parts:[
+  {q:'a. What annualized yield is it offering investors?', f:[{l:'Annualized yield',a:7.35,u:'%',tol:.08}],
+   s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.512) \u00f7 98.512] \u00d7 (365 \u00f7 75) = 0.015102 \u00d7 4.8667 = 0.0735 = 7.35%')},
+  {q:'b. What is the effective annual yield?', f:[{l:'Effective annual yield',a:7.57,u:'%',tol:.08}],
+   s:L('Formula','r_EFF = (1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Calculation','(1.015102)^4.8667 \u2212 1 = 0.0757 = 7.57%')}
+ ]},
+{id:'rockford', w:8, t:'Rockford Filing Ltd.: choosing the cheapest short-term financing alternative', src:'ICQ Module 8, Problem 35',
+ g:`<p>Rockford Filing Ltd. requires $1,000,000 in financing for a 45-day period. Three alternatives are being considered:</p><ul><li>(a) A line of credit at 10% interest, with a 1% annual commitment fee to establish the line.</li><li>(b) Forgo trade discounts from suppliers on terms of 2/15, net 60.</li><li>(c) Issue commercial paper for 45 days at a discount of 1.25%.</li></ul>`,
+ parts:[
+  {q:'a. What is the annual rate of interest on the line of credit, including the commitment fee?', f:[{l:'Annual commitment fee',a:10000,u:'$'},{l:'Interest expense',a:12328.77,u:'$',tol:5},{l:'Annual rate of interest',a:18.11,u:'%',tol:.1}],
+   s:L('Commitment fee','1% \u00d7 $1,000,000 = $10,000')+L('Interest expense','$1,000,000 \u00d7 10% \u00d7 (45 \u00f7 365) = $12,328.77')+L('Formula','R_ANNUAL = [(Commitment fee + Interest expense) \u00f7 Principal] \u00d7 (365 \u00f7 Days)')+L('Calculation','[($10,000 + $12,328.77) \u00f7 $1,000,000] \u00d7 (365 \u00f7 45) = 0.1811 = 18.11%')},
+  {q:'b. What is the cost of forgoing the cash discount on terms of 2/15, net 60?', f:[{l:'K_DIS',a:16.55,u:'%',tol:.1}],
+   s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (60 \u2212 15)] = 0.1655 = 16.55%')},
+  {q:'c. The commercial paper sells at a discount of 1.25% (so its price is 100 \u2212 1.25 = 98.75, per $100 of maturity value). What annualized rate does this represent?', f:[{l:'Annualized rate',a:10.27,u:'%',tol:.1}],
+   s:L('Price','100 \u2212 1.25 = 98.75')+L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.75) \u00f7 98.75] \u00d7 (365 \u00f7 45) = 0.1027 = 10.27%')},
+  {q:'d. Which alternative should Rockford choose?', f:[{l:'Cheapest alternative',a:'Commercial paper',choice:['Line of credit','Forgo the cash discount','Commercial paper']}],
+   s:L('Compare','(a) 18.11% vs. (b) 16.55% vs. (c) 10.27%')+L('Conclusion','Choose the commercial paper \u2014 it is the cheapest alternative')}
+ ]}
+];
+
+/* ---------- formula sheet ---------- */
+const FX = {
+ eac:['Earnings available to common','EAT − preferred dividends'],
+ eps:['Earnings per share (EPS)','Earnings available to common ÷ common shares outstanding'],
+ dps:['Dividends per share','Common dividends ÷ common shares outstanding'],
+ payout:['Payout ratio','Dividends per share ÷ EPS'],
+ pe:['Price/earnings (P/E)','Market price per share ÷ EPS'],
+ dy:['Dividend yield','Dividends per share ÷ market price per share'],
+ re:['Increase in retained earnings','Earnings available to common − common dividends'],
+ is:['Income statement','Sales − COGS = gross profit; − operating expenses (incl. amortization) = EBIT; − interest = EBT; − taxes = EAT'],
+ tax:['Taxes','EBT × tax rate'],
+ nwc:['Working capital changes','Current asset ↑ = cash out, ↓ = cash in. Current liability ↑ = cash in, ↓ = cash out'],
+ cfo:['Cash from operating activities','EAT + amortization ± changes in non-cash working capital'],
+ cfi:['Cash from investing activities','− purchases of long-term assets + proceeds from sales'],
+ cff:['Cash from financing activities','+ debt and share issues − repayments − dividends paid'],
+ divpaid:['Dividends paid','Beginning RE + net income − ending RE'],
+ amort:['Amortization expense','Change in accumulated amortization (no disposals)'],
+ netcash:['Net change in cash','CFO + CFI + CFF'],
+ fcf:['Free cash flow','CFO − capital expenditures − dividends'],
+ pm:['Profit margin','Net income ÷ sales'],
+ gpm:['Gross profit margin','Gross profit ÷ sales'],
+ roa:['Return on assets','Net income ÷ total assets'],
+ roa_dupont:['ROA (DuPont)','Profit margin × total asset turnover'],
+ roe:['Return on equity','Net income ÷ shareholders\u2019 equity'],
+ em:['Equity multiplier','Total assets ÷ shareholders\u2019 equity'],
+ roe_dupont:['ROE (DuPont)','ROA × equity multiplier'],
+ rt:['Receivables turnover','Credit sales ÷ accounts receivable'],
+ acp:['Average collection period','Accounts receivable ÷ average daily credit sales (sales ÷ 365)'],
+ it:['Inventory turnover','Cost of goods sold ÷ inventory'],
+ ihp:['Inventory holding period','Inventory ÷ average daily COGS (COGS ÷ 365)'],
+ apt:['Accounts payable turnover','Cost of goods sold ÷ accounts payable'],
+ app:['Accounts payable period','Accounts payable ÷ average daily purchases (COGS ÷ 365)'],
+ cat:['Capital asset turnover','Sales ÷ capital assets'],
+ tat:['Total asset turnover','Sales ÷ total assets'],
+ cr:['Current ratio','Current assets ÷ current liabilities'],
+ qr:['Quick ratio','(Current assets − inventory) ÷ current liabilities'],
+ dta:['Debt to total assets','Total debt ÷ total assets'],
+ de:['Debt to equity','Total debt ÷ shareholders\u2019 equity'],
+ tie:['Times interest earned','Income before interest and taxes ÷ interest'],
+ fcc:['Fixed charge coverage','Income before fixed charges and taxes ÷ fixed charges'],
+ ev:['Expected value','Σ (probability × units × price)'],
+ prod:['Units to produce','Projected sales + desired ending inventory − beginning inventory'],
+ prodcost:['Total production cost','Units produced × cost per unit'],
+ fifo:['COGS (FIFO)','Old inventory units × old cost + remaining units sold × new cost'],
+ endinv:['Ending inventory','Beginning inventory + production costs − COGS'],
+ receipts:['Cash receipts','Collected % of this month\u2019s sales + collected % of prior months\u2019 sales'],
+ avgmonthly:['Average monthly cost','Total cost ÷ number of months'],
+ payments:['Cash payments','Materials (per payment terms) + labour + overhead + other expenses + capital purchases'],
+ netcf:['Net cash flow','Cash receipts − cash payments'],
+ budget:['Borrowing rule','Beginning cash + net cash flow; borrow up to the minimum balance, repay loans from cash above the minimum'],
+ endcash:['Ending cash','Beginning cash + net cash flow + loan − repayment'],
+ pfbs:['Pro forma balances','AR = sales not yet collected; P&E = beginning + purchases; AP = unpaid purchases; RE = beginning + increase in RE'],
+ pos:['Percent-of-sales','Item ÷ sales = %; new balance = % × new sales'],
+ rnf:['Required new funds','RNF = (A/S₁)(ΔS) − (L/S₁)(ΔS) − PS₂(1 − D)'],
+ earnre:['Earnings from retained earnings','Net income = ending RE − beginning RE + dividends'],
+ em_debt:['Equity multiplier from debt ratio','1 ÷ (1 − debt-to-total-assets)'],
+ sgr:['Sustainable growth rate','SGR = P(1 − D)(1 + D/E) ÷ [A/S₁ − P(1 − D)(1 + D/E)]'],
+ endinv_level:['Ending inventory (level production)','Beginning inventory + Production − Sales'],
+ invcarry:['Cost of carrying inventory','Ending inventory (units) × Cost per unit × Period financing rate'],
+ monthlyrate:['Monthly financing rate','Annual financing rate ÷ 12 months'],
+ intcost:['Total financing (interest) cost','Amount financed × Rate × Number of periods'],
+ expclose:['Expected return, close estimate','Simple average of the relevant one-year yields over the period'],
+ expexact:['Expected return, exact (geometric mean)','[(1+r₁)(1+r₂)⋯(1+rₙ)]^(1/n) − 1'],
+ stlt_split:['Short-term / long-term financing split','% financed by a source = Amount financed by that source ÷ Total assets'],
+ hedge_rule:['Perfectly hedged financing rule','Match short-term funds to temporary (self-liquidating) current assets only; finance permanent current assets and capital assets with long-term funds'],
+ finplan_cost:['Total financing cost of a plan','(Short-term amount × short-term rate) + (Long-term amount × long-term rate)'],
+ finplan_earn:['Effect of financing cost on earnings','Earnings = (EBIT − Interest expense) × (1 − Tax rate); a higher-cost plan (more long-term debt) lowers earnings'],
+ financed_amt:['Amount financed by a source','Add up every asset portion assigned to that source (e.g. all capital assets plus a share of current assets)'],
+ forwardrate:['Anticipated one-year forward rate','(1 + yield for the longer bond)^(longer term) ÷ (1 + yield for the next-shorter bond)^(shorter term) − 1'],
+ concbank_netfunds:['Net funds freed up','(Daily receipts × days of speedup) − Compensating balance required'],
+ concbank_savings:['Annual savings from a cash management package','(Net funds freed up × opportunity cost of funds) − Annual fee for the service'],
+ credit_income:['Incremental income before taxes (credit decision)','Added sales − Uncollectible accounts − Collection costs − Production and selling costs'],
+ ar_investment:['Investment in accounts receivable','Credit sales ÷ Receivables turnover'],
+ roi_incremental:['Return on incremental investment','Incremental income before taxes ÷ Investment in accounts receivable'],
+ ar_turnover_acp:['Receivables turnover from the collection period','365 ÷ Average collection period (days)'],
+ gicyield:['Annual return on an interest-paying security','(Interest payment ÷ Principal amount) × (365 ÷ Days to maturity)'],
+ discyield_f:['Annualized yield (discount security)','[(100 − P) ÷ P] × (365 ÷ d), where P is the price as a % of maturity value and d is days to maturity'],
+ effyield:['Annualized effective yield (discount security)','(1 + (100 − P) ÷ P)^(365 ÷ d) − 1'],
+ eoq:['Economic order quantity (EOQ)','√(2 × S × O ÷ C), where S = annual sales in units, O = cost per order, C = carrying cost per unit'],
+ eoq_tc:['Total inventory cost (TC)','(Number of orders × Order cost per order) + (Carrying cost per unit × Average inventory)'],
+ eoq_safety:['Average inventory with safety stock','EOQ ÷ 2 + Safety stock'],
+ num_orders:['Number of orders per year','Annual sales in units ÷ EOQ'],
+ avg_inventory:['Average inventory (no safety stock)','EOQ ÷ 2'],
+ inv_investment:['Investment in inventory','Cost of goods sold (or production cost) of the new sales ÷ Inventory turnover'],
+ avgdaily_purch:['Average daily purchases','Annual purchases ÷ 365'],
+ ap_balance:['Accounts payable balance','Average daily purchases × Accounts payable period (days)'],
+ kdis:['Cost of forgoing a cash discount (K_DIS)','K_DIS = [d% ÷ (100% − d%)] × [365 ÷ (net period − discount period, in days)]'],
+ ar_bal:['Accounts receivable balance','Average daily credit sales × Average collection period'],
+ netcredit:['Net credit position','Accounts receivable balance − Accounts payable balance (positive = net credit extended; negative = net credit received)'],
+ bankrate:['Annual rate on interest-bearing bank financing (R_ANNUAL)','R_ANNUAL = (Interest ÷ Principal) × (365 ÷ Days)'],
+ bankcost:['Dollar cost of interest-bearing bank financing','Interest cost ($) = Principal × Rate × (Days ÷ 365)'],
+ compbal_amt:['Amount to be borrowed with a compensating balance','Amount needed ÷ (1 − Compensating balance %)'],
+ compbal_rate:['Annual rate on a compensating balance loan (R_COMP)','R_COMP = [Interest ÷ (Principal − Required balance)] × (365 ÷ Days)'],
+ discloan_rate:['Annual rate on a discounted loan (R_DIS)','R_DIS = [Interest ÷ (Principal − Interest)] × (365 ÷ Days)'],
+ commitfee:['Annual commitment fee (line of credit)','Commitment fee % × Amount of the line of credit']
+};
+const FXMAP = {
+ 'kramer-val':[['eac','eps'],['dps','payout','pe','dy']],
+ 'dover':[['is','eac','eps','dps'],['payout','re'],['pe']],
+ 'carr':[['is','tax'],['is','tax']],
+ 'kramer-cf':[['nwc'],['cfo','cfi'],['divpaid','cff','netcash']],
+ 'solitude':[['amort','nwc'],['cfo','cfi','cff','divpaid'],['netcash']],
+ 'coastal':[['fcf']],
+ 'sax-prof':[['pm','gpm'],['roa','roa_dupont','em','roe','roe_dupont']],
+ 'sax-util':[['rt','acp'],['it','ihp'],['apt','app'],['cat','tat']],
+ 'sax-liq':[['cr','qr'],['dta','tie','fcc']],
+ 'pony':[['roa','roe','em','roe_dupont'],['tat','pm']],
+ 'baker':[['roa_dupont'],['roa_dupont']],
+ 'uguess':[['tat','it','acp','cat'],['dta','cr']],
+ 'alonso':[['ev']],
+ 'biomed':[['prod']],
+ 'gold-prod':[['prod','prodcost'],['fifo'],['endinv']],
+ 'gold-is':[['is','tax']],
+ 'gold-rec':[['receipts']],
+ 'gold-pay':[['avgmonthly'],['payments']],
+ 'power':[['receipts']],
+ 'donna':[['prod'],['payments']],
+ 'gold-budget':[['netcf'],['budget'],['endcash']],
+ 'gold-bs':[['pfbs']],
+ 'howard-rnf':[['pos','rnf'],['dta','de','cr']],
+ 'howard-sgr':[['de','sgr'],['rnf']],
+ 'prince':[['receipts'],['netcf','budget','endcash']],
+ 'longbranch':[['pm','payout','rnf'],['pos'],['cr','dta']],
+ 'q-tallgrass':[['eps']],
+ 'q-maris':[['nwc'],['amort','cfo','cfi'],['cff','netcash']],
+ 'q-waif':[['amort','nwc','cfo'],['cfi','cff','divpaid','netcash']],
+ 'q-inland':[['fcf']],
+ 'q-thermo':[['earnre','eps','payout','pe']],
+ 'q-dental':[['is']],
+ 'q-breakaway':[['pm','tat','roa']],
+ 'q-waistnot':[['pm']],
+ 'q-fernandes':[['roa_dupont','em_debt','roe_dupont']],
+ 'q-kapoor':[['tie','fcc']],
+ 'q-unitedworld':[['pm'],['roa'],['roa']],
+ 'q-grande':[['rt','cr','tat','dta']],
+ 'q-snider':[['pm','roa','roe'],['rt','acp','it','ihp','tat'],['cr','qr','dta','tie','fcc']],
+ 'q-brampton':[['ev']],
+ 'q-digitex':[['prod']],
+ 'q-whistler':[['receipts']],
+ 'q-highsight':[['payments']],
+ 'q-boswell':[['prod'],['payments']],
+ 'q-jimdaniels':[['receipts'],['payments'],['netcf','budget','endcash']],
+ 'q-carter':[['rnf'],['pos'],['cr','dta']],
+ 'q-harvard':[['rnf'],['rnf']],
+ 'garza':[['endinv_level'],['monthlyrate','invcarry']],
+ 'gabriel':[['intcost'],['intcost']],
+ 'termstructure':[['expclose'],['expexact']],
+ 'hip-plans':[['stlt_split','finplan_cost'],['stlt_split','finplan_cost'],['hedge_rule','stlt_split','finplan_cost'],['finplan_earn']],
+ 'lear':[['financed_amt','finplan_cost','finplan_earn'],['financed_amt','finplan_cost','finplan_earn']],
+ 'gocbonds':[['forwardrate']],
+ 'vincent':[['intcost']],
+ 'ruth':[['endinv_level'],['monthlyrate','invcarry']],
+ 'concbank':[['concbank_netfunds','concbank_savings']],
+ 'comiskey':[['credit_income','ar_investment','roi_incremental'],['credit_income','roi_incremental'],['ar_investment','roi_incremental'],['ar_turnover_acp','ar_investment','roi_incremental']],
+ 'gic':[['gicyield']],
+ 'discyield':[['discyield_f','effyield']],
+ 'eoq-centennial':[['eoq'],['eoq_tc'],['eoq_safety']],
+ 'higgins':[['eoq'],['eoq'],['eoq_tc'],['eoq_safety']],
+ 'fisk':[['eoq'],['num_orders'],['avg_inventory'],['eoq_tc']],
+ 'henderson':[['ar_investment'],['credit_income','roi_incremental'],['roi_incremental'],['inv_investment','ar_investment'],['roi_incremental']],
+ 'lett':[['discyield_f'],['effyield']],
+ 'haynes':[['concbank_netfunds','concbank_savings']],
+ 'trade_credit8':[['avgdaily_purch','ap_balance'],['avgdaily_purch','ap_balance']],
+ 'cash_discount_ex':[['kdis']],
+ 'promptly':[['kdis']],
+ 'bautista':[['ar_bal','ap_balance','netcredit'],['ap_balance','netcredit']],
+ 'stephen_rate':[['bankrate'],['bankcost']],
+ 'stephen_comp':[['compbal_amt'],['compbal_rate']],
+ 'stephen_discounted':[['discloan_rate']],
+ 'chapman':[['discyield_f'],['effyield']],
+ 'rockford':[['commitfee','bankrate'],['kdis'],['discyield_f'],[]]
+};
+const fxHTML = (p,pi) => ((FXMAP[p.id]||[])[pi]||[]).map(k=>L(FX[k][0],FX[k][1])).join('');
+
+/* ---------- state ---------- */
+const KEY='acct224-reviewer-v1';
+let store = {};
+try{ store = JSON.parse(localStorage.getItem(KEY)||'{}') || {}; }catch(e){ store = {}; }
+let cloudRef=null, cloudBusy=false, cloudDirty=false, cloudTimer=null, cloudRetried=false;
+const SYNC_OK='Progress, flags and notes are saved to your Claude account and follow you to any browser or device.';
+const setSync = t => { const el=document.getElementById('sync'); if(el) el.textContent=t; };
+const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} queueCloud(); };
+function queueCloud(){
+  if(!cloudRef) return;
+  cloudDirty=true; setSync('Saving\u2026');
+  clearTimeout(cloudTimer); cloudTimer=setTimeout(flushCloud,800);
+}
+async function flushCloud(){
+  if(!cloudRef||cloudBusy||!cloudDirty) return;
+  cloudBusy=true; cloudDirty=false;
+  let retry=false;
+  try{
+    await cloudRef.set({v:1, data: JSON.parse(JSON.stringify(store)), savedAt: Date.now()});
+    cloudRetried=false; setSync(SYNC_OK);
+  }catch(e){
+    cloudDirty=true;
+    setSync('Could not reach your Claude account just now. Your latest changes are kept in this browser and will sync on your next edit.');
+    if(e && e.code==='unavailable' && !cloudRetried){ cloudRetried=true; retry=true; }
+  }
+  cloudBusy=false;
+  if(retry) setTimeout(flushCloud, 2000+Math.random()*1000);
+  else if(cloudDirty && !cloudRetried) setTimeout(flushCloud, 300);
+}
+const st = { mode:'week', week:2, test:1, idx:{2:0,3:0,4:0,5:0,6:0,7:0,8:0}, mixWeeks:new Set(WEEK_NUMS), mixOrder:[], mixPos:0, flagOnly:false };
+const isFlagged = p => !!(store._flags && store._flags[p.id]);
+const flagCount = () => P.filter(isFlagged).length;
+const getNote = p => (store._notes && store._notes[p.id]) || '';
+const noteCount = () => P.filter(p=>getNote(p).trim()).length;
+if(store._ui){ try{ Object.assign(st.idx, store._ui.idx||{}); st.week = store._ui.week||2; st.test = testOf(st.week); }catch(e){} }
+
+const byWeek = w => P.filter(p=>p.w===w);
+const fid = (p,pi,fi)=>`${p.id}-${pi}-${fi}`;
+const allFields = p => p.parts.flatMap((pt,pi)=>pt.f.map((f,fi)=>fid(p,pi,fi)));
+const probScore = p => { const ids=allFields(p); const ok=ids.filter(i=>store[i]&&store[i].ok).length; return {ok, n:ids.length}; };
+const weekScore = w => byWeek(w).reduce((a,p)=>{const s=probScore(p); a.ok+=s.ok; a.n+=s.n; return a;},{ok:0,n:0});
+
+/* ---------- answer checking ---------- */
+function parseNum(s){
+  if(s==null) return NaN;
+  let t=String(s).trim().toLowerCase();
+  if(!t) return NaN;
+  let neg=false;
+  if(/^\(.*\)$/.test(t)){ neg=true; t=t.slice(1,-1); }
+  t=t.replace(/[$,\s×x%]|days?|units?|times|m$/g,'').replace(/[–−]/g,'-');
+  if(t.startsWith('(')&&t.endsWith(')')){neg=true;t=t.slice(1,-1);}
+  const v=Number(t);
+  return isNaN(v)?NaN:(neg?-Math.abs(v):v);
+}
+function defTol(f){
+  if(f.tol!=null) return f.tol;
+  const a=Math.abs(f.a);
+  switch(f.u){
+    case '$': return a<100 ? .01 : Math.max(1, a*0.0006);
+    case '%': return .06;
+    case 'x': return .051;
+    case 'days': return .6;
+    case 'units': return .5;
+    default: return Math.max(.01, a*.005);
+  }
+}
+function isRight(f, raw){
+  if(f.choice) return raw===f.a;
+  let v=parseNum(raw); if(isNaN(v)) return null;
+  const tol=defTol(f);
+  if(Math.abs(v-f.a)<=tol) return true;
+  if(f.u==='%' && Math.abs(v*100-f.a)<=tol) return true;
+  return false;
+}
+const fmt = f => {
+  if(f.choice) return f.a;
+  const a=f.a, abs=Math.abs(a);
+  let s = abs>=1000 ? abs.toLocaleString('en-US',{maximumFractionDigits:0}) : String(+abs.toFixed(2));
+  if(f.u==='$'||f.u==='$M') s='$'+s;
+  if(f.u==='$M') s+=' million';
+  if(f.u==='%') s+='%';
+  if(f.u==='x') s+='×';
+  if(f.u==='days') s+=' days';
+  if(f.u==='units') s+=' units';
+  return a<0 ? '('+s+')' : s;
+};
+const pre = u => (u==='$'||u==='$M')?'$':'';
+const suf = u => ({'%':'%','x':'×','days':'days','units':'units','$M':'M'})[u]||'';
+
+/* ---------- rendering ---------- */
+const $ = s=>document.querySelector(s);
+const sheet=$('#sheet');
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const wvar = w => `--wc:var(--w${w});--wcs:var(--w${w}s)`;
+
+function renderTestSeg(){
+  $('#testseg').innerHTML = Object.keys(TESTS).map(n=>{
+    const t=TESTS[n];
+    return `<button aria-pressed="${st.test===+n}" data-test="${n}">${t.name} <span style="opacity:.75;font-weight:500">(Wk ${t.weeks[0]}–${t.weeks[t.weeks.length-1]})</span></button>`;
+  }).join('');
+  $('#testseg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const n=+b.dataset.test;
+    st.test=n;
+    if(!TESTS[n].weeks.includes(st.week)) st.week=TESTS[n].weeks[0];
+    persistUI(); render(); window.scrollTo({top:0});
+  });
+}
+function renderOverview(){
+  const el=$('#overview'); if(!el) return;
+  const wasOpen = el.dataset.forWeek==='' + st.week && el.open;
+  el.innerHTML = `<summary>${WEEKS[st.week].name} overview</summary><div class="ov-body">${OVERVIEWS[st.week]||''}</div>`;
+  el.style.cssText = wvar(st.week);
+  el.dataset.forWeek = st.week;
+  el.open = wasOpen;
+}
+function renderTabs(){
+  const weeks = TESTS[st.test].weeks;
+  $('#tabs').innerHTML = weeks.map(w=>{
+    const s=weekScore(w), pct=s.n?Math.round(100*s.ok/s.n):0;
+    return `<button class="tab" role="tab" style="${wvar(w)}" aria-selected="${st.week===w}" data-w="${w}">
+      <span class="wk">${WEEKS[w].name}</span><span class="tp">${WEEKS[w].topic}</span>
+      <span class="bar" title="${pct}% correct"><i style="width:${pct}%"></i></span></button>`;
+  }).join('');
+  $('#tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{ st.week=+b.dataset.w; persistUI(); render(); });
+}
+function renderChips(){
+  $('#chips').innerHTML=WEEK_NUMS.map(w=>`<button class="chip" style="${wvar(w)}" aria-pressed="${st.mixWeeks.has(w)}" data-w="${w}">${WEEKS[w].name}</button>`).join('');
+  $('#chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{
+    const w=+b.dataset.w;
+    if(st.mixWeeks.has(w)) st.mixWeeks.delete(w); else st.mixWeeks.add(w);
+    shuffle(); render();
+  });
+  const fc=document.createElement('button');
+  fc.className='chip flagchip'; fc.setAttribute('aria-pressed', st.flagOnly);
+  fc.textContent='\u2691 Marked for review only ('+flagCount()+')';
+  fc.onclick=()=>{ st.flagOnly=!st.flagOnly; shuffle(); render(); };
+  $('#chips').appendChild(fc);
+}
+function shuffle(){
+  const pool=P.filter(p=>st.mixWeeks.has(p.w) && (!st.flagOnly || isFlagged(p)));
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  st.mixOrder=pool.map(p=>p.id); st.mixPos=0;
+}
+function persistUI(){ store._ui={idx:st.idx,week:st.week}; save(); }
+
+function fieldHTML(p,pi,fi,f){
+  const id=fid(p,pi,fi), rec=store[id]||{}, cls=rec.ok===true?'ok':(rec.ok===false?'bad':'');
+  const v = rec.v!=null?rec.v:'';
+  let ctrl;
+  if(f.choice){
+    ctrl=`<select id="${id}" data-f="${id}"><option value="">Choose…</option>${f.choice.map(c=>`<option ${v===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`;
+  } else {
+    ctrl=(pre(f.u)?`<span>${pre(f.u)}</span>`:'')+`<input id="${id}" data-f="${id}" inputmode="decimal" autocomplete="off" value="${esc(v)}">`+(suf(f.u)?`<span>${suf(f.u)}</span>`:'');
+  }
+  const fb = rec.ok===true?'Correct':(rec.ok===false?(rec.shown?'Answer: '+fmt(f):'Not quite, try again'):'');
+  return `<div class="fld ${cls}" data-wrap="${id}"><label for="${id}">${esc(f.l)}</label><div class="inp">${ctrl}</div><div class="fb" aria-live="polite">${fb}</div></div>`;
+}
+
+function problemHTML(p, ctx){
+  const w=WEEKS[p.w];
+  let h=`<div class="phead"><span class="tag">${w.name}: ${w.topic}</span><span class="src">${p.src}</span>${p.extra?'<span class="xtag">Not on the midterm</span>':''}<button class="flag notebtn" data-notebtn aria-expanded="${!!getNote(p)}">\u270E ${getNote(p)?'My note':'Add note'}</button><button class="flag" data-flag aria-pressed="${isFlagged(p)}">${isFlagged(p)?'\u2691 Marked for review':'\u2690 Review again later'}</button></div><h2>${p.t}</h2>`;
+  h+=`<div class="note-area" id="na-${p.id}" ${getNote(p)?'':'hidden'}><label for="nt-${p.id}">My notes: what is tripping me up</label><textarea id="nt-${p.id}" data-note rows="3" placeholder="e.g. I keep forgetting that a decrease in a liability uses cash">${esc(getNote(p))}</textarea><div class="note-saved" aria-live="polite"></div></div>`;
+  h+=`<div class="given">${p.g}</div><div class="parts">`;
+  p.parts.forEach((pt,pi)=>{
+    h+=`<section class="part" data-p="${pi}"><p class="q">${p.parts.length>1?`<b class="pl">Part ${pi+1}</b>`:''}${pt.q}</p>
+    <div class="fields">${pt.f.map((f,fi)=>fieldHTML(p,pi,fi,f)).join('')}</div>
+    <div class="acts"><button class="btn" data-check="${pi}">Check</button><button class="btn2" data-fx="${pi}" aria-expanded="false">Show formulas</button><button class="btn2" data-steps="${pi}" aria-expanded="false">Show steps</button><button class="btn2" data-reveal="${pi}">Reveal answers</button><button class="btn2" data-clear="${pi}">Clear</button></div>
+    <div class="fx" id="fx-${p.id}-${pi}">${fxHTML(p,pi)}</div><div class="steps" id="steps-${p.id}-${pi}">${pt.s}</div></section>`;
+  });
+  h+='</div>';
+  return h;
+}
+
+function render(){
+  $('#mWeek').setAttribute('aria-pressed', st.mode==='week');
+  $('#mMix').setAttribute('aria-pressed', st.mode==='mix');
+  $('#weekUI').hidden = st.mode!=='week';
+  $('#mixUI').hidden = st.mode!=='mix';
+  let p, nav='', foot='';
+  if(st.mode==='week'){
+    renderTestSeg();
+    renderTabs();
+    renderOverview();
+    sheet.classList.remove('mixed');
+    const list=byWeek(st.week);
+    const i=Math.min(st.idx[st.week]||0, list.length-1);
+    p=list[i];
+    nav=`<nav class="pnav" aria-label="${WEEKS[st.week].name} problems">`+list.map((q,k)=>{
+      const s=probScore(q); const c=s.ok===s.n?'done':(s.ok>0?'part':'');
+      return `<button class="pn ${c}${q.id.startsWith('q-')?' qz':''}${isFlagged(q)?' fl':''}${getNote(q).trim()?' nt':''}" data-k="${k}" aria-current="${k===i}" title="${esc(q.t)}">${k+1}</button>`;
+    }).join('')+`<span class="legend">Solid: in-class question &nbsp; Dashed: Connect quiz &nbsp; \u2691 Review again later &nbsp; \u270E Has a note</span></nav>`;
+    const flat=WEEK_NUMS.flatMap(w=>byWeek(w).map((q,k)=>({w,k})));
+    const g=flat.findIndex(x=>x.w===st.week&&x.k===i);
+    const prev=flat[g-1], next=flat[g+1];
+    foot=`<div class="foot"><button class="btn2" id="prev" ${prev?'':'disabled'}>${prev&&prev.w!==st.week?'Back to '+WEEKS[prev.w].name:'Previous problem'}</button><button class="btn" id="next" ${next?'':'disabled'}>${next&&next.w!==st.week?'Continue to '+WEEKS[next.w].name:'Next problem'}</button></div>`;
+    sheet.setAttribute('style', wvar(p.w));
+    sheet.innerHTML = nav + problemHTML(p) + foot;
+    sheet.querySelectorAll('.pn').forEach(b=>b.onclick=()=>{ st.idx[st.week]=+b.dataset.k; persistUI(); render(); window.scrollTo({top:0}); });
+    const go=t=>{ if(!t) return; st.week=t.w; st.test=testOf(t.w); st.idx[t.w]=t.k; persistUI(); render(); window.scrollTo({top:0}); };
+    $('#prev').onclick=()=>go(prev); $('#next').onclick=()=>go(next);
+  } else {
+    renderChips();
+    sheet.classList.add('mixed');
+    if(!st.mixOrder.length){
+      sheet.setAttribute('style','');
+      sheet.innerHTML = st.flagOnly ? `<div class="empty">No problems marked for review in the selected weeks yet. Use \u201cReview again later\u201d on any problem to add it here.</div>` : `<div class="empty">Pick at least one week above to build a mixed set.</div>`;
+      updateOverall(); return;
+    }
+    p=P.find(q=>q.id===st.mixOrder[st.mixPos]);
+    const n=st.mixOrder.length;
+    nav=`<p class="count" style="margin:0 0 10px">Problem ${st.mixPos+1} of ${n}</p>`;
+    foot=`<div class="foot"><button class="btn2" id="prev" ${st.mixPos>0?'':'disabled'}>Previous problem</button><button class="btn" id="next">${st.mixPos<n-1?'Next problem':'Shuffle a new set'}</button></div>`;
+    sheet.setAttribute('style', wvar(p.w));
+    sheet.innerHTML = nav + problemHTML(p) + foot;
+    $('#prev').onclick=()=>{ st.mixPos--; render(); window.scrollTo({top:0}); };
+    $('#next').onclick=()=>{ if(st.mixPos<n-1) st.mixPos++; else shuffle(); render(); window.scrollTo({top:0}); };
+  }
+  wire(p);
+  updateOverall();
+}
+
+function setField(p,pi,fi,res,raw,shown){
+  const f=p.parts[pi].f[fi], id=fid(p,pi,fi);
+  const wrap=sheet.querySelector(`[data-wrap="${id}"]`);
+  wrap.classList.remove('ok','bad');
+  const fb=wrap.querySelector('.fb');
+  if(res===null||raw===''){ delete store[id]; fb.textContent=''; return; }
+  store[id]={v:raw, ok:res, shown:!!shown};
+  wrap.classList.add(res?'ok':'bad');
+  fb.textContent = res?'Correct':(shown?'Answer: '+fmt(f):'Not quite, try again');
+}
+
+function wire(p){
+  const nb=sheet.querySelector('[data-notebtn]'), na=document.getElementById('na-'+p.id), ta=document.getElementById('nt-'+p.id);
+  if(nb) nb.onclick=()=>{
+    const show=na.hidden; na.hidden=!show; nb.setAttribute('aria-expanded',show);
+    if(show) ta.focus();
+  };
+  let tmr;
+  if(ta) ta.addEventListener('input',()=>{
+    store._notes=store._notes||{};
+    const v=ta.value;
+    if(v.trim()) store._notes[p.id]=v; else delete store._notes[p.id];
+    save();
+    nb.textContent='\u270E '+(v.trim()?'My note':'Add note');
+    const cur=sheet.querySelector('.pn[aria-current="true"]'); if(cur) cur.classList.toggle('nt',!!v.trim());
+    updateNotesBtn();
+    const s=na.querySelector('.note-saved'); s.textContent='Saving\u2026'; clearTimeout(tmr); tmr=setTimeout(()=>{s.textContent='Saved';},500);
+  });
+  const fb=sheet.querySelector('[data-flag]');
+  if(fb) fb.onclick=()=>{
+    store._flags=store._flags||{};
+    if(store._flags[p.id]) delete store._flags[p.id]; else store._flags[p.id]=true;
+    save();
+    const on=isFlagged(p);
+    fb.setAttribute('aria-pressed',on); fb.textContent=on?'\u2691 Marked for review':'\u2690 Review again later';
+    if(st.mode==='week'){ const b=sheet.querySelector('.pn[aria-current="true"]'); if(b) b.classList.toggle('fl',on); }
+    else { const c=document.querySelector('.flagchip'); if(c) c.textContent='\u2691 Marked for review only ('+flagCount()+')'; }
+  };
+  sheet.querySelectorAll('[data-f]').forEach(el=>{
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const pi=+el.closest('.part').dataset.p; check(p,pi); }});
+  });
+  sheet.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(p,+b.dataset.check));
+  sheet.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{
+    const el=document.getElementById(`fx-${p.id}-${b.dataset.fx}`);
+    const open=el.classList.toggle('open'); b.textContent=open?'Hide formulas':'Show formulas'; b.setAttribute('aria-expanded',open);
+  });
+  sheet.querySelectorAll('[data-steps]').forEach(b=>b.onclick=()=>{
+    const el=document.getElementById(`steps-${p.id}-${b.dataset.steps}`);
+    const open=el.classList.toggle('open'); b.textContent=open?'Hide steps':'Show steps'; b.setAttribute('aria-expanded',open);
+  });
+  sheet.querySelectorAll('[data-reveal]').forEach(b=>b.onclick=()=>{
+    const pi=+b.dataset.reveal;
+    p.parts[pi].f.forEach((f,fi)=>{
+      const el=document.getElementById(fid(p,pi,fi));
+      const raw=el.value.trim();
+      const r=raw===''?null:isRight(f,raw);
+      if(r===true) return;
+      el.value = f.choice? f.a : fmt(f).replace(/[$×%]| million| days| units/g,'');
+      setField(p,pi,fi,false,el.value,true);
+    });
+    save(); refreshProgress();
+  });
+  sheet.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{
+    const pi=+b.dataset.clear;
+    p.parts[pi].f.forEach((f,fi)=>{ document.getElementById(fid(p,pi,fi)).value=''; setField(p,pi,fi,null,''); });
+    save(); refreshProgress();
+  });
+}
+function check(p,pi){
+  p.parts[pi].f.forEach((f,fi)=>{
+    const el=document.getElementById(fid(p,pi,fi));
+    const raw=el.value.trim();
+    const prevShown = store[fid(p,pi,fi)]&&store[fid(p,pi,fi)].shown && store[fid(p,pi,fi)].v===raw;
+    setField(p,pi,fi, raw===''?null:isRight(f,raw), raw, prevShown);
+  });
+  save(); refreshProgress();
+}
+function refreshProgress(){
+  if(st.mode==='week'){
+    renderTabs();
+    const list=byWeek(st.week);
+    sheet.querySelectorAll('.pn').forEach((b,k)=>{ const s=probScore(list[k]); b.classList.toggle('done',s.ok===s.n); b.classList.toggle('part',s.ok>0&&s.ok<s.n); });
+  }
+  updateOverall();
+}
+function updateOverall(){
+  const t=WEEK_NUMS.reduce((a,w)=>{const s=weekScore(w);a.ok+=s.ok;a.n+=s.n;return a;},{ok:0,n:0});
+  $('#overall').textContent=`${t.ok} of ${t.n} answer fields correct across ${P.length} problems.`;
+}
+
+$('#mWeek').onclick=()=>{ st.mode='week'; render(); };
+$('#mMix').onclick=()=>{ st.mode='mix'; if(!st.mixOrder.length) shuffle(); render(); };
+$('#shuffle').onclick=()=>{ shuffle(); render(); };
+function updateNotesBtn(){
+  const n=noteCount();
+  $('#notesBtn').textContent='My notes'+(n?' ('+n+')':'');
+  if(!$('#notesPanel').hidden) renderNotes();
+}
+function renderNotes(){
+  const list=WEEK_NUMS.flatMap(w=>byWeek(w).map((q,k)=>({q,k}))).filter(x=>getNote(x.q).trim());
+  let h='<h3>My notes</h3><p class="count">Everything you\u2019ve written about what trips you up, in course order. Start your next review here.</p>';
+  if(!list.length) h+='<p class="count">No notes yet. Use \u201c\u270E Add note\u201d on any problem.</p>';
+  h+=list.map(({q,k})=>`<div class="ni" style="${wvar(q.w)}"><div class="nt-head"><span class="tag">${WEEKS[q.w].name}</span><b>${q.t}</b>${isFlagged(q)?'<span class="src">\u2691 marked</span>':''}</div><p class="nt-text">${esc(getNote(q))}</p><button class="btn2" data-go="${q.w}-${k}">Go to problem</button></div>`).join('');
+  $('#notesPanel').innerHTML=h;
+  $('#notesPanel').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{
+    const [w,k]=b.dataset.go.split('-').map(Number);
+    st.mode='week'; st.week=w; st.test=testOf(w); st.idx[w]=k; persistUI();
+    $('#notesPanel').hidden=true; $('#notesBtn').setAttribute('aria-expanded',false);
+    render(); sheet.scrollIntoView({block:'start'});
+  });
+}
+$('#notesBtn').onclick=()=>{
+  const p=$('#notesPanel'); p.hidden=!p.hidden; $('#notesBtn').setAttribute('aria-expanded',!p.hidden);
+  if(!p.hidden) renderNotes();
+};
+updateNotesBtn();
+$('#reset').onclick=()=>{ if(confirm('Clear all saved answers and progress?')){ store={}; save(); render(); } };
+render();
+/* ---------- account sync ---------- */
+(async()=>{
+  setSync('Saved in this browser only.');
+  if(!window.claude || typeof window.claude.use!=='function') return;
+  try{
+    const [db,user]=await Promise.all([claude.use('db'), claude.use('user')]);
+    if(!db || !user) return;
+    const uid=await user.id();
+    if(!uid) return;
+    setSync('Connecting to your Claude account\u2026');
+    const ref=db.doc('data/users/'+uid+'/progress');
+    const snap=await ref.get();
+    const remote = snap.exists ? ((snap.data()||{}).data) : null;
+    cloudRef=ref;
+    if(remote && typeof remote==='object'){
+      const local=store;
+      const merged=Object.assign({}, local, remote);
+      merged._flags=Object.assign({}, local._flags||{}, remote._flags||{});
+      merged._notes=Object.assign({}, local._notes||{}, remote._notes||{});
+      store=merged;
+      try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){}
+      if(store._ui){ Object.assign(st.idx, store._ui.idx||{}); st.week=store._ui.week||st.week; }
+      const ae=document.activeElement;
+      if(!(ae && /TEXTAREA|INPUT|SELECT/.test(ae.tagName))) render();
+      updateNotesBtn();
+      if(JSON.stringify(merged)!==JSON.stringify(remote)){ cloudDirty=true; flushCloud(); }
+      else setSync(SYNC_OK);
+    } else if(Object.keys(store).length){
+      cloudDirty=true; flushCloud();
+    } else setSync(SYNC_OK);
+  }catch(e){ setSync('Saved in this browser only.'); }
+})();
+</script>
+</body>
+</html>

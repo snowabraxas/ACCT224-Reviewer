@@ -21,6 +21,7 @@ Everything lives in a single file, `index.html` — no build step. Open it direc
 - The `P` array holds every problem (given info, answer fields, worked steps).
 - `FX` / `FXMAP` hold the formula library and which formulas apply to which problem part.
 - `WEEK_NUMS` / `WEEKS` / `TESTS` drive every week-aware piece of the UI, so adding a new week is mostly additive.
+- `SUPABASE_URL` / `SUPABASE_KEY` near the top of the script point at the Supabase project (the key is the public **anon/publishable** key, safe to be public — see `supabase/schema.sql` for the table and Row Level Security policies it relies on). If a fork doesn't set up its own Supabase project, the page just falls back to this-browser-only storage.
 
 ## Adding a new week
 

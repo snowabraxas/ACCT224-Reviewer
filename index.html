@@ -929,6 +929,51 @@ const P = [
   {q:'d. Which alternative should Rockford choose?', f:[{l:'Cheapest alternative',a:'Commercial paper',choice:['Line of credit','Forgo the cash discount','Commercial paper']}],
    s:L('Compare','(a) 18.11% vs. (b) 16.55% vs. (c) 10.27%')+L('Conclusion','Choose the commercial paper \u2014 it is the cheapest alternative')}
  ]}
+,
+{id:'macco', w:8, t:'Macco Bakers: choosing the cheapest short-term financing alternative', src:'Connect quiz, Module 8 Q1',
+ g:`<p>Macco Bakers requires $500,000 in financing for a 90-day period. Three alternatives are being considered:</p><ul><li>(a) A line of credit at 8% interest; the bank charges a flat $5,000 fee to establish the line.</li><li>(b) Forgo trade discounts from suppliers on terms of 2/10, net 100.</li><li>(c) Issue commercial paper for 90 days at a discount of 2.05%.</li></ul><p>Use 365 days in a year; do not round intermediate calculations; round final answers to 2 decimal places.</p>`,
+ parts:[
+  {q:'a. What would be the rate of interest for the bank loan (including the fee)?', f:[{l:'Rate of interest for bank loan',a:12.06,u:'%',tol:.1}],
+   s:L('Interest expense','$500,000 \u00d7 8% \u00d7 (90 \u00f7 365) = $9,863.01')+L('Total financing cost','$5,000 fee + $9,863.01 interest = $14,863.01')+L('Formula','R_ANNUAL = (Total cost \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($14,863.01 \u00f7 $500,000) \u00d7 (365 \u00f7 90) = 0.1206 = 12.06%')},
+  {q:'b. What would be the cost of forgoing the cash discount?', f:[{l:'Cost of forgoing the cash discount',a:8.28,u:'%',tol:.1}],
+   s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (100 \u2212 10)] = 0.020408 \u00d7 4.0556 = 0.0828 = 8.28%')},
+  {q:'c. What would be the price of commercial paper?', f:[{l:'Discounted commercial paper',a:8.49,u:'%',tol:.1}],
+   s:L('Price','100 \u2212 2.05 = 97.95 per $100 of maturity value')+L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[2.05 \u00f7 97.95] \u00d7 (365 \u00f7 90) = 0.020929 \u00d7 4.0556 = 0.0849 = 8.49%')},
+  {q:'d. Which alternative should be selected?', f:[{l:'Cheapest alternative',a:'Cost of forgoing discount',choice:['Bank loan','Cost of forgoing discount','Commerical paper']}],
+   s:L('Compare','(a) 12.06% vs. (b) 8.28% vs. (c) 8.49%')+L('Conclusion','Choose to forgo the cash discount \u2014 it is the cheapest of the three, just ahead of the commercial paper')}
+ ]},
+{id:'tbill182', w:8, t:'182-day Treasury bills: annualized yield', src:'Connect quiz, Module 8 Q2',
+ g:`<p>The average price on 182-day Treasury bills was 98.097, with maturity value 100. Use 365 days in a year; do not round intermediate calculations; round the final answer to 2 decimal places.</p>`,
+ parts:[
+  {q:'Calculate the T-bill\u2019s annualized yield.', f:[{l:'T-bill\u2019s annualized yield',a:3.89,u:'%',tol:.08}],
+   s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.097) \u00f7 98.097] \u00d7 (365 \u00f7 182) = 0.019399 \u00d7 2.0055 = 0.0389 = 3.89%')}
+ ]},
+{id:'bankloan5200', w:8, t:'Bank loan: annual rate and effective annual rate', src:'Connect quiz, Module 8 Q3',
+ g:`<p>Your bank will lend you $5,200 for 60 days at a cost of $91 interest. Use 365 days in a year; do not round intermediate calculations; round final answers to 2 decimal places.</p>`,
+ parts:[
+  {q:'a. What is your annual rate of interest?', f:[{l:'Annual rate of interest',a:10.65,u:'%',tol:.1}],
+   s:L('Formula','R_ANNUAL = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($91 \u00f7 $5,200) \u00d7 (365 \u00f7 60) = 0.0175 \u00d7 6.0833 = 0.1065 = 10.65%')},
+  {q:'b. What is your effective annual rate?', f:[{l:'Effective annual rate',a:11.13,u:'%',tol:.15}],
+   s:L('Formula','r_EFF = (1 + Interest \u00f7 Principal)^(365 \u00f7 Days) \u2212 1')+L('Calculation','(1 + 0.0175)^(365 \u00f7 60) \u2212 1 = 1.0175^6.0833 \u2212 1 = 0.1113 = 11.13%')}
+ ]},
+{id:'knowitall', w:8, t:'Prof. Know-It-All: annual rate on a discounted loan', src:'Connect quiz, Module 8 Q4',
+ g:`<p>Prof. Know-It-All is going to borrow $5,000 for one year at 14% interest, with the loan discounted. Use 365 days in a year; do not round intermediate calculations; round the final answer to 2 decimal places.</p>`,
+ parts:[
+  {q:'What is the annual rate of interest if the loan is discounted?', f:[{l:'Annual rate of interest',a:16.28,u:'%',tol:.1}],
+   s:L('Interest','$5,000 \u00d7 14% \u00d7 (365 \u00f7 365) = $700')+L('Formula','R_DIS = [Interest \u00f7 (Principal \u2212 Interest)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$700 \u00f7 ($5,000 \u2212 $700)] \u00d7 (365 \u00f7 365) = 700 \u00f7 4,300 = 0.1628 = 16.28%')}
+ ]},
+{id:'discountlist', w:8, t:'Cost of not taking trade discounts, on four sets of terms', src:'Connect quiz, Module 8 Q5',
+ g:`<p>Compute the cost of not taking the following trade discounts. Use 365 days in a year; round final answers to 2 decimal places.</p>`,
+ parts:[
+  {q:'a. 2/14, net 45.', f:[{l:'Cost of lost discount',a:24.03,u:'%',tol:.15}],
+   s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (45 \u2212 14)] = 0.020408 \u00d7 11.7742 = 0.2403 = 24.03%')},
+  {q:'b. 2/19, net 60.', f:[{l:'Cost of lost discount',a:18.17,u:'%',tol:.15}],
+   s:L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (60 \u2212 19)] = 0.020408 \u00d7 8.9024 = 0.1817 = 18.17%')},
+  {q:'c. 4/19, net 45.', f:[{l:'Cost of lost discount',a:58.49,u:'%',tol:.2}],
+   s:L('Calculation','[4% \u00f7 96%] \u00d7 [365 \u00f7 (45 \u2212 19)] = 0.041667 \u00d7 14.0385 = 0.5849 = 58.49%')},
+  {q:'d. 3/13, net 130.', f:[{l:'Cost of lost discount',a:9.65,u:'%',tol:.15}],
+   s:L('Calculation','[3% \u00f7 97%] \u00d7 [365 \u00f7 (130 \u2212 13)] = 0.030928 \u00d7 3.1197 = 0.0965 = 9.65%')}
+ ]}
 ];
 
 /* ---------- formula sheet ---------- */
@@ -1025,7 +1070,8 @@ const FX = {
  compbal_amt:['Amount to be borrowed with a compensating balance','Amount needed ÷ (1 − Compensating balance %)'],
  compbal_rate:['Annual rate on a compensating balance loan (R_COMP)','R_COMP = [Interest ÷ (Principal − Required balance)] × (365 ÷ Days)'],
  discloan_rate:['Annual rate on a discounted loan (R_DIS)','R_DIS = [Interest ÷ (Principal − Interest)] × (365 ÷ Days)'],
- commitfee:['Annual commitment fee (line of credit)','Commitment fee % × Amount of the line of credit']
+ commitfee:['Annual commitment fee (line of credit)','Commitment fee % × Amount of the line of credit'],
+ bankeff:['Effective annual rate on interest-bearing financing','r_EFF = (1 + Interest ÷ Principal)^(365 ÷ Days) − 1']
 };
 const FXMAP = {
  'kramer-val':[['eac','eps'],['dps','payout','pe','dy']],
@@ -1101,7 +1147,12 @@ const FXMAP = {
  'stephen_comp':[['compbal_amt'],['compbal_rate']],
  'stephen_discounted':[['discloan_rate']],
  'chapman':[['discyield_f'],['effyield']],
- 'rockford':[['commitfee','bankrate'],['kdis'],['discyield_f'],[]]
+ 'rockford':[['commitfee','bankrate'],['kdis'],['discyield_f'],[]],
+ 'macco':[['bankrate'],['kdis'],['discyield_f'],[]],
+ 'tbill182':[['discyield_f']],
+ 'bankloan5200':[['bankrate'],['bankeff']],
+ 'knowitall':[['discloan_rate']],
+ 'discountlist':[['kdis'],['kdis'],['kdis'],['kdis']]
 };
 const fxHTML = (p,pi) => ((FXMAP[p.id]||[])[pi]||[]).map(k=>L(FX[k][0],FX[k][1])).join('');
 

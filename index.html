@@ -805,86 +805,172 @@ const P = [
    f:[{l:'2-year security',a:6.49,u:'%',tol:.02},{l:'3-year security',a:6.66,u:'%',tol:.02},{l:'4-year security',a:7.48,u:'%',tol:.02}],
    s:L('Formula','Exact rate = [(1+r\u2081)(1+r\u2082)\u22ef(1+r\u2099)]^(1/n) \u2212 1')+L('2-year','[(1.05)(1.08)]^(1/2) \u2212 1 = 0.0649 = 6.49%')+L('3-year','[(1.05)(1.08)(1.07)]^(1/3) \u2212 1 = 0.0666 = 6.66%')+L('4-year','[(1.05)(1.08)(1.07)(1.10)]^(1/4) \u2212 1 = 0.0748 = 7.48%')+'<p class="note">Calculator trap: multiply every bracket together first, THEN apply the root, THEN subtract 1. Doing the root on only the last number before multiplying gives a wrong, much larger answer.</p>'}
  ]},
-{id:'hip-plans', w:6, t:'HIP Corporation: short-term vs long-term financing plans', src:'ICQ Module 6, Financing Plans for Current and Total Assets',
- g:tb(['HIP Corporation balance sheet','Assets'],[['Temporary current assets','$300,000'],['Permanent current assets','100,000'],['Capital assets','600,000'],['Total assets','$1,000,000']],[3]) +
- `<p>Short-term interest is 6% and long-term interest is 10%. Three financing plans are compared:</p>
- <ul><li><b>Plan A</b> finances all current assets (temporary and permanent) with short-term funds, and capital assets with long-term funds.</li>
- <li><b>Plan B</b> uses only $200,000 of short-term financing, with the rest financed long-term.</li>
- <li><b>Plan C (perfectly hedged)</b> matches temporary current assets with short-term funds, and matches permanent current assets plus capital assets with long-term funds.</li></ul>`,
+{id:'hip-plans', w:6, t:'HIP Corporation: financing plans for current (and total) assets', src:'ICQ Module 6, Financing Plans for Current (and Total) Assets',
+ g:`<p>The Hudovernik Interesting Products Corporation (“HIP” Corporation) produces goods for sale in the Toronto region. Assume we are comparing alternative financing plans for HIP’s Assets, which we know are comprised of current assets (otherwise known as “working capital”) and capital assets.</p><p>As seen below, a total of $1,000,000 worth of financing is required: $400,000 of working capital (i.e. the company’s “current assets”) and $600,000 of capital assets must be financed. To accomplish the financing of the $1,000,000 of assets, we will analyze the financing cost of 3 plans. Assume: short-term interest rates are 6% and long-term interest rates are 10%.</p>` +
+ tb(['HIP Corporation: Balance Sheet Assets',''],[['Temporary Current Assets','$300,000'],['Permanent Current Assets','$100,000'],['Capital Assets (i.e. Property, Plant &amp; Equipment)','$600,000'],['TOTAL ASSETS','$1,000,000']],[3]) +
+ `<ul><li><b>Plan A:</b> finance all current assets (both temporary and permanent) with short-term funds; the remaining financing is long-term (for the capital assets). Short term = ($300,000 + $100,000) ÷ $1,000,000 = 40%; long term = 60%.</li><li><b>Plan B:</b> finance only $200,000 of working capital with short-term money; the rest is long-term. Short term = $200,000 ÷ $1,000,000 = 20%; long term = 80%.</li><li><b>Plan C (perfectly hedged):</b> finance temporary current assets with short-term funds; permanent current assets and capital assets with long-term funds. Percentages: see Step 1 below.</li></ul>`,
  parts:[
-  {q:'Plan A: the short-term/long-term split and total financing cost.', f:[{l:'Short-term %',a:40,u:'%'},{l:'Long-term %',a:60,u:'%'},{l:'Short-term cost',a:24000,u:'$'},{l:'Long-term cost',a:60000,u:'$'},{l:'Total financing cost',a:84000,u:'$'}],
-   s:L('Short-term %','(300,000 + 100,000) \u00f7 1,000,000 = 40%')+L('Long-term %','600,000 \u00f7 1,000,000 = 60%')+L('Short-term cost','400,000 \u00d7 6% = 24,000')+L('Long-term cost','600,000 \u00d7 10% = 60,000')+L('Total','84,000')},
-  {q:'Plan B: the short-term/long-term split and total financing cost.', f:[{l:'Short-term %',a:20,u:'%'},{l:'Long-term %',a:80,u:'%'},{l:'Short-term cost',a:12000,u:'$'},{l:'Long-term cost',a:80000,u:'$'},{l:'Total financing cost',a:92000,u:'$'}],
-   s:L('Short-term %','200,000 \u00f7 1,000,000 = 20%')+L('Long-term %','800,000 \u00f7 1,000,000 = 80%')+L('Short-term cost','200,000 \u00d7 6% = 12,000')+L('Long-term cost','800,000 \u00d7 10% = 80,000')+L('Total','92,000')},
-  {q:'Plan C: classify each asset type by basis of financing, find the percentages, then the total financing cost.', f:[{l:'Short-term total (temporary CA)',a:300000,u:'$'},{l:'Long-term total (permanent CA + capital)',a:700000,u:'$'},{l:'Short-term %',a:30,u:'%'},{l:'Long-term %',a:70,u:'%'},{l:'Short-term cost',a:18000,u:'$'},{l:'Long-term cost',a:70000,u:'$'},{l:'Total financing cost',a:88000,u:'$'}],
-   s:L('Perfectly hedged rule','Short-term funds match only temporary (self-liquidating) current assets; everything else, including permanent current assets, is long-term')+L('Short-term basis','Temporary current assets = 300,000')+L('Long-term basis','Permanent current assets 100,000 + capital assets 600,000 = 700,000')+L('Short-term %','300,000 \u00f7 1,000,000 = 30%')+L('Long-term %','700,000 \u00f7 1,000,000 = 70%')+L('Short-term cost','300,000 \u00d7 6% = 18,000')+L('Long-term cost','700,000 \u00d7 10% = 70,000')+L('Total','88,000')},
-  {q:'Effect on earnings. EBIT is $200,000 for all three plans; the tax rate is 50%.', f:[{l:'Earnings, Plan A',a:58000,u:'$'},{l:'Earnings, Plan B',a:54000,u:'$'},{l:'Earnings, Plan C',a:56000,u:'$'},{l:'Plan with the least effect on earnings',a:'Plan A',choice:['Plan A','Plan B','Plan C']},{l:'Plan with the most effect on earnings',a:'Plan B',choice:['Plan A','Plan B','Plan C']}],
-   s:L('Plan A','EBIT 200,000 \u2212 interest 84,000 = 116,000 EBT \u00d7 50% tax = 58,000 earnings')+L('Plan B','200,000 \u2212 92,000 = 108,000 \u00d7 50% = 54,000')+L('Plan C','200,000 \u2212 88,000 = 112,000 \u00d7 50% = 56,000')+L('Why','Plan A relies most on cheaper short-term debt, so it has the highest earnings (least negative effect); Plan B relies most on costlier long-term debt, so it has the lowest earnings (most effect)')+'<p class="note">Plan C, the perfectly hedged plan, is not the lowest-cost plan. Its purpose is to balance risk by matching how long financing is needed against how long it\u2019s borrowed for, not to maximize earnings.</p>'}
+  {q:'Plan A: 40% short-term and 60% long-term.', gq:wst(['Assets to be financed','% Short term or Long term','=','Amount to be financed','×','Applicable Rate','=','Total financing cost'],[
+    ['$________','× 40% short-term','=','{{f0}}','×','6 %','=','{{f2}}'],
+    ['','× 60% long-term','=','{{f1}}','×','10 %','=','{{f3}}'],
+    ['TOTAL','','','','','','','{{f4}}']],[2]),
+   f:[{l:'Short-term amount',a:400000,u:'$'},{l:'Long-term amount',a:600000,u:'$'},{l:'Short-term cost',a:24000,u:'$'},{l:'Long-term cost',a:60000,u:'$'},{l:'Total financing cost',a:84000,u:'$'}],
+   s:L('Short-term','40% × $1,000,000 = $400,000 × 6% = $24,000')+L('Long-term','60% × $1,000,000 = $600,000 × 10% = $60,000')+L('Total','$24,000 + $60,000 = $84,000')},
+  {q:'Plan B: 20% short-term and 80% long-term.', gq:wst(['Assets to be financed','% Short term or Long term','=','Amount to be financed','×','Applicable Rate','=','Total financing cost'],[
+    ['$________','× 20% short-term','=','{{f0}}','×','6 %','=','{{f2}}'],
+    ['','× 80% long-term','=','{{f1}}','×','10 %','=','{{f3}}'],
+    ['TOTAL','','','','','','','{{f4}}']],[2]),
+   f:[{l:'Short-term amount',a:200000,u:'$'},{l:'Long-term amount',a:800000,u:'$'},{l:'Short-term cost',a:12000,u:'$'},{l:'Long-term cost',a:80000,u:'$'},{l:'Total financing cost',a:92000,u:'$'}],
+   s:L('Short-term','20% × $1,000,000 = $200,000 × 6% = $12,000')+L('Long-term','80% × $1,000,000 = $800,000 × 10% = $80,000')+L('Total','$12,000 + $80,000 = $92,000')},
+  {q:'Plan C, Step 1: calculate the relative percentage of total assets to be financed on a short-term and long-term basis.', gq:wst(['Type of Asset','Short-term','Long-term','TOTAL'],[
+    ['Temporary Current Assets','$________','$________','$________'],
+    ['Permanent Current Assets','$________','$________','$________'],
+    ['Capital Assets','$________','$________','$________'],
+    ['TOTAL by Basis','{{f0}}','{{f1}}','$________'],
+    ['% of TOTAL ASSETS','{{f2}}','{{f3}}','100%']],[3,4]) +
+   `<p class="note">Basis of financing: enter only ONE amount per asset type.</p>`,
+   f:[{l:'Short-term total',a:300000,u:'$'},{l:'Long-term total',a:700000,u:'$'},{l:'Short-term % of total assets',a:30,u:'%'},{l:'Long-term % of total assets',a:70,u:'%'}],
+   s:L('Short-term basis','Temporary current assets only: $300,000')+L('Long-term basis','Permanent current assets $100,000 + capital assets $600,000 = $700,000')+L('Percentages','$300,000 ÷ $1,000,000 = 30% short-term; $700,000 ÷ $1,000,000 = 70% long-term')},
+  {q:'Plan C, Step 2: use the Step 1 percentages in the template.', gq:wst(['Assets to be financed','% Short term or Long term','=','Amount to be financed','×','Applicable Rate','=','Total financing cost'],[
+    ['$________','× ____ % short-term','=','{{f0}}','×','6 %','=','{{f2}}'],
+    ['','× ____ % long-term','=','{{f1}}','×','10 %','=','{{f3}}'],
+    ['TOTAL','','','','','','','{{f4}}']],[2]),
+   f:[{l:'Short-term amount',a:300000,u:'$'},{l:'Long-term amount',a:700000,u:'$'},{l:'Short-term cost',a:18000,u:'$'},{l:'Long-term cost',a:70000,u:'$'},{l:'Total financing cost',a:88000,u:'$'}],
+   s:L('Short-term','30% × $1,000,000 = $300,000 × 6% = $18,000')+L('Long-term','70% × $1,000,000 = $700,000 × 10% = $70,000')+L('Total','$18,000 + $70,000 = $88,000')},
+  {q:'Financing plans and the effect on earnings: complete the comparison for Plans A, B and C.', gq:tb(['HIP Corporation: Income Statement','$'],[['Sales','$4,700,000'],['Cost of goods sold','$3,000,000'],['Gross profit','$1,700,000'],['Selling and administration expense','$1,500,000'],['Earnings before interest &amp; taxes (EBIT)','$200,000']],[4]) +
+   wst(['Plan','Plan (A) 40% short-term &amp; 60% long-term','Plan (B) 20% short-term &amp; 80% long-term','Plan (C) Perfectly Hedged'],[
+    ['Earnings before Interest &amp; Taxes (EBIT)','$200,000','$200,000','$200,000'],
+    ['Interest Expense (as calculated above)','{{f0}}','{{f1}}','{{f2}}'],
+    ['Net Income before Taxes','{{f3}}','{{f4}}','{{f5}}'],
+    ['Taxes (assume 50%)','{{f6}}','{{f7}}','{{f8}}'],
+    ['Earnings (i.e. Net Income)','{{f9}}','{{f10}}','{{f11}}']],[4]) +
+   `<p class="note">Compare the plans’ effect on earnings (least effect, moderate effect or most effect): Plan A has the {{f12}} effect on earnings; Plan B has the {{f13}} effect on earnings; Plan C has the {{f14}} effect on earnings.</p>`,
+   f:[{l:'Plan A interest',a:84000,u:'$'},{l:'Plan B interest',a:92000,u:'$'},{l:'Plan C interest',a:88000,u:'$'},
+      {l:'Plan A net income before taxes',a:116000,u:'$'},{l:'Plan B net income before taxes',a:108000,u:'$'},{l:'Plan C net income before taxes',a:112000,u:'$'},
+      {l:'Plan A taxes',a:58000,u:'$'},{l:'Plan B taxes',a:54000,u:'$'},{l:'Plan C taxes',a:56000,u:'$'},
+      {l:'Plan A earnings',a:58000,u:'$'},{l:'Plan B earnings',a:54000,u:'$'},{l:'Plan C earnings',a:56000,u:'$'},
+      {l:'Plan A effect on earnings',a:'least',choice:['least','moderate','most']},{l:'Plan B effect on earnings',a:'most',choice:['least','moderate','most']},{l:'Plan C effect on earnings',a:'moderate',choice:['least','moderate','most']}],
+   s:L('Interest','A $84,000; B $92,000; C $88,000 (from the plan worksheets)')+L('Net income before taxes','$200,000 − interest: A $116,000; B $108,000; C $112,000')+L('Taxes at 50%','A $58,000; B $54,000; C $56,000')+L('Earnings','A $58,000; B $54,000; C $56,000')+L('Effect on earnings','Plan A least (cheapest financing), Plan B most, Plan C moderate')+'<p class="note">The Perfectly Hedged Plan is not the least cost plan, but it does best balance risk (matching asset and liability timing).</p>'}
  ]}
 ,
 {id:'lear', w:6, t:'Lear Inc.: cost of two financing plans', src:'Connect quiz, Module 6 Q1',
- g:`<p>Lear Inc. has $800,000 in current assets, $350,000 of which are considered permanent current assets. In addition, the firm has $600,000 invested in capital assets. Short-term financing currently costs 5%, long-term financing costs 10%. EBIT is $200,000 and the tax rate is 30%.</p>`,
+ g:`<p>Lear Inc. has $800,000 in current assets, $350,000 of which are considered permanent current assets. In addition, the firm has $600,000 invested in capital assets. Short-term financing currently costs 5%, long-term financing costs 10%. EBIT is $200,000 and the tax rate is 30%.</p>` +
+ tb(['Lear Inc.: Balance Sheet Assets',''],[['Temporary Current Assets','$________'],['Permanent Current Assets','$350,000'],['Capital Assets','$600,000'],['TOTAL ASSETS','$________']],[3]),
  parts:[
-  {q:'a. Lear finances all capital assets and half of its permanent current assets with long-term financing. Find Lear\u2019s earnings after taxes under this plan.', f:[{l:'Long-term financed amount',a:775000,u:'$'},{l:'Short-term financed amount',a:625000,u:'$'},{l:'Interest expense',a:108750,u:'$'},{l:'Earnings before taxes',a:91250,u:'$'},{l:'Taxes',a:27375,u:'$'},{l:'Earnings after taxes',a:63875,u:'$'}],
+  {q:'a. Lear finances all capital assets and half of its permanent current assets with long-term financing. Find Lear\u2019s earnings after taxes under this plan.', gq:wst(['Assets to be financed','% Short term or Long term','=','Amount to be financed','×','Applicable Rate','=','Total financing cost'],[
+    ['$________','× ____ % long-term','=','{{f0}}','×','10 %','=','$________'],
+    ['','× ____ % short-term','=','{{f1}}','×','5 %','=','$________'],
+    ['TOTAL interest expense','','','','','','','{{f2}}']],[2]) +
+   wst(null,[['Earnings before Interest &amp; Taxes (EBIT)','$200,000'],['Interest Expense (as calculated above)','$________'],['Net Income before Taxes','{{f3}}'],['Taxes (30%)','{{f4}}'],['Earnings (i.e. Net Income)','{{f5}}']],[4]), f:[{l:'Long-term financed amount',a:775000,u:'$'},{l:'Short-term financed amount',a:625000,u:'$'},{l:'Interest expense',a:108750,u:'$'},{l:'Earnings before taxes',a:91250,u:'$'},{l:'Taxes',a:27375,u:'$'},{l:'Earnings after taxes',a:63875,u:'$'}],
    s:L('Temporary current assets','800,000 \u2212 350,000 = 450,000')+L('Long-term financed','Capital assets 600,000 + half of permanent CA (175,000) = 775,000')+L('Short-term financed','Temporary CA 450,000 + remaining half permanent CA (175,000) = 625,000')+L('Interest','775,000 \u00d7 10% + 625,000 \u00d7 5% = 77,500 + 31,250 = 108,750')+L('EBT','200,000 \u2212 108,750 = 91,250')+L('Taxes','30% \u00d7 91,250 = 27,375')+L('EAT','91,250 \u2212 27,375 = 63,875')},
-  {q:'b. As an alternative, Lear finances all capital assets and all permanent current assets, plus half of temporary current assets, with long-term financing. Same rates apply. Find earnings after taxes under this plan.', f:[{l:'Long-term financed amount',a:1175000,u:'$'},{l:'Short-term financed amount',a:225000,u:'$'},{l:'Interest expense',a:128750,u:'$'},{l:'Earnings before taxes',a:71250,u:'$'},{l:'Taxes',a:21375,u:'$'},{l:'Earnings after taxes',a:49875,u:'$'}],
+  {q:'b. As an alternative, Lear finances all capital assets and all permanent current assets, plus half of temporary current assets, with long-term financing. Same rates apply. Find earnings after taxes under this plan.', gq:wst(['Assets to be financed','% Short term or Long term','=','Amount to be financed','×','Applicable Rate','=','Total financing cost'],[
+    ['$________','× ____ % long-term','=','{{f0}}','×','10 %','=','$________'],
+    ['','× ____ % short-term','=','{{f1}}','×','5 %','=','$________'],
+    ['TOTAL interest expense','','','','','','','{{f2}}']],[2]) +
+   wst(null,[['Earnings before Interest &amp; Taxes (EBIT)','$200,000'],['Interest Expense (as calculated above)','$________'],['Net Income before Taxes','{{f3}}'],['Taxes (30%)','{{f4}}'],['Earnings (i.e. Net Income)','{{f5}}']],[4]), f:[{l:'Long-term financed amount',a:1175000,u:'$'},{l:'Short-term financed amount',a:225000,u:'$'},{l:'Interest expense',a:128750,u:'$'},{l:'Earnings before taxes',a:71250,u:'$'},{l:'Taxes',a:21375,u:'$'},{l:'Earnings after taxes',a:49875,u:'$'}],
    s:L('Long-term financed','Capital assets 600,000 + permanent CA 350,000 + half temporary CA (225,000) = 1,175,000')+L('Short-term financed','Remaining half of temporary CA = 225,000')+L('Interest','1,175,000 \u00d7 10% + 225,000 \u00d7 5% = 117,500 + 11,250 = 128,750')+L('EBT','200,000 \u2212 128,750 = 71,250')+L('Taxes','30% \u00d7 71,250 = 21,375')+L('EAT','71,250 \u2212 21,375 = 49,875')+'<p class="note">Plan b uses more long-term (higher-cost) financing than plan a, so interest expense rises and earnings after taxes fall.</p>'}
  ]},
 {id:'gocbonds', w:6, t:'Government of Canada bonds: anticipated one-year forward rates', src:'Connect quiz, Module 6 Q2',
  g:tb(['Coupon','Maturity','Price','Yield'],[['8.25%','Mar. 1, 20YY + 1','$102.75','5.78%'],['3.75%','Mar. 1, 20YY + 2','$95.70','5.85%'],['5.75%','Mar. 1, 20YY + 3','$98.65','6.22%']]) +
  `<p>As of the close of business March 1, 20YY. Round final answers to 2 decimal places; do not round intermediate calculations.</p>`,
  parts:[
-  {q:'Calculate the anticipated one-year interest rate for the 2nd year and the 3rd year, using the expectations hypothesis.', f:[{l:'2nd year rate',a:5.92,u:'%',tol:.04},{l:'3rd year rate',a:6.96,u:'%',tol:.04}],
+  {q:'Calculate the anticipated one-year interest rate for the 2nd year and the 3rd year, using the expectations hypothesis.', gq:calc([
+    'Expectations hypothesis: a long rate is the average of the expected one-year rates it spans, so ( 1 + y<sub>n</sub> )<sup>n</sup> = ( 1 + y<sub>n−1</sub> )<sup>n−1</sup> × ( 1 + f<sub>n</sub> )',
+    '2nd year: f<sub>2</sub> = ( 1 + 0.____ )<sup>2</sup> ÷ ( 1 + 0.____ ) − 1 = 0.____ = {{f0}}',
+    '3rd year: f<sub>3</sub> = ( 1 + 0.____ )<sup>3</sup> ÷ ( 1 + 0.____ )<sup>2</sup> − 1 = 0.____ = {{f1}}']), f:[{l:'2nd year rate',a:5.92,u:'%',tol:.04},{l:'3rd year rate',a:6.96,u:'%',tol:.04}],
    s:L('Idea','A multi-year yield is the geometric average of the one-year rates expected over its life, so each forward rate can be backed out from two adjacent yields')+L('2nd year formula','(1 + y\u2082)\u00b2 \u00f7 (1 + y\u2081) \u2212 1')+L('2nd year','(1.0585)\u00b2 \u00f7 1.0578 \u2212 1 = 1.12042225 \u00f7 1.0578 \u2212 1 = 0.0592 = 5.92%')+L('3rd year formula','(1 + y\u2083)\u00b3 \u00f7 (1 + y\u2082)\u00b2 \u2212 1')+L('3rd year','(1.0622)\u00b3 \u00f7 (1.0585)\u00b2 \u2212 1 = 1.19844716 \u00f7 1.12042225 \u2212 1 = 0.0696 = 6.96%')}
  ]},
 {id:'vincent', w:6, t:'Vincent Black Lightning: fixed vs. variable short-term financing cost', src:'Connect quiz, Module 6 Q3',
  g:`<p>Vincent Black Lightning requires $950,000 in financing over the next three years. The firm can borrow the funds for three years at a fixed 7% per year. Alternatively, short-term financing is forecast to cost 3% in year 1, 5% in year 2 and 11% in year 3.</p>`,
  parts:[
-  {q:'a. Total three-year interest cost under each plan.  b. Which plan is less costly?', f:[{l:'Fixed cost financing total',a:199500,u:'$'},{l:'Variable short-term financing total',a:180500,u:'$'},{l:'Less costly plan',a:'Short-term plan',choice:['Fixed cost plan','Short-term plan']}],
+  {q:'a. Total three-year interest cost under each plan.  b. Which plan is less costly?', gq:wst(['Plan type','Amount In $','×','Applicable Rate','×','Number of years','=','Total financing cost'],[
+    ['Fixed (long-term) rate','$________','×','____ %','×','3 years','=','$________'],
+    ['TOTAL','','','','','','','{{f0}}'],
+    ['Short-term rate, year 1','$________','×','____ %','×','1 year','=','$________'],
+    ['Short-term rate, year 2','$________','×','____ %','×','1 year','=','$________'],
+    ['Short-term rate, year 3','$________','×','____ %','×','1 year','=','$________'],
+    ['TOTAL','','','','','','','{{f1}}']],[1,5]) +
+   `<p class="note">b. Which action is less costly? The {{f2}} appears less costly.</p>`, f:[{l:'Fixed cost financing total',a:199500,u:'$'},{l:'Variable short-term financing total',a:180500,u:'$'},{l:'Less costly plan',a:'Short-term plan',choice:['Fixed cost plan','Short-term plan']}],
    s:L('Fixed cost','950,000 \u00d7 7% \u00d7 3 years = 199,500')+L('Variable, year 1','950,000 \u00d7 3% = 28,500')+L('Variable, year 2','950,000 \u00d7 5% = 47,500')+L('Variable, year 3','950,000 \u00d7 11% = 104,500')+L('Variable total','28,500 + 47,500 + 104,500 = 180,500')+L('Compare','180,500 < 199,500, so the short-term plan is less costly, though its rates are forecasts rather than guaranteed')}
  ]},
 {id:'ruth', w:6, t:'Ruth Sporting Goods: level production, inventory and financing cost', src:'Connect quiz, Module 6 Q4',
  g:tb(['Month','Units sold'],[['March','3,600'],['April','7,600'],['May','12,200'],['June','10,200'],['Total','33,600']],[4]) +
  `<p>Ruth\u2019s production manager rejects matching production to sales each month, and instead uses level production of 8,400 units per month (33,600 \u00f7 4 months). Assume no beginning inventory in March.</p>`,
  parts:[
-  {q:'a. Complete the table: units sold, units produced, the change in inventory and the ending inventory for each month.', f:['March','April','May','June'].flatMap((m,i)=>[
+  {q:'a. Complete the table: units sold, units produced, the change in inventory and the ending inventory for each month.', gq:wst(['Month','Units sold','Units produced','Change in inventory','Ending inventory'],[
+    ['March','{{f0}}','{{f1}}','{{f2}}','{{f3}}'],
+    ['April','{{f4}}','{{f5}}','{{f6}}','{{f7}}'],
+    ['May','{{f8}}','{{f9}}','{{f10}}','{{f11}}'],
+    ['June','{{f12}}','{{f13}}','{{f14}}','{{f15}}']]), f:['March','April','May','June'].flatMap((m,i)=>[
     {l:m+': units sold',a:[3600,7600,12200,10200][i],u:'units'},
     {l:m+': units produced',a:8400,u:'units'},
     {l:m+': change in inventory',a:[4800,800,-3800,-1800][i],u:'units'},
     {l:m+': ending inventory',a:[4800,5600,1800,0][i],u:'units'}
    ]),
    s:L('Change in inventory','Units produced \u2212 units sold')+L('Ending inventory','Previous ending inventory + this month\u2019s change (0 to start in March)')+L('March','8,400 \u2212 3,600 = +4,800; ending 0 + 4,800 = 4,800')+L('April','8,400 \u2212 7,600 = +800; ending 4,800 + 800 = 5,600')+L('May','8,400 \u2212 12,200 = (3,800); ending 5,600 \u2212 3,800 = 1,800')+L('June','8,400 \u2212 10,200 = (1,800); ending 1,800 \u2212 1,800 = 0')+'<p class="note">Ending inventory returns to zero in June because total production (33,600) exactly equals total sales for the season.</p>'},
-  {q:'b. If inventory costs $20 per unit and is financed through the bank at 6% per annum, what is the monthly financing cost and the total for the four months?', f:[{l:'March financing cost',a:480,u:'$'},{l:'April financing cost',a:560,u:'$'},{l:'May financing cost',a:180,u:'$'},{l:'June financing cost',a:0,u:'$'},{l:'Total financing cost',a:1220,u:'$'}],
+  {q:'b. If inventory costs $20 per unit and is financed through the bank at 6% per annum, what is the monthly financing cost and the total for the four months?', gq:calc(['Monthly financing rate = quoted Annual financing rate ÷ 12 months per year = ____ % ÷ 12 = ____ %']) +
+   wst(['','Ending Inv. (from above)','×','Cost per Unit $20','×','Monthly financing rate','=','Monthly financing cost'],[
+    ['March','____ units','×','$20','×','____ %','=','{{f0}}'],
+    ['April','____ units','×','$20','×','____ %','=','{{f1}}'],
+    ['May','____ units','×','$20','×','____ %','=','{{f2}}'],
+    ['June','____ units','×','$20','×','____ %','=','{{f3}}'],
+    ['TOTAL FINANCING COST FOR THE PERIOD','','','','','','','{{f4}}']],[4]), f:[{l:'March financing cost',a:480,u:'$'},{l:'April financing cost',a:560,u:'$'},{l:'May financing cost',a:180,u:'$'},{l:'June financing cost',a:0,u:'$'},{l:'Total financing cost',a:1220,u:'$'}],
    s:L('Monthly rate','6% \u00f7 12 months = 0.50%')+L('March','4,800 units \u00d7 $20 \u00d7 0.50% = $480')+L('April','5,600 \u00d7 $20 \u00d7 0.50% = $560')+L('May','1,800 \u00d7 $20 \u00d7 0.50% = $180')+L('June','0 \u00d7 $20 \u00d7 0.50% = $0')+L('Total','480 + 560 + 180 + 0 = $1,220')}
  ]}
 ,
 {id:'concbank', w:7, t:'Concentration banking: is the cash management package worth it?', src:'ICQ Module 7, Problem 7',
- g:`<ul><li>Your banker has analyzed your company account and has suggested that her bank has a cash management package for you.</li><li>She suggests that with a concentration banking system, {the time needed to make funds from deposited customer cheques available to you} can be reduced by three days on average.</li><li>You, of course, are delighted (you’re not sure why), but you do know your average daily collections amount to $305,000.</li><li>Your opportunity cost of funds is 9 percent.</li><li>The bank provides this service for $52,500 plus a compensating balance in your current account of $75,000.</li><li>(A compensating balance is the amount you are required to maintain interest free at that bank; a “&gt;$0 minimum” amount required in your bank account.)</li></ul>` +
- wst(['','','Amount'],[
-  ['Funds freed up: 3 days × $305,000 average daily collections','=','{{p0f0}}'],
-  ['Less: compensating balance required','−','$________'],
-  ['Net funds freed up','=','{{p0f1}}'],
-  ['× Opportunity cost of funds','×','____ %'],
-  ['Annual benefit (savings)','=','{{p0f2}}'],
-  ['Less: annual fee for the service','−','$________'],
-  ['Annual benefit (savings), net of fee','=','{{p0f3}}']],[6]) +
- `<p class="note">Conclusion: ______ the package, there are ____ incremental benefits compared to incremental fees.</p>`,
+ g:`<ul><li>Your banker has analyzed your company account and has suggested that her bank has a cash management package for you.</li><li>She suggests that with a concentration banking system, {the time needed to make funds from deposited customer cheques available to you} can be reduced by three days on average.</li><li>You, of course, are delighted (you’re not sure why), but you do know your average daily collections amount to $305,000.</li><li>Your opportunity cost of funds is 9 percent.</li><li>The bank provides this service for $52,500 plus a compensating balance in your current account of $75,000.</li><li>(A compensating balance is the amount you are required to maintain interest free at that bank; a “&gt;$0 minimum” amount required in your bank account.)</li><li>Is this package worth it? If so, by how much?</li></ul>` +
+ wst(null,[
+  ['$305,000 daily receipts × 3 days speed up =','{{p0f0}}'],
+  ['subtract: compensating balance requirement','$________'],
+  ['Net funds freed up','{{p0f1}}'],
+  ['Opportunity benefit (cost) of funds at:','9%'],
+  ['Annual benefit: = Net funds freed up × 9%','{{p0f2}}'],
+  ['subtract: Annual new bank fee','$________'],
+  ['Annual savings from concentration banking system','{{p0f3}}']],[2,6]) +
+ `<p class="note">Conclusion: {{p0f4}} the package, there are ____ incremental benefits compared to incremental fees.</p>`,
  parts:[
   {q:'Is the package worth it? If so, by how much?', f:[{l:'Funds freed up by the speedup',a:915000,u:'$'},{l:'Net funds freed up',a:840000,u:'$'},{l:'Annual benefit at 9%',a:75600,u:'$'},{l:'Annual savings from the package',a:23100,u:'$'},{l:'Accept the package?',a:'Accept',choice:['Accept','Reject']}],
    s:L('Funds freed up','$305,000 \u00d7 3 days = $915,000')+L('Net funds freed up','915,000 \u2212 compensating balance 75,000 = 840,000')+L('Annual benefit','840,000 \u00d7 9% = 75,600')+L('Annual savings','75,600 \u2212 annual fee 52,500 = 23,100')+L('Conclusion','Accept the package: the incremental benefits ($75,600) exceed the incremental fees ($52,500) by $23,100 a year')}
  ]},
 {id:'comiskey', w:7, t:'Comiskey Fence Co.: should credit be extended to new customers?', src:'ICQ Module 7, Problems 23 and 24',
- g:`<ul><li>Comiskey Fence Co. is evaluating extending credit to a new group of customers.</li><li>Although these customers will provide $180,000 in additional credit sales, 12 percent are likely to be uncollectible.</li><li>The company will incur $15,700 in additional collection expenses.</li><li>Production and marketing expenses represent 70 percent of sales.</li><li>The company has a receivables turnover of five times.</li><li>No other asset buildup will be required to service the new customers.</li><li>The firm has a 15 percent desired return on investment.</li></ul>` +
- calc(['A/R Turnover = Sales (on credit) ÷ Accounts Receivable = 365 days per year ÷ Average Collection Period',
-       'Accounts Receivable = Sales (on credit) ÷ A/R Turnover = Average Collection Period × Average Daily Sales']),
+ g:`<ul><li>Comiskey Fence Co. is evaluating extending credit to a new group of customers.</li><li>Although these customers will provide $180,000 in additional credit sales, 12 percent are likely to be uncollectible.</li><li>The company will incur $15,700 in additional collection expenses.</li><li>Production and marketing expenses represent 70 percent of sales.</li><li>The company has a receivables turnover of five times.</li><li>No other asset buildup will be required to service the new customers.</li><li>The firm has a 15 percent desired return on investment.</li></ul>`,
  parts:[
-  {q:'a. If 12% of the new sales prove uncollectible, should Comiskey extend credit?', f:[{l:'Accounts uncollectible',a:21600,u:'$'},{l:'Annual incremental revenue',a:158400,u:'$'},{l:'Production and selling costs',a:126000,u:'$'},{l:'Annual income before taxes',a:16700,u:'$'},{l:'Investment in accounts receivable',a:36000,u:'$'},{l:'Return on incremental investment',a:46.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+  {q:'a. If 12% of the new sales prove uncollectible, should Comiskey extend credit?', gq:wst(null,[
+    ['Added sales','$________'],
+    ['subtract: Accounts uncollectible (12% of new sales)','{{f0}}'],
+    ['Annual incremental revenue','{{f1}}'],
+    ['subtract: Collection costs','$________'],
+    ['subtract: Production and selling costs (70% of new sales)','{{f2}}'],
+    ['Annual income before taxes','{{f3}}']],[2,5]) +
+   calc(['Investment in accounts receivable = Sales ÷ Turnover = $________ ÷ 5 = {{f4}}',
+         'Return on incremental investment = $________ ÷ $________ = 0.____ = {{f5}}']) +
+   `<p class="note">Conclusion: extend credit to these customers? {{f6}} — because ____% incremental return is ______ than 15%.</p>`, f:[{l:'Accounts uncollectible',a:21600,u:'$'},{l:'Annual incremental revenue',a:158400,u:'$'},{l:'Production and selling costs',a:126000,u:'$'},{l:'Annual income before taxes',a:16700,u:'$'},{l:'Investment in accounts receivable',a:36000,u:'$'},{l:'Return on incremental investment',a:46.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
    s:L('Uncollectible','12% \u00d7 180,000 = 21,600')+L('Incremental revenue','180,000 \u2212 21,600 = 158,400')+L('Production and selling','70% \u00d7 180,000 = 126,000')+L('Income before taxes','158,400 \u2212 15,700 \u2212 126,000 = 16,700')+L('Investment in AR','Sales 180,000 \u00f7 turnover 5 = 36,000')+L('Return','16,700 \u00f7 36,000 = 46.4%')+L('Conclusion','Yes, extend credit: 46.4% is well above the 15% desired return')},
-  {q:'b. What if 15% of the new sales prove uncollectible instead?', f:[{l:'Accounts uncollectible',a:27000,u:'$'},{l:'Annual income before taxes',a:11300,u:'$'},{l:'Return on incremental investment',a:31.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+  {q:'b. What if 15% of the new sales prove uncollectible instead?', gq:wst(null,[
+    ['Added sales','$________'],
+    ['subtract: Accounts uncollectible (15% of new sales)','{{f0}}'],
+    ['Annual incremental revenue','$________'],
+    ['subtract: Collection costs','$________'],
+    ['subtract: Production and selling costs (70% of new sales)','$________'],
+    ['Annual income before taxes','{{f1}}']],[2,5]) +
+   calc(['Return on incremental investment = $________ ÷ $________ = 0.____ = {{f2}}']) +
+   `<p class="note">Conclusion: extend credit? {{f3}} — because ____% is ______ than 15%.</p>`, f:[{l:'Accounts uncollectible',a:27000,u:'$'},{l:'Annual income before taxes',a:11300,u:'$'},{l:'Return on incremental investment',a:31.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
    s:L('Uncollectible','15% \u00d7 180,000 = 27,000 (5,400 more than part a)')+L('Income before taxes','180,000 \u2212 27,000 \u2212 15,700 \u2212 126,000 = 11,300')+L('Return','11,300 \u00f7 36,000 (from part a) = 31.4%')+L('Conclusion','Yes, extend credit: 31.4% is still greater than 15%')},
-  {q:'c. What if receivables turnover drops to 1.5\u00d7, with 12% of accounts uncollectible as in part a?', f:[{l:'New investment in accounts receivable',a:120000,u:'$'},{l:'Return on incremental investment',a:13.92,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
+  {q:'c. What if receivables turnover drops to 1.5\u00d7, with 12% of accounts uncollectible as in part a?', gq:calc([
+    'If receivable turnover drops to 1.5x (“One point five times”), the investment in accounts receivable would be:',
+    'Accounts Receivable = $________ divided by 1.5 times = {{f0}}',
+    'Return on incremental investment = $________ ÷ $________ = 0.____ = {{f1}}']) +
+   `<p class="note">Conclusion: should the credit be extended? {{f2}} — because ____% is ______ than the desired 15%.</p>`, f:[{l:'New investment in accounts receivable',a:120000,u:'$'},{l:'Return on incremental investment',a:13.92,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
    s:L('New investment in AR','180,000 \u00f7 1.5 = 120,000')+L('Return','16,700 (from part a) \u00f7 120,000 = 13.92%')+L('Conclusion','No: 13.92% is less than the desired 15%, so credit should not be extended on this basis')},
-  {q:'d. (Problem 24) What if the average collection period is 120 days instead, with 12% uncollectible as in part a?', f:[{l:'Accounts receivable turnover',a:3.04,u:'x',tol:.02},{l:'New investment in accounts receivable',a:59178,u:'$',tol:40},{l:'Return on incremental investment',a:28.22,u:'%',tol:.05},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
+  {q:'d. (Problem 24) What if the average collection period is 120 days instead, with 12% uncollectible as in part a?', gq:calc([
+    'First compute the new accounts receivable balance.',
+    'Accounts receivable = Average collection period × average daily sales = 120 days × $________ ÷ 365 = 120 days × $______ = $________',
+    'OR:',
+    'Accounts receivable turnover = 365 ÷ Average collection period = 365 days ÷ 120 days = {{f0}}',
+    'Accounts receivable = Sales ÷ accounts receivable turnover = $________ ÷ ____ times = {{f1}}',
+    'Return on incremental investment = $________ ÷ $________ = 0.____ = {{f2}}']) +
+   `<p class="note">Conclusion: extend credit? {{f3}} — ____% is ______ than 15%.</p>`, f:[{l:'Accounts receivable turnover',a:3.04,u:'x',tol:.02},{l:'New investment in accounts receivable',a:59178,u:'$',tol:40},{l:'Return on incremental investment',a:28.22,u:'%',tol:.05},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
    s:L('AR turnover','365 \u00f7 120 days = 3.0417\u00d7')+L('New investment in AR','180,000 \u00f7 3.0417 = 59,178')+L('Return','16,700 (from part a) \u00f7 59,178 = 28.22%')+L('Conclusion','Yes, extend credit: 28.22% is greater than 15%')}
  ]},
 {id:'gic', w:7, t:'Annual return on an interest-paying security (GIC)', src:'ICQ Module 7, Annual Return example',
@@ -908,72 +994,96 @@ const P = [
   {q:'Find the annualized yield, and the annualized effective yield that accounts for compounding.', f:[{l:'Annualized yield',a:1.91,u:'%',tol:.03},{l:'Annualized effective yield',a:1.92,u:'%',tol:.03}],
    s:L('Annualized yield formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Annualized yield','[(100 \u2212 99.531) \u00f7 99.531] \u00d7 (365 \u00f7 90) = 0.019110 = 1.91%')+L('Effective yield formula','(1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Effective yield','(1 + 0.004712)^(365\u00f790) \u2212 1 = 0.019248 = 1.92%')+L('Why they differ','The effective yield compounds the 90-day return over the periods in a year; the simple annualized yield does not')}
  ]},
-{id:'eoq-centennial', w:7, t:'Centennial Company: economic order quantity and total inventory cost', src:'ICQ Module 7, EOQ example',
- g:`<p>Centennial Company sells 2,000 units a year. Each order costs $8 to place, and the carrying cost of holding inventory is $0.20 per unit per year.</p>`,
+{id:'eoq-centennial', w:7, t:'Centennial Company: economic ordering quantity, total cost and safety stock', src:'ICQ Module 7, EOQ in-class example',
+ g:`<ul><li>Assume the Centennial Company sells 2,000 units each year.</li><li>Every time the Centennial Company makes an order from its supplier, the cost is $8 per order.</li><li>When the Centennial Company stores the inventory in its warehouse, the annual cost of holding that inventory, or the “Carrying Cost of Inventory”, is $0.20 per unit per year.</li></ul>` +
+ calc(['EOQ = √( 2 × S × O ÷ C )&nbsp;&nbsp; where S = Total sales in units, O = Ordering cost for each order, C = Carrying cost per unit in dollars']),
  parts:[
-  {q:'What is the economic order quantity (EOQ)?', f:[{l:'EOQ',a:400,u:'units'}],
-   s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 2,000 \u00d7 8 \u00f7 0.20) = \u221a160,000 = 400 units')},
-  {q:'What is the total cost (TC) of inventory at the EOQ?', f:[{l:'Number of orders',a:5,u:'x'},{l:'Order cost',a:40,u:'$'},{l:'Carrying cost',a:40,u:'$'},{l:'Total inventory cost',a:80,u:'$'}],
-   s:L('Number of orders','2,000 \u00f7 400 = 5 orders')+L('Order cost','5 \u00d7 $8 = $40')+L('Carrying cost','$0.20 \u00d7 (400 \u00f7 2 = 200 average units) = $40')+L('TC','40 + 40 = $80')},
-  {q:'If 50 units of safety stock are desired, what is the new average inventory and new carrying cost?', f:[{l:'New average inventory',a:250,u:'units'},{l:'New carrying cost',a:50,u:'$'}],
-   s:L('Average inventory with safety stock','EOQ \u00f7 2 + safety stock = 200 + 50 = 250 units')+L('New carrying cost','250 \u00d7 $0.20 = $50')}
- ]},
+  {q:'Economic Ordering Quantity: how many units should Centennial order each time?', gq:calc([
+    'EOQ = √( 2 × ______ units × $____ per order ÷ $____ per unit ) = √( $________ units per order ÷ $____ per unit ) = √ ________ units² per order = {{f0}}']),
+   f:[{l:'EOQ',a:400,u:'units'}],
+   s:L('Inside the root first','2 × 2,000 × $8 = $32,000; $32,000 ÷ $0.20 = 160,000')+L('Then the root','√160,000 = 400 units per order')},
+  {q:'Total cost of inventory: TC = Order Costs + Carrying Costs.', gq:calc([
+    'TC = ( S × O ) ÷ Q + ( C × Q ) ÷ 2 = ( ______ units × $____ ) ÷ ____ units per order + ( $____ per unit × ____ units per order ) ÷ 2',
+    'TC = ( ____ orders × $____ ) + ( $____ × ____ units ) = {{f0}} + {{f1}} = {{f2}}']),
+   f:[{l:'Order cost',a:40,u:'$'},{l:'Carrying cost',a:40,u:'$'},{l:'Total cost',a:80,u:'$'}],
+   s:L('Number of orders','2,000 ÷ 400 = 5 orders × $8 = $40.00')+L('Carrying cost','$0.20 × average inventory of 200 units (400 ÷ 2) = $40.00')+L('TC','$40 + $40 = $80.00')+'<p class="note">At the EOQ, total ordering cost equals total carrying cost.</p>'},
+  {q:'Safety stock: Centennial wants 50 units of safety stock. What are the new average inventory and the new carrying cost?', gq:calc([
+    'Average inventory = EOQ ÷ 2 + Safety stock = ____ units ÷ 2 + 50 units = {{f0}}',
+    'New Carrying Cost = Average inventory in units × Carrying cost per unit = ____ units × $____ per unit = {{f1}}']),
+   f:[{l:'New average inventory',a:250,u:'units'},{l:'New carrying cost',a:50,u:'$'}],
+   s:L('Average inventory','400 ÷ 2 + 50 = 250 units')+L('Carrying cost','250 × $0.20 = $50 (up $10 from $40), so total cost rises to $90')}
+ ]}
+,
 {id:'higgins', w:7, t:'Higgins Athletic Wear: EOQ, average inventory and total inventory cost', src:'ICQ Module 7, Problem 41',
- g:`<p>Higgins Athletic Wear has expected sales of 22,500 units a year, carrying costs of $1.50 per unit, and an ordering cost of $3.00 per order.</p>` +
- calc(['EOQ = √( 2 × S × O ÷ C )',
-       'where&nbsp; S = Total sales in units&nbsp;&nbsp; O = Ordering cost for each order&nbsp;&nbsp; C = Carrying cost per unit in dollars',
-       'TC = Order Cost + Carrying Cost = ( S × O ) ÷ Q&nbsp; +&nbsp; ( C × Q ) ÷ 2',
-       'where&nbsp; Q = Quantity per order&nbsp;&nbsp;&nbsp; Average inventory (units) = EOQ ÷ 2 + Safety stock']) +
- `<p class="note">Calculator reminder: do the math inside each “root” first, then take the root of the result. For total cost, do the division in each fraction first, then add the results together.</p>`,
+ g:`<p>Higgins Athletic Wear has expected sales of 22,500 units a year, carrying costs of $1.50 per unit, and an ordering cost of $3.00 per order.</p><p class="note">Calculator reminder: do the math inside each “root” first, then take the root of the result. For total cost, do the division in each fraction first, then add the results together.</p>`,
  parts:[
-  {q:'a. What is the economic order quantity?', f:[{l:'EOQ',a:300,u:'units'}],
+  {q:'a. What is the economic order quantity?', gq:calc(['EOQ = √( 2SO ÷ C ) = √( 2 × ______ × $____ ÷ $____ ) = √ ________ = {{f0}}']), f:[{l:'EOQ',a:300,u:'units'}],
    s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 22,500 \u00d7 3 \u00f7 1.50) = \u221a90,000 = 300 units')},
-  {q:'b. What is average inventory, and the total carrying cost?', f:[{l:'Average inventory',a:150,u:'units'},{l:'Total carrying cost',a:225,u:'$'}],
+  {q:'b. What is average inventory, and the total carrying cost?', gq:calc(['EOQ ÷ 2 = ____ units ÷ 2 = {{f0}} (average inventory)',
+         '____ units × $____ carrying cost per unit = {{f1}} total carrying cost']), f:[{l:'Average inventory',a:150,u:'units'},{l:'Total carrying cost',a:225,u:'$'}],
    s:L('Average inventory','EOQ \u00f7 2 = 300 \u00f7 2 = 150 units')+L('Total carrying cost','150 \u00d7 $1.50 = $225')},
-  {q:'c. What is the total inventory cost?', f:[{l:'Number of orders',a:75,u:'x'},{l:'Order cost',a:225,u:'$'},{l:'Carrying cost',a:225,u:'$'},{l:'Total inventory cost',a:450,u:'$'}],
+  {q:'c. What is the total inventory cost?', gq:calc(['TC = SO ÷ Q + CQ ÷ 2 = ( ______ × $____ ) ÷ ____ + ( $____ × ____ ) ÷ 2',
+         '&nbsp;&nbsp;&nbsp;= {{f0}} orders × $____ + $____ × ____ units = {{f1}} + {{f2}} = {{f3}}']), f:[{l:'Number of orders',a:75,u:'x'},{l:'Order cost',a:225,u:'$'},{l:'Carrying cost',a:225,u:'$'},{l:'Total inventory cost',a:450,u:'$'}],
    s:L('Number of orders','22,500 \u00f7 300 = 75 orders')+L('Order cost','75 \u00d7 $3 = $225')+L('Carrying cost','$1.50 \u00d7 150 = $225')+L('TC','225 + 225 = $450')},
-  {q:'d. If an additional 30 units are required as safety stock, what are the new average inventory and new total carrying cost?', f:[{l:'New average inventory',a:180,u:'units'},{l:'New total carrying cost',a:270,u:'$'}],
+  {q:'d. If an additional 30 units are required as safety stock, what are the new average inventory and new total carrying cost?', gq:calc(['Average inventory = EOQ ÷ 2 + Safety stock = ____ ÷ 2 + ____ = {{f0}}',
+         '____ units × $____ carrying cost per unit = {{f1}} total carrying cost']), f:[{l:'New average inventory',a:180,u:'units'},{l:'New total carrying cost',a:270,u:'$'}],
    s:L('Average inventory with safety stock','300 \u00f7 2 + 30 = 180 units')+L('New carrying cost','180 \u00d7 $1.50 = $270')}
  ]}
 ,
 {id:'fisk', w:7, t:'Fisk Corporation: EOQ after a drop in ordering cost', src:'Connect quiz, Module 7 Q1',
  g:`<p>Fisk Corporation anticipates sales of 56,000 units a year, an ordering cost of $8 per order, and carrying costs of $1.40 per unit. In the second year, Fisk finds it can reduce ordering costs to $2 per order; carrying costs stay at $1.40 per unit.</p>`,
  parts:[
-  {q:'a-1. What is the EOQ for the second year?', f:[{l:'Economic ordering quantity (EOQ)',a:400,u:'units'}],
+  {q:'a-1. What is the EOQ for the second year?', gq:calc(['EOQ = √( 2SO ÷ C ) = √( 2 × ______ × $____ ÷ $____ ) = √ ________ = {{f0}}']), f:[{l:'Economic ordering quantity (EOQ)',a:400,u:'units'}],
    s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 56,000 \u00d7 2 \u00f7 1.40) = \u221a160,000 = 400 units')},
-  {q:'a-2. How many orders will be placed during the second year?', f:[{l:'Number of orders',a:140,u:'x'}],
+  {q:'a-2. How many orders will be placed during the second year?', gq:calc(['Number of orders = S ÷ EOQ = ______ ÷ ____ = {{f0}}']), f:[{l:'Number of orders',a:140,u:'x'}],
    s:L('Formula','Number of orders = Annual sales in units \u00f7 EOQ')+L('Calculation','56,000 \u00f7 400 = 140 orders')},
-  {q:'a-3. What will average inventory be for the second year?', f:[{l:'Average inventory',a:200,u:'units'}],
+  {q:'a-3. What will average inventory be for the second year?', gq:calc(['Average inventory = EOQ ÷ 2 = ____ ÷ 2 = {{f0}}']), f:[{l:'Average inventory',a:200,u:'units'}],
    s:L('Formula','Average inventory = EOQ \u00f7 2')+L('Calculation','400 \u00f7 2 = 200 units')},
-  {q:'a-4. What is the total cost of ordering and carrying inventory for the second year?', f:[{l:'Total costs',a:560,u:'$'}],
+  {q:'a-4. What is the total cost of ordering and carrying inventory for the second year?', gq:calc(['TC = SO ÷ Q + CQ ÷ 2 = ____ orders × $____ + $____ × ____ units = $____ + $____ = {{f0}}']), f:[{l:'Total costs',a:560,u:'$'}],
    s:L('Formula','TC = (Number of orders \u00d7 Order cost) + (Carrying cost per unit \u00d7 Average inventory)')+L('Calculation','(140 \u00d7 $2) + ($1.40 \u00d7 200) = $280 + $280 = $560')}
  ]},
 {id:'henderson', w:7, t:'Henderson Office Supplies: liberalizing credit, with and without an inventory buildup', src:'Connect quiz, Module 7 Q2',
  g:`<p>Henderson Office Supplies is considering a more liberal credit policy to increase sales by $71,000. It expects 9% of the new accounts to be uncollectible, collection costs of 2% of new sales, production costs of 80% of sales, and accounts receivable turnover of 2 times. No other asset buildup is assumed at first.</p>`,
  parts:[
-  {q:'a. What is the level of investment in accounts receivable to support this sales expansion?', f:[{l:'Investment in accounts receivable',a:35500,u:'$'}],
+  {q:'a. What is the level of investment in accounts receivable to support this sales expansion?', gq:calc(['Investment in accounts receivable = Sales ÷ Turnover = $________ ÷ ____ = {{f0}}']), f:[{l:'Investment in accounts receivable',a:35500,u:'$'}],
    s:L('Formula','Investment in AR = New sales \u00f7 Receivables turnover')+L('Calculation','71,000 \u00f7 2 = $35,500')},
-  {q:'b. What would be Henderson\u2019s incremental before-tax return on investment?', f:[{l:'Incremental income before tax',a:6390,u:'$'},{l:'Return on incremental investment',a:18,u:'%'}],
+  {q:'b. What would be Henderson\u2019s incremental before-tax return on investment?', gq:wst(null,[
+    ['Added sales','$________'],
+    ['subtract: Accounts uncollectible (9% of new sales)','$________'],
+    ['Annual incremental revenue','$________'],
+    ['subtract: Collection costs (2% of new sales)','$________'],
+    ['subtract: Production costs (80% of new sales)','$________'],
+    ['Annual income before taxes','{{f0}}']],[2,5]) +
+   calc(['Return on incremental investment = $________ ÷ $________ = 0.____ = {{f1}}']), f:[{l:'Incremental income before tax',a:6390,u:'$'},{l:'Return on incremental investment',a:18,u:'%'}],
    s:L('Uncollectible','9% \u00d7 71,000 = 6,390')+L('Collection costs','2% \u00d7 71,000 = 1,420')+L('Production costs','80% \u00d7 71,000 = 56,800')+L('Income before tax','71,000 \u2212 6,390 \u2212 1,420 \u2212 56,800 = 6,390')+L('Return','6,390 \u00f7 35,500 (from part a) = 18%')},
-  {q:'c. Should Henderson liberalize credit if a 15% before-tax return is required?', f:[{l:'Liberalize credit?',a:'Yes',choice:['Yes','No']}],
+  {q:'c. Should Henderson liberalize credit if a 15% before-tax return is required?', gq:`<p class="note">Conclusion: liberalize credit? {{f0}} — because ____% is ______ than the required 15%.</p>`, f:[{l:'Liberalize credit?',a:'Yes',choice:['Yes','No']}],
    s:L('Compare','18% (from part b) is greater than the required 15%, so yes, liberalize credit')},
-  {q:'d. Now assume Henderson also needs to increase inventory to support the new sales, with inventory turnover of 5\u00d7 on cost of goods sold. What is the total incremental investment in accounts receivable and inventory?', f:[{l:'Investment in inventory',a:11360,u:'$'},{l:'Total incremental investment',a:46860,u:'$'}],
+  {q:'d. Now assume Henderson also needs to increase inventory to support the new sales, with inventory turnover of 5\u00d7 on cost of goods sold. What is the total incremental investment in accounts receivable and inventory?', gq:calc(['Investment in inventory = Sales ÷ Inventory turnover = $________ ÷ ____ = {{f0}}',
+         'Total incremental investment = Accounts receivable + Inventory = $________ + $________ = {{f1}}']), f:[{l:'Investment in inventory',a:11360,u:'$'},{l:'Total incremental investment',a:46860,u:'$'}],
    s:L('COGS of the new sales','Production costs from part b = 80% \u00d7 71,000 = 56,800')+L('Investment in inventory','56,800 \u00f7 inventory turnover 5 = 11,360')+L('Total investment','AR 35,500 (part a) + inventory 11,360 = 46,860')},
-  {q:'e. Given the income from part b and the investment from part d, should Henderson extend more liberal credit terms?', f:[{l:'Return on total investment',a:13.64,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
+  {q:'e. Given the income from part b and the investment from part d, should Henderson extend more liberal credit terms?', gq:calc(['Return on total investment = $________ ÷ $________ = 0.____ = {{f0}}']) +
+   `<p class="note">Conclusion: extend credit? {{f1}} — because ____% is ______ than 15%.</p>`, f:[{l:'Return on total investment',a:13.64,u:'%',tol:.05},{l:'Extend credit?',a:'No',choice:['Yes','No']}],
    s:L('Return','6,390 (part b) \u00f7 46,860 (part d) = 13.64%')+L('Compare','13.64% is less than the required 15%, so no, once the inventory buildup is included the expansion no longer clears the hurdle')}
  ]},
 {id:'lett', w:7, t:'Lett\u2019s commercial paper: yield and effective annual yield', src:'Connect quiz, Module 7 Q3',
  g:`<p>Lett\u2019s commercial paper is selling at a discount. It sells for 98.32% of par and matures in 100 days. Use 365 days a year; do not round intermediate calculations.</p>`,
  parts:[
-  {q:'a. Calculate its yield as quoted in the market.', f:[{l:'Yield',a:6.24,u:'%',tol:.04}],
+  {q:'a. Calculate its yield as quoted in the market.', gq:calc(['r = ( 100 − P ) ÷ P × 365 ÷ d = ( 100 − ______ ) ÷ ______ × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Yield',a:6.24,u:'%',tol:.04}],
    s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.32) \u00f7 98.32] \u00d7 (365 \u00f7 100) = 0.017087 \u00d7 3.65 = 0.0624 = 6.24%')},
-  {q:'b. Calculate its effective annual yield.', f:[{l:'Effective annual yield',a:6.38,u:'%',tol:.04}],
+  {q:'b. Calculate its effective annual yield.', gq:calc(['r<sub>EFF</sub> = ( 1 + ( 100 − P ) ÷ P )<sup>(365/d)</sup> − 1 = ( 1 + ( 100 − ______ ) ÷ ______ )<sup>(365/____)</sup> − 1 = 0.____ = {{f0}}']), f:[{l:'Effective annual yield',a:6.38,u:'%',tol:.04}],
    s:L('Formula','Effective yield = (1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Calculation','(1.017087)^3.65 \u2212 1 = 0.0638 = 6.38%')+L('Why it\u2019s higher','The effective yield compounds the 100-day return over the 3.65 periods in a year, instead of simply scaling it up')}
  ]},
 {id:'haynes', w:7, t:'Haynes Bank: is a cash management offer worth accepting?', src:'Connect quiz, Module 7 Q4',
  g:`<p>Haynes Bank offers to reduce the collection time on your company\u2019s daily cash receipts by two days. The service costs $25,000 per year. Short-term money market rates average 8%, and anticipated annual sales are $45.625 million.</p>`,
  parts:[
-  {q:'If you anticipate annual sales of $45.625 million, would you accept the bank\u2019s offer?', f:[{l:'Average daily sales',a:125000,u:'$'},{l:'Funds freed up by the speedup',a:250000,u:'$'},{l:'Annual benefit at 8%',a:20000,u:'$'},{l:'Net annual savings (cost)',a:-5000,u:'$'},{l:'Accept the offer?',a:'No',choice:['Yes','No']}],
+  {q:'If you anticipate annual sales of $45.625 million, would you accept the bank\u2019s offer?', gq:wst(null,[
+    ['Annual sales $45,625,000 ÷ 365 days = average daily sales','{{f0}}'],
+    ['$________ daily receipts × 2 days speed up = funds freed up','{{f1}}'],
+    ['Opportunity benefit (cost) of funds at:','8%'],
+    ['Annual benefit: = Funds freed up × 8%','{{f2}}'],
+    ['subtract: Annual new bank fee','$________'],
+    ['Annual savings (cost) from the offer','{{f3}}']],[5]) +
+   `<p class="note">Conclusion: accept the offer? {{f4}} — there are ____ incremental benefits compared to incremental fees.</p>`, f:[{l:'Average daily sales',a:125000,u:'$'},{l:'Funds freed up by the speedup',a:250000,u:'$'},{l:'Annual benefit at 8%',a:20000,u:'$'},{l:'Net annual savings (cost)',a:-5000,u:'$'},{l:'Accept the offer?',a:'No',choice:['Yes','No']}],
    s:L('Average daily sales','$45,625,000 \u00f7 365 = $125,000')+L('Funds freed up','$125,000 \u00d7 2 days = $250,000')+L('Annual benefit','$250,000 \u00d7 8% = $20,000')+L('Net savings','$20,000 \u2212 $25,000 fee = ($5,000)')+L('Conclusion','No: the $25,000 fee costs more than the $20,000 benefit, a net loss of $5,000 a year')}
  ]}
 ,
@@ -1069,29 +1179,41 @@ const P = [
   ['Annual cost of forgoing an early pay cash discount on an invoice:&nbsp; K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) )','b'],
   ['Annual return (yield) on securities sold at a discount:&nbsp; R<sub>DIS</sub> = ( 100 − P ) ÷ P × ( 365 ÷ d )','c']]) +
  wst(['Part','Cost'],[
-  ['(a) Line of Credit including commitment fee','{{p0f2}}'],
-  ['(b) Forgo trade discounts from suppliers','{{p1f0}}'],
-  ['(c) Issue commercial paper','{{p2f0}}']]) +
+  ['(a) Line of Credit including commitment fee','____ %'],
+  ['(b) Forgo trade discounts from suppliers','____ %'],
+  ['(c) Issue commercial paper','____ %']]) +
  `<p class="note">CONCLUSION: Choose the {{p3f0}} — it is the cheapest alternative.</p>`,
  parts:[
-  {q:'a. What is the annual rate of interest on the line of credit, including the commitment fee?', f:[{l:'Annual commitment fee',a:10000,u:'$'},{l:'Interest expense',a:12328.77,u:'$',tol:5},{l:'Annual rate of interest',a:18.11,u:'%',tol:.1}],
+  {q:'a. What is the annual rate of interest on the line of credit, including the commitment fee?', gq:calc([
+    'Annual commitment fee = 1% × $________ = {{f0}}',
+    'Interest expense = $________ × 10 % × ____ ÷ 365 = {{f1}}',
+    'Annual rate of interest: R<sub>ANNUAL</sub> = I ÷ P × 365 ÷ d = ( $________ + $________ )* ÷ $________ × 365 ÷ ____ = 0.____ = {{f2}}']) +
+   `<p class="note">* Note: the interest cost also includes the commitment fee.</p>`, f:[{l:'Annual commitment fee',a:10000,u:'$'},{l:'Interest expense',a:12328.77,u:'$',tol:5},{l:'Annual rate of interest',a:18.11,u:'%',tol:.1}],
    s:L('Commitment fee','1% \u00d7 $1,000,000 = $10,000')+L('Interest expense','$1,000,000 \u00d7 10% \u00d7 (45 \u00f7 365) = $12,328.77')+L('Formula','R_ANNUAL = [(Commitment fee + Interest expense) \u00f7 Principal] \u00d7 (365 \u00f7 Days)')+L('Calculation','[($10,000 + $12,328.77) \u00f7 $1,000,000] \u00d7 (365 \u00f7 45) = 0.1811 = 18.11%')},
-  {q:'b. What is the cost of forgoing the cash discount on terms of 2/15, net 60?', f:[{l:'Cost of forgoing the discount',a:16.55,u:'%',tol:.1}],
+  {q:'b. What is the cost of forgoing the cash discount on terms of 2/15, net 60?', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of forgoing the discount',a:16.55,u:'%',tol:.1}],
    s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (60 \u2212 15)] = 0.1655 = 16.55%')},
-  {q:'c. The commercial paper sells at a discount of 1.25% (so its price is 100 \u2212 1.25 = 98.75, per $100 of maturity value). What annualized rate does this represent?', f:[{l:'Annualized rate',a:10.27,u:'%',tol:.1}],
+  {q:'c. The commercial paper sells at a discount of 1.25% (so its price is 100 \u2212 1.25 = 98.75, per $100 of maturity value). What annualized rate does this represent?', gq:calc(['Students: the commercial paper sells “at a discount of 1.25 percent”, so the Price “P” is ( 100 − 1.25 ) = ______',
+         'r = ( 100 − P ) ÷ P × 365 ÷ d = ( 100 − ______ ) ÷ ______ × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Annualized rate',a:10.27,u:'%',tol:.1}],
    s:L('Price','100 \u2212 1.25 = 98.75')+L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.75) \u00f7 98.75] \u00d7 (365 \u00f7 45) = 0.1027 = 10.27%')},
   {q:'d. Which alternative should Rockford choose?', f:[{l:'Cheapest alternative',a:'Commercial paper',choice:['Line of credit','Forgo the cash discount','Commercial paper']}],
    s:L('Compare','(a) 18.11% vs. (b) 16.55% vs. (c) 10.27%')+L('Conclusion','Choose the commercial paper \u2014 it is the cheapest alternative')}
  ]}
 ,
 {id:'macco', w:8, t:'Macco Bakers: choosing the cheapest short-term financing alternative', src:'Connect quiz, Module 8 Q1',
- g:`<p>Macco Bakers requires $500,000 in financing for a 90-day period. Three alternatives are being considered:</p><ul><li>(a) A line of credit at 8% interest; the bank charges a flat $5,000 fee to establish the line.</li><li>(b) Forgo trade discounts from suppliers on terms of 2/10, net 100.</li><li>(c) Issue commercial paper for 90 days at a discount of 2.05%.</li></ul><p>Use 365 days in a year; do not round intermediate calculations; round final answers to 2 decimal places.</p>`,
+ g:`<p>Macco Bakers requires $500,000 in financing for a 90-day period. Three alternatives are being considered:</p><ul><li>(a) A line of credit at 8% interest; the bank charges a flat $5,000 fee to establish the line.</li><li>(b) Forgo trade discounts from suppliers on terms of 2/10, net 100.</li><li>(c) Issue commercial paper for 90 days at a discount of 2.05%.</li></ul><p>Use 365 days in a year; do not round intermediate calculations; round final answers to 2 decimal places.</p>` +
+ wst(['Part','Cost'],[['(a) Line of credit including the fee','____ %'],['(b) Forgo trade discounts from suppliers','____ %'],['(c) Issue commercial paper','____ %']]) +
+ `<p class="note">CONCLUSION: Choose the {{p3f0}}. It is the cheapest alternative.</p>`,
  parts:[
-  {q:'a. What would be the rate of interest for the bank loan (including the fee)?', f:[{l:'Rate of interest for bank loan',a:12.06,u:'%',tol:.1}],
+  {q:'a. What would be the rate of interest for the bank loan (including the fee)?', gq:calc([
+    'Flat fee to establish the line = $________',
+    'Interest expense = $________ × 8 % × ____ ÷ 365 = $________',
+    'R<sub>ANNUAL</sub> = ( $________ + $________ )* ÷ $________ × 365 ÷ ____ = 0.____ = {{f0}}']) +
+   `<p class="note">* Note: the interest cost also includes the fee.</p>`, f:[{l:'Rate of interest for bank loan',a:12.06,u:'%',tol:.1}],
    s:L('Interest expense','$500,000 \u00d7 8% \u00d7 (90 \u00f7 365) = $9,863.01')+L('Total financing cost','$5,000 fee + $9,863.01 interest = $14,863.01')+L('Formula','R_ANNUAL = (Total cost \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($14,863.01 \u00f7 $500,000) \u00d7 (365 \u00f7 90) = 0.1206 = 12.06%')},
-  {q:'b. What would be the cost of forgoing the cash discount?', f:[{l:'Cost of forgoing the cash discount',a:8.28,u:'%',tol:.1}],
+  {q:'b. What would be the cost of forgoing the cash discount?', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of forgoing the cash discount',a:8.28,u:'%',tol:.1}],
    s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (100 \u2212 10)] = 0.020408 \u00d7 4.0556 = 0.0828 = 8.28%')},
-  {q:'c. What would be the price of commercial paper?', f:[{l:'Discounted commercial paper',a:8.49,u:'%',tol:.1}],
+  {q:'c. What would be the price of commercial paper?', gq:calc(['The paper sells “at a discount of 2.05 percent”, so the Price “P” is ( 100 − 2.05 ) = ______',
+         'r = ( 100 − P ) ÷ P × 365 ÷ d = ( 100 − ______ ) ÷ ______ × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Discounted commercial paper',a:8.49,u:'%',tol:.1}],
    s:L('Price','100 \u2212 2.05 = 97.95 per $100 of maturity value')+L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[2.05 \u00f7 97.95] \u00d7 (365 \u00f7 90) = 0.020929 \u00d7 4.0556 = 0.0849 = 8.49%')},
   {q:'d. Which alternative should be selected?', f:[{l:'Cheapest alternative',a:'Cost of forgoing discount',choice:['Bank loan','Cost of forgoing discount','Commerical paper']}],
    s:L('Compare','(a) 12.06% vs. (b) 8.28% vs. (c) 8.49%')+L('Conclusion','Choose to forgo the cash discount \u2014 it is the cheapest of the three, just ahead of the commercial paper')}
@@ -1099,33 +1221,34 @@ const P = [
 {id:'tbill182', w:8, t:'182-day Treasury bills: annualized yield', src:'Connect quiz, Module 8 Q2',
  g:`<p>The average price on 182-day Treasury bills was 98.097, with maturity value 100. Use 365 days in a year; do not round intermediate calculations; round the final answer to 2 decimal places.</p>`,
  parts:[
-  {q:'Calculate the T-bill\u2019s annualized yield.', f:[{l:'T-bill\u2019s annualized yield',a:3.89,u:'%',tol:.08}],
+  {q:'Calculate the T-bill\u2019s annualized yield.', gq:calc(['r = ( 100 − P ) ÷ P × 365 ÷ d = ( 100 − ______ ) ÷ ______ × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'T-bill\u2019s annualized yield',a:3.89,u:'%',tol:.08}],
    s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.097) \u00f7 98.097] \u00d7 (365 \u00f7 182) = 0.019399 \u00d7 2.0055 = 0.0389 = 3.89%')}
  ]},
 {id:'bankloan5200', w:8, t:'Bank loan: annual rate and effective annual rate', src:'Connect quiz, Module 8 Q3',
  g:`<p>Your bank will lend you $5,200 for 60 days at a cost of $91 interest. Use 365 days in a year; do not round intermediate calculations; round final answers to 2 decimal places.</p>`,
  parts:[
-  {q:'a. What is your annual rate of interest?', f:[{l:'Annual rate of interest',a:10.65,u:'%',tol:.1}],
+  {q:'a. What is your annual rate of interest?', gq:calc(['R<sub>ANNUAL</sub> = I ÷ P × 365 ÷ d = $____ ÷ $______ × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Annual rate of interest',a:10.65,u:'%',tol:.1}],
    s:L('Formula','R_ANNUAL = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($91 \u00f7 $5,200) \u00d7 (365 \u00f7 60) = 0.0175 \u00d7 6.0833 = 0.1065 = 10.65%')},
-  {q:'b. What is your effective annual rate?', f:[{l:'Effective annual rate',a:11.13,u:'%',tol:.15}],
+  {q:'b. What is your effective annual rate?', gq:calc(['R<sub>EFF</sub> = ( 1 + I ÷ P )<sup>(365/d)</sup> − 1 = ( 1 + $____ ÷ $______ )<sup>(365/____)</sup> − 1 = 0.____ = {{f0}}']), f:[{l:'Effective annual rate',a:11.13,u:'%',tol:.15}],
    s:L('Formula','r_EFF = (1 + Interest \u00f7 Principal)^(365 \u00f7 Days) \u2212 1')+L('Calculation','(1 + 0.0175)^(365 \u00f7 60) \u2212 1 = 1.0175^6.0833 \u2212 1 = 0.1113 = 11.13%')}
  ]},
 {id:'knowitall', w:8, t:'Prof. Know-It-All: annual rate on a discounted loan', src:'Connect quiz, Module 8 Q4',
  g:`<p>Prof. Know-It-All is going to borrow $5,000 for one year at 14% interest, with the loan discounted. Use 365 days in a year; do not round intermediate calculations; round the final answer to 2 decimal places.</p>`,
  parts:[
-  {q:'What is the annual rate of interest if the loan is discounted?', f:[{l:'Annual rate of interest',a:16.28,u:'%',tol:.1}],
+  {q:'What is the annual rate of interest if the loan is discounted?', gq:calc(['Interest I = P × r × d ÷ 365 = $______ × ____ % × 365 ÷ 365 = $______',
+         'R<sub>DIS</sub> = I ÷ ( P − I ) × 365 ÷ d = $____ ÷ ( $______ − $____ ) × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Annual rate of interest',a:16.28,u:'%',tol:.1}],
    s:L('Interest','$5,000 \u00d7 14% \u00d7 (365 \u00f7 365) = $700')+L('Formula','R_DIS = [Interest \u00f7 (Principal \u2212 Interest)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$700 \u00f7 ($5,000 \u2212 $700)] \u00d7 (365 \u00f7 365) = 700 \u00f7 4,300 = 0.1628 = 16.28%')}
  ]},
 {id:'discountlist', w:8, t:'Cost of not taking trade discounts, on four sets of terms', src:'Connect quiz, Module 8 Q5',
  g:`<p>Compute the cost of not taking the following trade discounts. Use 365 days in a year; round final answers to 2 decimal places.</p>`,
  parts:[
-  {q:'a. 2/14, net 45.', f:[{l:'Cost of lost discount',a:24.03,u:'%',tol:.15}],
+  {q:'a. 2/14, net 45.', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of lost discount',a:24.03,u:'%',tol:.15}],
    s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (45 \u2212 14)] = 0.020408 \u00d7 11.7742 = 0.2403 = 24.03%')},
-  {q:'b. 2/19, net 60.', f:[{l:'Cost of lost discount',a:18.17,u:'%',tol:.15}],
+  {q:'b. 2/19, net 60.', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of lost discount',a:18.17,u:'%',tol:.15}],
    s:L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (60 \u2212 19)] = 0.020408 \u00d7 8.9024 = 0.1817 = 18.17%')},
-  {q:'c. 4/19, net 45.', f:[{l:'Cost of lost discount',a:58.49,u:'%',tol:.2}],
+  {q:'c. 4/19, net 45.', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of lost discount',a:58.49,u:'%',tol:.2}],
    s:L('Calculation','[4% \u00f7 96%] \u00d7 [365 \u00f7 (45 \u2212 19)] = 0.041667 \u00d7 14.0385 = 0.5849 = 58.49%')},
-  {q:'d. 3/13, net 130.', f:[{l:'Cost of lost discount',a:9.65,u:'%',tol:.15}],
+  {q:'d. 3/13, net 130.', gq:calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) ) = __% ÷ ( 100% − __% ) × 365 ÷ ( ___ − ___ ) = 0.____ = {{f0}}']), f:[{l:'Cost of lost discount',a:9.65,u:'%',tol:.15}],
    s:L('Calculation','[3% \u00f7 97%] \u00d7 [365 \u00f7 (130 \u2212 13)] = 0.030928 \u00d7 3.1197 = 0.0965 = 9.65%')}
  ]}
 ];
@@ -1278,7 +1401,7 @@ const FXMAP = {
  'garza':[['endinv_level'],['monthlyrate','invcarry']],
  'gabriel':[['intcost'],['intcost']],
  'termstructure':[['expclose'],['expexact']],
- 'hip-plans':[['stlt_split','finplan_cost'],['stlt_split','finplan_cost'],['hedge_rule','stlt_split','finplan_cost'],['finplan_earn']],
+ 'hip-plans':[['stlt_split','finplan_cost'],['stlt_split','finplan_cost'],['hedge_rule','stlt_split'],['stlt_split','finplan_cost'],['finplan_earn']],
  'lear':[['financed_amt','finplan_cost','finplan_earn'],['financed_amt','finplan_cost','finplan_earn']],
  'gocbonds':[['forwardrate']],
  'vincent':[['intcost']],

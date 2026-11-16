@@ -114,6 +114,7 @@ h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.1;margin:0;font-weight:800
 .notesp .count{margin:0 0 8px}
 .authp{--wc:var(--ink);--wcs:var(--rule2)}
 .authrow{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;align-items:center}
+.authrow[hidden]{display:none}
 .authrow input{flex:1;min-width:160px;border:1.5px solid var(--fieldline);border-radius:7px;background:var(--field);padding:8px 10px;font:inherit;color:inherit}
 .authmsg{font-size:.85rem;color:var(--muted);margin:6px 0 0;min-height:1.2em}
 .ni{border-top:1px solid var(--rule);padding:10px 0;display:grid;gap:6px}
@@ -1505,6 +1506,21 @@ updateNotesBtn();
 $('#reset').onclick=()=>{ if(confirm('Clear all saved answers and progress?')){ store={}; save(); render(); } };
 render();
 /* ---------- account sync (Supabase) ---------- */
+let authNotice='';
+const authRedirect = (location.protocol==='http:'||location.protocol==='https:') ? (location.origin+location.pathname) : null;
+function readUrlAuthError(){
+  try{
+    const q=new URLSearchParams(location.hash.replace(/^#/,''));
+    const code=q.get('error_code')||'', desc=q.get('error_description')||q.get('error')||'';
+    if(!code && !desc) return;
+    if(/expired|invalid/i.test(code+' '+desc)){
+      authNotice='That sign-in link had already been used, or it expired. Mail scanners often open the link before you do, which uses it up. Send yourself a fresh code below and type the 6-digit code in instead of clicking the link.';
+    } else {
+      authNotice='Sign-in didn’t finish: '+desc+'. Send yourself a fresh code below.';
+    }
+    try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  }catch(e){}
+}
 function renderAuth(){
   const box=document.getElementById('authPanel');
   if(!box) return;
@@ -1519,7 +1535,7 @@ function renderAuth(){
     if(btn) btn.textContent='Account';
   } else {
     box.innerHTML=`
-      <p>Sign in with your email to keep your progress across devices and browsers. No password \u2014 you\u2019ll get a one-time code by email.</p>
+      <p>Sign in with your email to keep your progress across devices and browsers. No password: we email you a 6-digit code, and you type it in below.</p>
       <div class="authrow">
         <input type="email" id="authEmail" placeholder="you@school.edu" autocomplete="email">
         <button class="btn" id="sendCodeBtn">Send code</button>
@@ -1530,6 +1546,7 @@ function renderAuth(){
       </div>
       <p class="authmsg" id="authMsg"></p>`;
     if(btn) btn.textContent='Sign in';
+    if(authNotice){ const m=box.querySelector('#authMsg'); if(m) m.textContent=authNotice; }
   }
   wireAuthPanel();
 }
@@ -1540,11 +1557,11 @@ function wireAuthPanel(){
   if(sendBtn) sendBtn.onclick=async()=>{
     const email=(emailInput.value||'').trim();
     if(!email){ msg.textContent='Enter your email first.'; return; }
-    sendBtn.disabled=true; msg.textContent='Sending\u2026';
+    sendBtn.disabled=true; authNotice=''; msg.textContent='Sending\u2026';
     try{
-      const {error}=await sb.auth.signInWithOtp({email});
+      const {error}=await sb.auth.signInWithOtp({email, options: authRedirect?{emailRedirectTo:authRedirect}:{}});
       if(error) throw error;
-      msg.textContent='Code sent \u2014 check your email.';
+      msg.textContent='Code sent. Type the 6-digit code from the email below. If the email also has a sign-in link, ignore it \u2014 mail scanners often use the link up before you can click it.';
       document.getElementById('codeRow').hidden=false;
       const codeInput=document.getElementById('authCode');
       if(codeInput) codeInput.focus();
@@ -1605,7 +1622,12 @@ function initAuth(){
     p.hidden=!p.hidden; btn.setAttribute('aria-expanded',!p.hidden);
     if(!p.hidden) renderAuth();
   };
+  readUrlAuthError();
   if(!sb){ setSync('Saved in this browser only.'); renderAuth(); return; }
+  if(authNotice){
+    const p=document.getElementById('authPanel');
+    if(p){ p.hidden=false; if(btn) btn.setAttribute('aria-expanded',true); }
+  }
   setSync('Saved in this browser only.');
   sb.auth.getSession().then(({data})=>handleSession(data && data.session)).catch(()=>{ renderAuth(); });
   sb.auth.onAuthStateChange((event,session)=>{ handleSession(session); });

@@ -115,11 +115,6 @@ h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.1;margin:0;font-weight:800
 .notesp[hidden]{display:none}
 .notesp h3{margin:0 0 4px;font-size:1.1rem}
 .notesp .count{margin:0 0 8px}
-.authp{--wc:var(--ink);--wcs:var(--rule2)}
-.authrow{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;align-items:center}
-.authrow[hidden]{display:none}
-.authrow input{flex:1;min-width:160px;border:1.5px solid var(--fieldline);border-radius:7px;background:var(--field);padding:8px 10px;font:inherit;color:inherit}
-.authmsg{font-size:.85rem;color:var(--muted);margin:6px 0 0;min-height:1.2em}
 .ni{border-top:1px solid var(--rule);padding:10px 0;display:grid;gap:6px}
 .ni .nt-head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
 .ni .nt-head b{font-weight:700}
@@ -217,13 +212,11 @@ table.ws td.fcell{padding:3px 8px}
         <button id="mWeek" aria-pressed="true">Week by week</button>
         <button id="mMix" aria-pressed="false">Mixed practice</button>
       </div>
-      <button class="ghost" id="authBtn" aria-expanded="false">Sign in</button>
       <button class="ghost" id="notesBtn" aria-expanded="false">My notes</button>
       <button class="ghost" id="reset" title="Clear all saved answers">Reset progress</button>
     </div>
   </header>
 
-  <section class="notesp authp" id="authPanel" hidden aria-label="Sign in to sync your progress"></section>
   <section class="notesp" id="notesPanel" hidden aria-label="My notes"></section>
   <div id="weekUI">
     <div class="seg testseg" role="group" aria-label="Test coverage" id="testseg"></div>
@@ -243,7 +236,6 @@ table.ws td.fcell{padding:3px 8px}
   <p class="overall"><span id="overall"></span> <span id="sync"></span></p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ---------- helpers for building given-data tables ---------- */
 const isNum = s => typeof s === 'string' && /^[\s$(\-–+]*[\d.,]+[%)x×]*\s*(days|times|units)?$/.test(s.trim());
@@ -1315,33 +1307,8 @@ const fxHTML = (p,pi) => ((FXMAP[p.id]||[])[pi]||[]).map(k=>L(FX[k][0],FX[k][1])
 const KEY='acct224-reviewer-v1';
 let store = {};
 try{ store = JSON.parse(localStorage.getItem(KEY)||'{}') || {}; }catch(e){ store = {}; }
-const SUPABASE_URL='https://sshprsyntlfjhchejemd.supabase.co';
-const SUPABASE_KEY='sb_publishable_9OtLHVJFx5q_z4NZTZWN2w_7DO7Gfyq';
-let sb=null;
-try{ if(window.supabase && window.supabase.createClient) sb=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){}
-let cloudUid=null, cloudEmail=null, cloudBusy=false, cloudDirty=false, cloudTimer=null;
-const SYNC_OK='Your answers, flags and notes are saved to your account and follow you to any browser or device.';
 const setSync = t => { const el=document.getElementById('sync'); if(el) el.textContent=t; };
-const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} queueCloud(); };
-function queueCloud(){
-  if(!sb||!cloudUid) return;
-  cloudDirty=true; setSync('Saving\u2026');
-  clearTimeout(cloudTimer); cloudTimer=setTimeout(flushCloud,800);
-}
-async function flushCloud(){
-  if(!sb||!cloudUid||cloudBusy||!cloudDirty) return;
-  cloudBusy=true; cloudDirty=false;
-  try{
-    const {error}=await sb.from('progress').upsert({user_id:cloudUid, data: JSON.parse(JSON.stringify(store)), updated_at:new Date().toISOString()});
-    if(error) throw error;
-    setSync(SYNC_OK);
-  }catch(e){
-    cloudDirty=true;
-    setSync('Could not reach the server just now. Your latest changes are kept in this browser and will sync on your next edit.');
-  }
-  cloudBusy=false;
-  if(cloudDirty) setTimeout(flushCloud, 2000+Math.random()*1000);
-}
+const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} };
 const st = { mode:'week', week:2, test:1, idx:{2:0,3:0,4:0,5:0,6:0,7:0,8:0}, mixWeeks:new Set(WEEK_NUMS), mixOrder:[], mixPos:0, flagOnly:false };
 const isFlagged = p => !!(store._flags && store._flags[p.id]);
 const flagCount = () => P.filter(isFlagged).length;
@@ -1729,114 +1696,7 @@ $('#notesBtn').onclick=()=>{
 updateNotesBtn();
 $('#reset').onclick=()=>{ if(confirm('Clear all saved answers and progress?')){ store={}; save(); render(); } };
 render();
-/* ---------- account sync (Supabase) ---------- */
-let authNotice='';
-const authRedirect = (location.protocol==='http:'||location.protocol==='https:') ? (location.origin+location.pathname) : null;
-function readUrlAuthError(){
-  try{
-    const q=new URLSearchParams(location.hash.replace(/^#/,''));
-    const code=q.get('error_code')||'', raw=q.get('error')||'', desc=q.get('error_description')||raw||'';
-    if(!code && !desc) return;
-    const both=(code+' '+raw+' '+desc).toLowerCase();
-    if(both.includes('provider') && (both.includes('not enabled')||both.includes('unsupported'))){
-      authNotice='Google sign-in is not switched on for this copy of the page yet. Nothing you did wrong: it needs turning on at the server end.';
-    } else if(both.includes('access_denied')){
-      authNotice='Sign-in was cancelled before it finished. Your work is still saved in this browser. Use the button below to try again.';
-    } else {
-      authNotice='Sign-in did not finish: '+desc+'. Your work is still saved in this browser. Use the button below to try again.';
-    }
-    try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
-  }catch(e){}
-}
-function renderAuth(){
-  const box=document.getElementById('authPanel');
-  if(!box) return;
-  const btn=document.getElementById('authBtn');
-  if(!sb){
-    box.innerHTML='<p>Cloud sync is not configured for this copy of the page, so your progress is saved in this browser only.</p>';
-    if(btn) btn.hidden=true;
-    return;
-  }
-  if(cloudUid){
-    box.innerHTML=`<p>Signed in as <b>${esc(cloudEmail||'')}</b>. Your answers, flags and notes are saved to your account and follow you to any device.</p><button class="btn2" id="signOutBtn">Sign out</button>`;
-    if(btn) btn.textContent='Account';
-  } else {
-    box.innerHTML=`
-      <p>Sign in to keep your answers, flags and notes across devices and browsers. What you save is private to you: nobody else using this reviewer can see your answers or your notes.</p>
-      <div class="authrow">
-        <button class="btn" id="googleBtn">Continue with Google</button>
-      </div>
-      <p class="authmsg" id="authMsg"></p>`;
-    if(btn) btn.textContent='Sign in';
-    if(authNotice){ const m=box.querySelector('#authMsg'); if(m) m.textContent=authNotice; }
-  }
-  wireAuthPanel();
-}
-function wireAuthPanel(){
-  const msg=document.getElementById('authMsg');
-  const gBtn=document.getElementById('googleBtn');
-  if(gBtn) gBtn.onclick=async()=>{
-    gBtn.disabled=true; authNotice=''; if(msg) msg.textContent='Opening Google...';
-    try{
-      const {error}=await sb.auth.signInWithOAuth({provider:'google', options: authRedirect?{redirectTo:authRedirect}:{}});
-      if(error) throw error;
-    }catch(e){
-      if(msg) msg.textContent='Could not start Google sign-in: '+(e.message||'try again.');
-      gBtn.disabled=false;
-    }
-  };
-  const outBtn=document.getElementById('signOutBtn');
-  if(outBtn) outBtn.onclick=async()=>{ try{ await sb.auth.signOut(); }catch(e){} };
-}
-async function handleSession(session){
-  if(session && session.user){
-    cloudUid=session.user.id; cloudEmail=session.user.email;
-    setSync('Connecting to your account\u2026');
-    try{
-      const {data,error}=await sb.from('progress').select('data').eq('user_id',cloudUid).maybeSingle();
-      if(error) throw error;
-      const remote=data?data.data:null;
-      if(remote && typeof remote==='object'){
-        const local=store;
-        const merged=Object.assign({}, local, remote);
-        merged._flags=Object.assign({}, local._flags||{}, remote._flags||{});
-        merged._notes=Object.assign({}, local._notes||{}, remote._notes||{});
-        store=merged;
-        try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){}
-        if(store._ui){ Object.assign(st.idx, store._ui.idx||{}); st.week=store._ui.week||st.week; st.test=testOf(st.week); }
-        const ae=document.activeElement;
-        if(!(ae && /TEXTAREA|INPUT|SELECT/.test(ae.tagName))) render();
-        updateNotesBtn();
-        if(JSON.stringify(merged)!==JSON.stringify(remote)){ cloudDirty=true; flushCloud(); }
-        else setSync(SYNC_OK);
-      } else if(Object.keys(store).length){
-        cloudDirty=true; flushCloud();
-      } else setSync(SYNC_OK);
-    }catch(e){ setSync('Could not reach the server just now. Saved in this browser only for now.'); }
-  } else {
-    cloudUid=null; cloudEmail=null;
-    setSync(sb?'Saved in this browser only. Sign in to save across devices.':'Saved in this browser only.');
-  }
-  renderAuth();
-}
-function initAuth(){
-  const btn=document.getElementById('authBtn');
-  if(btn) btn.onclick=()=>{
-    const p=document.getElementById('authPanel');
-    p.hidden=!p.hidden; btn.setAttribute('aria-expanded',!p.hidden);
-    if(!p.hidden) renderAuth();
-  };
-  readUrlAuthError();
-  if(!sb){ setSync('Saved in this browser only.'); renderAuth(); return; }
-  if(authNotice){
-    const p=document.getElementById('authPanel');
-    if(p){ p.hidden=false; if(btn) btn.setAttribute('aria-expanded',true); }
-  }
-  setSync('Saved in this browser only.');
-  sb.auth.getSession().then(({data})=>handleSession(data && data.session)).catch(()=>{ renderAuth(); });
-  sb.auth.onAuthStateChange((event,session)=>{ handleSession(session); });
-}
-initAuth();
+setSync('Saved in this browser, on this device.');
 </script>
 </body>
 </html>

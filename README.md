@@ -32,4 +32,6 @@ Everything lives in a single file, `index.html` — no build step. Open it direc
 
 ## Data and privacy
 
+Sign-in is Google OAuth through Supabase Auth. No email is sent by this app, which sidesteps Supabase's built-in email service (it only delivers to addresses inside the project's own organisation, and caps at ~2 per hour).
+
 Each signed-in user's answers, flags and notes are stored in Supabase under their own row, protected by Row Level Security — nobody else (including the repo owner) can read another user's saved progress.

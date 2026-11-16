@@ -1511,12 +1511,15 @@ const authRedirect = (location.protocol==='http:'||location.protocol==='https:')
 function readUrlAuthError(){
   try{
     const q=new URLSearchParams(location.hash.replace(/^#/,''));
-    const code=q.get('error_code')||'', desc=q.get('error_description')||q.get('error')||'';
+    const code=q.get('error_code')||'', raw=q.get('error')||'', desc=q.get('error_description')||raw||'';
     if(!code && !desc) return;
-    if(/expired|invalid/i.test(code+' '+desc)){
-      authNotice='That sign-in link had already been used, or it expired. Mail scanners often open the link before you do, which uses it up. Send yourself a fresh code below and type the 6-digit code in instead of clicking the link.';
+    const both=(code+' '+raw+' '+desc).toLowerCase();
+    if(both.includes('provider') && (both.includes('not enabled')||both.includes('unsupported'))){
+      authNotice='Google sign-in is not switched on for this copy of the page yet. Nothing you did wrong: it needs turning on at the server end.';
+    } else if(both.includes('access_denied')){
+      authNotice='Sign-in was cancelled before it finished. Your work is still saved in this browser. Use the button below to try again.';
     } else {
-      authNotice='Sign-in didn’t finish: '+desc+'. Send yourself a fresh code below.';
+      authNotice='Sign-in did not finish: '+desc+'. Your work is still saved in this browser. Use the button below to try again.';
     }
     try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
   }catch(e){}
@@ -1526,7 +1529,7 @@ function renderAuth(){
   if(!box) return;
   const btn=document.getElementById('authBtn');
   if(!sb){
-    box.innerHTML='<p>Cloud sync isn\u2019t configured for this copy of the page \u2014 your progress is saved in this browser only.</p>';
+    box.innerHTML='<p>Cloud sync is not configured for this copy of the page, so your progress is saved in this browser only.</p>';
     if(btn) btn.hidden=true;
     return;
   }
@@ -1535,14 +1538,9 @@ function renderAuth(){
     if(btn) btn.textContent='Account';
   } else {
     box.innerHTML=`
-      <p>Sign in with your email to keep your progress across devices and browsers. No password: we email you a 6-digit code, and you type it in below.</p>
+      <p>Sign in to keep your answers, flags and notes across devices and browsers. What you save is private to you: nobody else using this reviewer can see your answers or your notes.</p>
       <div class="authrow">
-        <input type="email" id="authEmail" placeholder="you@school.edu" autocomplete="email">
-        <button class="btn" id="sendCodeBtn">Send code</button>
-      </div>
-      <div class="authrow" id="codeRow" hidden>
-        <input type="text" id="authCode" placeholder="6-digit code" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
-        <button class="btn" id="verifyCodeBtn">Verify</button>
+        <button class="btn" id="googleBtn">Continue with Google</button>
       </div>
       <p class="authmsg" id="authMsg"></p>`;
     if(btn) btn.textContent='Sign in';
@@ -1551,35 +1549,17 @@ function renderAuth(){
   wireAuthPanel();
 }
 function wireAuthPanel(){
-  const emailInput=document.getElementById('authEmail');
   const msg=document.getElementById('authMsg');
-  const sendBtn=document.getElementById('sendCodeBtn');
-  if(sendBtn) sendBtn.onclick=async()=>{
-    const email=(emailInput.value||'').trim();
-    if(!email){ msg.textContent='Enter your email first.'; return; }
-    sendBtn.disabled=true; authNotice=''; msg.textContent='Sending\u2026';
+  const gBtn=document.getElementById('googleBtn');
+  if(gBtn) gBtn.onclick=async()=>{
+    gBtn.disabled=true; authNotice=''; if(msg) msg.textContent='Opening Google...';
     try{
-      const {error}=await sb.auth.signInWithOtp({email, options: authRedirect?{emailRedirectTo:authRedirect}:{}});
+      const {error}=await sb.auth.signInWithOAuth({provider:'google', options: authRedirect?{redirectTo:authRedirect}:{}});
       if(error) throw error;
-      msg.textContent='Code sent. Type the 6-digit code from the email below. If the email also has a sign-in link, ignore it \u2014 mail scanners often use the link up before you can click it.';
-      document.getElementById('codeRow').hidden=false;
-      const codeInput=document.getElementById('authCode');
-      if(codeInput) codeInput.focus();
-    }catch(e){ msg.textContent='Could not send the code: '+(e.message||'try again'); }
-    sendBtn.disabled=false;
-  };
-  const verifyBtn=document.getElementById('verifyCodeBtn');
-  if(verifyBtn) verifyBtn.onclick=async()=>{
-    const email=(emailInput.value||'').trim();
-    const code=(document.getElementById('authCode').value||'').trim();
-    if(!code){ msg.textContent='Enter the code from your email.'; return; }
-    verifyBtn.disabled=true; msg.textContent='Verifying\u2026';
-    try{
-      const {error}=await sb.auth.verifyOtp({email, token:code, type:'email'});
-      if(error) throw error;
-      msg.textContent='Signed in.';
-    }catch(e){ msg.textContent='That code didn\u2019t work: '+(e.message||'try again'); }
-    verifyBtn.disabled=false;
+    }catch(e){
+      if(msg) msg.textContent='Could not start Google sign-in: '+(e.message||'try again.');
+      gBtn.disabled=false;
+    }
   };
   const outBtn=document.getElementById('signOutBtn');
   if(outBtn) outBtn.onclick=async()=>{ try{ await sb.auth.signOut(); }catch(e){} };

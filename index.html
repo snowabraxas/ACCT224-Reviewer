@@ -143,6 +143,10 @@ td.n,th.n{text-align:right;white-space:nowrap}
 tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
 table.ws td.op,table.ws th.op{text-align:center;color:var(--muted);padding:5px 4px;width:1%}
 table.ws td.bl{color:var(--muted)}
+input.scratch{border:0;border-bottom:1.5px dashed var(--fieldline);background:transparent;color:inherit;font:inherit;
+  padding:1px 4px;text-align:right;border-radius:0;min-width:44px;max-width:150px}
+input.scratch:focus{outline:none;border-bottom-color:var(--wc);background:var(--wcs)}
+input.scratch:not(:placeholder-shown){border-bottom-style:solid}
 table.ws td.fcell{padding:3px 8px}
 .fldin{display:inline-flex;flex-direction:column;vertical-align:middle;min-width:0;max-width:170px;text-align:left}
 .fldin .inp{min-width:86px}
@@ -1576,6 +1580,41 @@ function setField(p,pi,fi,res,raw,shown){
   fb.textContent = res?'Correct':(shown?'Answer: '+fmt(f):'Not quite, try again');
 }
 
+function activateBlanks(p){
+  let k = 0;
+  sheet.querySelectorAll('.given').forEach(box=>{
+    const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, null);
+    const todo = [];
+    while(walker.nextNode()){ if(/_{2,}/.test(walker.currentNode.nodeValue)) todo.push(walker.currentNode); }
+    todo.forEach(node=>{
+      const frag = document.createDocumentFragment();
+      node.nodeValue.split(/(_{2,})/).forEach(seg=>{
+        if(/^_{2,}$/.test(seg)){
+          const id = 'sc-' + p.id + '-' + (k++);
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.className = 'scratch';
+          inp.id = id;
+          inp.placeholder = ' ';
+          inp.setAttribute('data-scratch','');
+          inp.setAttribute('aria-label','Working space, not marked');
+          inp.size = Math.max(4, Math.min(11, seg.length));
+          const v = store[id];
+          if(typeof v === 'string') inp.value = v;
+          inp.addEventListener('input',()=>{
+            const t = inp.value;
+            if(t.trim()) store[id] = t; else delete store[id];
+            save();
+          });
+          frag.appendChild(inp);
+        } else if(seg){
+          frag.appendChild(document.createTextNode(seg));
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+  });
+}
 function wire(p){
   const nb=sheet.querySelector('[data-notebtn]'), na=document.getElementById('na-'+p.id), ta=document.getElementById('nt-'+p.id);
   if(nb) nb.onclick=()=>{
@@ -1610,6 +1649,7 @@ function wire(p){
       const pi = Number.isFinite(piN) ? piN : (host?+host.dataset.p:0);
       check(p,pi); });
   });
+  activateBlanks(p);
   sheet.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(p,+b.dataset.check));
   sheet.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{
     const el=document.getElementById(`fx-${p.id}-${b.dataset.fx}`);
@@ -1634,6 +1674,8 @@ function wire(p){
   sheet.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{
     const pi=+b.dataset.clear;
     p.parts[pi].f.forEach((f,fi)=>{ document.getElementById(fid(p,pi,fi)).value=''; setField(p,pi,fi,null,''); });
+    const host=b.closest('.part');
+    if(host) host.querySelectorAll('[data-scratch]').forEach(el=>{ el.value=''; delete store[el.id]; });
     save(); refreshProgress();
   });
 }

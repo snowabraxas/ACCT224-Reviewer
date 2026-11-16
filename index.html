@@ -62,7 +62,10 @@ h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.1;margin:0;font-weight:800
 .overview summary::before{content:"\25B8";display:inline-block;transition:transform .15s}
 .overview[open] summary::before{transform:rotate(90deg)}
 .overview .ov-body{padding:0 16px 14px;max-width:78ch;color:var(--ink)}
-.overview .ov-body p{margin:0}
+.overview .ov-body p{margin:0 0 8px}
+.overview .ov-body p:last-child{margin-bottom:0}
+.overview .ov-h{font-weight:700;color:var(--wc)}
+.overview .ov-note{font-size:.9rem;color:var(--muted);font-style:italic}
 .ghost{border:1px solid var(--rule);background:var(--paper);border-radius:8px;padding:8px 12px;cursor:pointer;font-weight:500;color:var(--muted)}
 .ghost:hover{color:var(--ink)}
 
@@ -138,6 +141,11 @@ th,td{padding:5px 10px;border-bottom:1px solid var(--rule2);text-align:left;vert
 th{font-weight:700;border-bottom:2px solid var(--rule);background:var(--wcs)}
 td.n,th.n{text-align:right;white-space:nowrap}
 tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
+table.ws td.op,table.ws th.op{text-align:center;color:var(--muted);padding:5px 4px;width:1%}
+table.ws td.bl{color:var(--muted)}
+.calc{margin:6px 0 12px;padding:10px 12px;background:var(--wcs);border-radius:8px;font-size:.92rem}
+.calc div{padding:3px 0;font-variant-numeric:tabular-nums}
+.partgiven{margin:0 0 12px}
 .parts{margin-top:10px;border-top:2px solid var(--rule)}
 .part{padding:16px 0 14px;border-bottom:1px dashed var(--rule)}
 .q{margin:0 0 10px;font-weight:600;max-width:78ch}
@@ -233,6 +241,24 @@ function tb(head, rows, totRows){
   h += '<tbody>' + rows.map((r,ri)=>`<tr class="${totRows.includes(ri)?'tot':''}">` + r.map((c,i)=>`<td class="${i>0 && (isNum(String(c))||c==='') ?'n':''}">${c}</td>`).join('') + '</tr>').join('') + '</tbody></table></div>';
   return h;
 }
+const OPS = {'+':1,'\u2212':1,'\u2013':1,'-':1,'\u00d7':1,'\u00f7':1,'=':1};
+function wst(head, rows, totRows){
+  totRows = totRows || [];
+  const cell = (c, tag) => {
+    const t = String(c).trim();
+    let cls = '';
+    if (OPS[t]) cls = 'op';
+    else if (t === '') cls = 'n';
+    else if (t.indexOf('__') >= 0) cls = 'n bl';
+    else if (isNum(t)) cls = 'n';
+    return `<${tag} class="${cls}">${c}</${tag}>`;
+  };
+  let h = '<div class="tw"><table class="ws">';
+  if (head) h += '<thead><tr>' + head.map(c=>cell(c,'th')).join('') + '</tr></thead>';
+  h += '<tbody>' + rows.map((r,ri)=>`<tr class="${totRows.includes(ri)?'tot':''}">` + r.map(c=>cell(c,'td')).join('') + '</tr>').join('') + '</tbody></table></div>';
+  return h;
+}
+const calc = lines => '<div class="calc">' + lines.map(l=>`<div>${l}</div>`).join('') + '</div>';
 const L = (a,b) => `<div class="ln"><b>${a}</b><span>${b}</span></div>`;
 const M = ['Jan','Feb','Mar','Apr','May','Jun'];
 const monthFields = (vals, u, extra) => vals.map((v,i)=>Object.assign({l:M[i], a:v, u:u||'$'}, extra||{}));
@@ -253,13 +279,26 @@ const TESTS = {
 };
 const testOf = w => TESTS[1].weeks.includes(w) ? 1 : 2;
 const OVERVIEWS = {
-  2:`<p>The income statement and balance sheet, and how the statement of cash flows is built from the change in each balance-sheet account between two periods. Operating cash flow starts from net income (earnings after tax) and adds back non-cash charges such as amortization; investing and financing activities capture everything else — asset purchases and sales, new debt and share issues, repayments, and dividends paid.</p>`,
-  3:`<p>Ratio analysis: profitability ratios (profit margin, return on assets, return on equity), asset-utilization ratios (turnover and period ratios for receivables, inventory, payables and total assets), liquidity ratios (current and quick ratio) and debt/coverage ratios (debt-to-assets, times interest earned). The DuPont method breaks ROA and ROE into their component ratios so you can see what’s actually driving a change in profitability.</p>`,
-  4:`<p>Forecasting production and cash flows: building a production budget from projected unit sales and a desired ending-inventory policy, costing that production (materials, labour, overhead), and turning the result into a month-by-month schedule of cash receipts (from the collection pattern on credit sales) and cash payments (for materials, labour, overhead and other fixed costs).</p>`,
-  5:`<p>Putting the monthly cash receipts and payments together into a cash budget with a minimum cash balance, borrowing and repaying a line of credit as needed. Then the percent-of-sales method is used to build a pro forma balance sheet and solve for required new funds (RNF) — the external financing a sales increase requires — and the sustainable growth rate (SGR), the fastest a firm can grow without raising new equity.</p>`,
-  6:`<p>Short-term vs. long-term financing strategies for working capital — aggressive, conservative and the matching (hedging) principle — and how to compare the cost of different financing plans. Also: converting many different interest-rate quotes (simple annual rates, monthly rates, rates over a period of days) onto the same annualized basis so they can be compared directly.</p>`,
-  7:`<p>Managing the components of working capital day to day: speeding up cash collection with a lockbox or concentration-banking service, deciding whether to extend more liberal credit to customers (and calculating the return on that investment in receivables), and sizing inventory orders with the economic order quantity (EOQ) model, including the effect of safety stock.</p>`,
-  8:`<p>Sources of short-term financing and their true annualized cost: trade credit (and the cost of forgoing an early-payment discount), interest-bearing bank loans, compensating-balance loans, discounted loans, and commercial paper sold at a discount. Every method reduces to the same style of formula — R = (Interest ÷ Principal) × (365 ÷ Days) — so the alternatives can be compared on an apples-to-apples basis.</p>`
+  2:`<p class="ov-h">Module 2 (Chapter 2): Review of Accounting</p>
+<p>As discussed last module, the discipline of accounting and economics underpin the field of finance. Accordingly, we will review some basic fundamental accounting concepts in this chapter i.e., financial statement (income statement, balance sheet and cash flow).</p>`,
+  3:`<p class="ov-h">Module 3 (Chapter 3): Financial Analysis</p>
+<p>In Module 2 we reviewed financial statements, which is the "language of business".</p>
+<p>In this Module 3, we will examine financial statements to provide more context about the organization with the help of a simple mathematical concepts called ratio.</p>`,
+  4:`<p class="ov-h">Module 4 (begin Chapter 4): Introduction to Financial Forecasting</p>
+<p>In Module 4 (and also in Module 5: we will cover Chapter 4 in both Module 4 and Module 5), we will learn to forecast or predict future financial statements. Similar to a weather forecast; we will use financial forecast to help us make business decisions that will add value to the firm.</p>`,
+  5:`<p class="ov-h">Module 5 (conclude Chapter 4): Advanced Financial Forecasting</p>
+<p>In Module 5, we will continue examination of Chapter 4 (we will cover Chapter 4 in both Module 4 and Module 5). We will learn to forecast or predict future financial statements. Similar to a weather forecast; we will use financial forecast to help us make business decisions that will add value to the firm.</p>`,
+  6:`<p class="ov-h">Module 6 (Chapter 6): Working Capital and Financial Decisions</p>
+<p>This module introduces the concept of working capital management. It entails the efficient management of the firm\u2019s short-term assets and liabilities.</p>
+<p>Module 6 establishes our framework, and allows us to examine current asset management (in Module 7) and current liabilities management (in Module 8) in more detail.</p>
+<p>Taken together, these three modules (6,7,8) capture the overarching theme in short-term financial management called working capital management.</p>
+<p class="ov-note">Please note, Chapter 5 is not covered in this course, it will be covered in Corporate Finance 2 (ACCT 334)</p>`,
+  7:`<p class="ov-h">Module 7 (Chapter 7): Current Asset Management</p>
+<p>This module builds on the concept from our prior Module 6, Working capital and financing decision.</p>
+<p>Module 7 focuses on current asset management and we will take a deep dive into the strategies employed by financial manager to manage cash, marketable securities, accounts receivable, and inventory.</p>`,
+  8:`<p class="ov-h">Module 8 (Chapter 8): Sources of Short Term Financing</p>
+<p>This module continues to build on the concept from Module 6, Working capital and financing decision.</p>
+<p>In Module 8, we will take a deep dive into the various avenues through which financial managers seek out different sources of short-term financing. We will explore trade credit, bank credit, commercial papers, bankers acceptances, and the use of collateral (such as accounts receivable and inventory).</p>`
 };
 
 /* ---------- shared data blocks ---------- */
@@ -696,28 +735,61 @@ const P = [
  ]}
 ,
 {id:'garza', w:6, t:'Garza Electronics: level production and inventory financing cost', src:'ICQ Module 6, Problem 3',
- g:`<p>Garza Electronics expects to sell 500 units in January, 250 in February and 1,000 in March. January's beginning inventory is 700 units. Expected sales for the whole year are 7,200 units, and Garza has decided on a level monthly production schedule of 600 units (7,200 \u00f7 12 months).</p>`,
+ g:`<ul><li>Garza Electronics expects to sell 500 units in January, 250 units in February, and 1,000 units in March.</li><li>January’s beginning inventory is 700 units.</li><li>Expected sales for the whole year are 7,200 units.</li><li>Garza has decided on a level monthly production schedule of 600 units (7,200 units / 12 months = 600 units per month).</li><li>What is the expected end-of-month inventory for January, February, and March?</li></ul>` +
+ wst(['In Units','Beginning Inventory','+','Production','–','Sales','=','Ending Inventory'],[
+  ['January','700 units','+','600','–','500','=','_____ units'],
+  ['February','____ units','+','600','–','250','=','_____ units'],
+  ['March','____ units','+','600','–','1,000','=','_____ units']]),
  parts:[
   {q:'Expected ending inventory for January, February and March.', f:[{l:'January ending inventory',a:800,u:'units'},{l:'February ending inventory',a:1150,u:'units'},{l:'March ending inventory',a:750,u:'units'}],
    s:L('Formula','Ending inventory = Beginning inventory + Production \u2212 Sales')+L('January','700 + 600 \u2212 500 = 800')+L('February','800 + 600 \u2212 250 = 1,150')+L('March','1,150 + 600 \u2212 1,000 = 750')},
-  {q:'Garza can borrow at 6% per year and each unit of inventory costs $100. What is the total financing cost of carrying this inventory, January to March?', f:[{l:'Monthly financing rate',a:0.50,u:'%',tol:.01},{l:'January financing cost',a:400,u:'$'},{l:'February financing cost',a:575,u:'$'},{l:'March financing cost',a:375,u:'$'},{l:'Total financing cost',a:1350,u:'$'}],
+  {q:'Garza Electronics can borrow at 6% per year and the cost per unit of its inventory is $100 per unit. Over the January to March period, what is the total cost (in dollars) of carrying this inventory?',
+   gq:calc(['Monthly financing rate = quoted Annual financing rate ÷ 12 months per year','&nbsp;&nbsp;= 6.0% per annum ÷ 12 months per year = _.__ %']) +
+      wst(['','Ending Inv. (from above)','×','Cost per Unit $100','×','Monthly financing rate','=','Monthly financing cost'],[
+       ['January','____ units','×','$100','×','____ %','=','$____'],
+       ['February','____ units','×','$100','×','____ %','=','$____'],
+       ['March','____ units','×','$100','×','____ %','=','$____'],
+       ['TOTAL FINANCING COST FOR THE PERIOD','','','','','','','$____']],[3]),
+   f:[{l:'Monthly financing rate',a:0.50,u:'%',tol:.01},{l:'January financing cost',a:400,u:'$'},{l:'February financing cost',a:575,u:'$'},{l:'March financing cost',a:375,u:'$'},{l:'Total financing cost',a:1350,u:'$'}],
    s:L('Monthly rate','6.0% \u00f7 12 months = 0.50%')+L('January','800 units \u00d7 $100 \u00d7 0.50% = $400')+L('February','1,150 \u00d7 $100 \u00d7 0.50% = $575')+L('March','750 \u00d7 $100 \u00d7 0.50% = $375')+L('Total','400 + 575 + 375 = $1,350')+'<p class="note">Type 0.50% as 0.005 in your calculator, or type 0.5 then the % key.</p>'}
  ]},
 {id:'gabriel', w:6, t:'Gabriel Health Services: short-term versus long-term financing cost', src:'ICQ Module 6, Problem 11',
- g:`<p>Gabriel Health Services Ltd. requires $1.5 million in financing over the next two years. It can borrow at a long-term rate of 5% per year for the full two years. Alternatively, it could use one-year financing each year: forecasts suggest 3.5% in year 1 and 6.25% in year 2.</p>`,
+ g:`<ul><li>Gabriel Health Services Ltd. requires $1.5 million in financing over the next two years.</li><li>The firm can borrow at 5 percent per year over the two years.</li><li>However, with some economic forecasting, it has been suggested that financing in the first year will be 3.5 percent and 6.25 percent in the second year.</li></ul>`,
  parts:[
-  {q:'Total interest cost under each plan, in whole dollars (not millions).', f:[{l:'Long-term plan total',a:150000,u:'$'},{l:'Short-term plan total',a:146250,u:'$'},{l:'Less costly plan',a:'Short-term',choice:['Long-term','Short-term']}],
+  {q:'a. Determine the total interest charges under both possibilities. (Enter answers in whole dollar, not in millions.) b. Which action is less costly?',
+   gq:wst(['Plan type','Amount In $','×','Applicable Rate','×','Number of years','=','Total financing cost'],[
+    ['Long-term rate','$________','×','____ %','×','2 years','=','$________'],
+    ['TOTAL','','','','','','','$________'],
+    ['Short-term rate','$________','×','____ %','×','1 year','=','$________'],
+    ['','$________','×','____ %','×','1 year','=','$________'],
+    ['TOTAL','','','','','','','$________']],[1,4]),
+   f:[{l:'Long-term plan total',a:150000,u:'$'},{l:'Short-term plan total',a:146250,u:'$'},{l:'Less costly plan',a:'Short-term',choice:['Long-term','Short-term']}],
    s:L('Long-term','$1,500,000 \u00d7 5.00% \u00d7 2 years = $150,000')+L('Short-term, year 1','$1,500,000 \u00d7 3.50% \u00d7 1 year = $52,500')+L('Short-term, year 2','$1,500,000 \u00d7 6.25% \u00d7 1 year = $93,750')+L('Short-term total','52,500 + 93,750 = $146,250')+L('Conclusion','Short-term is less costly by $3,750, but its year 2 rate is a forecast, not a guarantee')},
-  {q:'If year 2\u2019s short-term rate turns out to be 7.25% instead, what is the new short-term total, and is short-term still less costly?', f:[{l:'Year 2 cost at 7.25%',a:108750,u:'$'},{l:'New short-term total',a:161250,u:'$'},{l:'Still less costly?',a:'No',choice:['Yes','No']}],
+  {q:'What if Year 2 rates will be 7.25% (remember, the future is un-certain)?',
+   gq:wst(['Plan type','Amount In $','×','Applicable Rate','×','Number of years','=','Total financing cost'],[
+    ['Long-term rate','$1,500,000','×','5.00 %','×','2 years','=','$150,000'],
+    ['TOTAL','','','','','','','$150,000'],
+    ['Short-term rate','$1,500,000','×','3.50 %','×','1 year','=','$52,500'],
+    ['','$1,500,000','×','7.25 %','×','1 year','=','$________'],
+    ['TOTAL','','','','','','','$________']],[1,4]),
+   f:[{l:'Year 2 cost at 7.25%',a:108750,u:'$'},{l:'New short-term total',a:161250,u:'$'},{l:'Still less costly?',a:'No',choice:['Yes','No']}],
    s:L('Year 2','$1,500,000 \u00d7 7.25% \u00d7 1 year = $108,750')+L('New total','52,500 + 108,750 = $161,250')+L('Compare','$161,250 > $150,000 long-term, so short-term is now more expensive')+'<p class="note">This is the risk of short-term financing: the rate in a later year is not locked in, so the cost can swing above the long-term alternative.</p>'}
  ]},
 {id:'termstructure', w:6, t:'Expectations hypothesis: multi-year expected returns', src:'ICQ Module 6, Problem 25',
- g:tb(['Security duration and start date','Observed yield for the period'],[['1-year T-bill at beginning of year 1','5%'],['1-year T-bill at beginning of year 2','8%'],['1-year T-bill at beginning of year 3','7%'],['1-year T-bill at beginning of year 4','10%']]) +
- `<p>Using the expectations hypothesis, find the annual expected return for securities with maturities of two, three and four years. Round final answers to 2 decimal places; do not round intermediate calculations.</p>`,
+ g:`<p>Using the expectations hypothesis theory for the term structure of interest rates, determine the expected return* for securities with maturities of two, three, and four years based on the following data.</p><p class="note">* Professor clarification: expected returns should be quoted annually, and therefore, this question is asking what is the annual expected return for each situation. (Input your answers as a percent rounded to 2 decimal places. Do not round intermediate calculations.)</p>` +
+ tb(['Security duration (i.e. time period) and start date','YIELD: The observed rate for the time period'],[['1-year T-bill at beginning of year 1','5 %'],['1-year T-bill at beginning of year 2','8 %'],['1-year T-bill at beginning of year 3','7 %'],['1-year T-bill at beginning of year 4','10 %']]),
  parts:[
-  {q:'[a] Close estimate: simple average of the relevant one-year yields.', f:[{l:'2-year security',a:6.50,u:'%',tol:.02},{l:'3-year security',a:6.67,u:'%',tol:.02},{l:'4-year security',a:7.50,u:'%',tol:.02}],
+  {q:'[a] Close estimate', gq:calc([
+    '2 year security: ( __ % + __ % ) / 2 = _____ %',
+    '3 year security: ( __ % + __ % + __ % ) / 3 = _____ %',
+    '4 year security: ( __ % + __ % + __ % + __ % ) / 4 = _____ %']),
+   f:[{l:'2-year security',a:6.50,u:'%',tol:.02},{l:'3-year security',a:6.67,u:'%',tol:.02},{l:'4-year security',a:7.50,u:'%',tol:.02}],
    s:L('2-year','(5% + 8%) \u00f7 2 = 6.50%')+L('3-year','(5% + 8% + 7%) \u00f7 3 = 6.67%')+L('4-year','(5% + 8% + 7% + 10%) \u00f7 4 = 7.50%')+'<p class="note">Calculator trap: typing 5% + 8% \u00f7 2 without brackets divides only the 8% first. Use brackets around the whole sum.</p>'},
-  {q:'[b] Exact calculation: geometric mean using roots.', f:[{l:'2-year security',a:6.49,u:'%',tol:.02},{l:'3-year security',a:6.66,u:'%',tol:.02},{l:'4-year security',a:7.48,u:'%',tol:.02}],
+  {q:'[b] Exact calculation, using “roots” (square root, cube root, fourth root)', gq:calc([
+    '2 year security: [ (1 + 0.__) (1 + 0.__) ]<sup>(1/2)</sup> − 1 = 0.______ = _____ %',
+    '3 year security: [ (1 + 0.__) (1 + 0.__) (1 + 0.__) ]<sup>(1/3)</sup> − 1 = 0.______ = _____ %',
+    '4 year security: [ (1 + 0.__) (1 + 0.__) (1 + 0.__) (1 + 0.__) ]<sup>(1/4)</sup> − 1 = 0.______ = _____ %']),
+   f:[{l:'2-year security',a:6.49,u:'%',tol:.02},{l:'3-year security',a:6.66,u:'%',tol:.02},{l:'4-year security',a:7.48,u:'%',tol:.02}],
    s:L('Formula','Exact rate = [(1+r\u2081)(1+r\u2082)\u22ef(1+r\u2099)]^(1/n) \u2212 1')+L('2-year','[(1.05)(1.08)]^(1/2) \u2212 1 = 0.0649 = 6.49%')+L('3-year','[(1.05)(1.08)(1.07)]^(1/3) \u2212 1 = 0.0666 = 6.66%')+L('4-year','[(1.05)(1.08)(1.07)(1.10)]^(1/4) \u2212 1 = 0.0748 = 7.48%')+'<p class="note">Calculator trap: multiply every bracket together first, THEN apply the root, THEN subtract 1. Doing the root on only the last number before multiplying gives a wrong, much larger answer.</p>'}
  ]},
 {id:'hip-plans', w:6, t:'HIP Corporation: short-term vs long-term financing plans', src:'ICQ Module 6, Financing Plans for Current and Total Assets',
@@ -1331,6 +1403,7 @@ function problemHTML(p, ctx){
   h+=`<div class="given">${p.g}</div><div class="parts">`;
   p.parts.forEach((pt,pi)=>{
     h+=`<section class="part" data-p="${pi}"><p class="q">${p.parts.length>1?`<b class="pl">Part ${pi+1}</b>`:''}${pt.q}</p>
+    ${pt.gq?`<div class="given partgiven">${pt.gq}</div>`:''}
     <div class="fields">${pt.f.map((f,fi)=>fieldHTML(p,pi,fi,f)).join('')}</div>
     <div class="acts"><button class="btn" data-check="${pi}">Check</button><button class="btn2" data-fx="${pi}" aria-expanded="false">Show formulas</button><button class="btn2" data-steps="${pi}" aria-expanded="false">Show steps</button><button class="btn2" data-reveal="${pi}">Reveal answers</button><button class="btn2" data-clear="${pi}">Clear</button></div>
     <div class="fx" id="fx-${p.id}-${pi}">${fxHTML(p,pi)}</div><div class="steps" id="steps-${p.id}-${pi}">${pt.s}</div></section>`;

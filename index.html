@@ -846,13 +846,24 @@ const P = [
  ]}
 ,
 {id:'concbank', w:7, t:'Concentration banking: is the cash management package worth it?', src:'ICQ Module 7, Problem 7',
- g:`<p>A concentration banking system would make deposited customer cheques available 3 days sooner on average. Average daily collections are $305,000, and the opportunity cost of funds is 9%. The bank charges $52,500 for the service, plus a compensating balance of $75,000 (an interest-free minimum balance you must keep at that bank).</p>`,
+ g:`<ul><li>Your banker has analyzed your company account and has suggested that her bank has a cash management package for you.</li><li>She suggests that with a concentration banking system, {the time needed to make funds from deposited customer cheques available to you} can be reduced by three days on average.</li><li>You, of course, are delighted (you’re not sure why), but you do know your average daily collections amount to $305,000.</li><li>Your opportunity cost of funds is 9 percent.</li><li>The bank provides this service for $52,500 plus a compensating balance in your current account of $75,000.</li><li>(A compensating balance is the amount you are required to maintain interest free at that bank; a “&gt;$0 minimum” amount required in your bank account.)</li></ul>` +
+ wst(['','','Amount'],[
+  ['Funds freed up: 3 days × $305,000 average daily collections','=','$________'],
+  ['Less: compensating balance required','−','$________'],
+  ['Net funds freed up','=','$________'],
+  ['× Opportunity cost of funds','×','____ %'],
+  ['Annual benefit (savings)','=','$________'],
+  ['Less: annual fee for the service','−','$________'],
+  ['Annual benefit (savings), net of fee','=','$________']],[6]) +
+ `<p class="note">Conclusion: ______ the package, there are ____ incremental benefits compared to incremental fees.</p>`,
  parts:[
   {q:'Is the package worth it? If so, by how much?', f:[{l:'Funds freed up by the speedup',a:915000,u:'$'},{l:'Net funds freed up',a:840000,u:'$'},{l:'Annual benefit at 9%',a:75600,u:'$'},{l:'Annual savings from the package',a:23100,u:'$'},{l:'Accept the package?',a:'Accept',choice:['Accept','Reject']}],
    s:L('Funds freed up','$305,000 \u00d7 3 days = $915,000')+L('Net funds freed up','915,000 \u2212 compensating balance 75,000 = 840,000')+L('Annual benefit','840,000 \u00d7 9% = 75,600')+L('Annual savings','75,600 \u2212 annual fee 52,500 = 23,100')+L('Conclusion','Accept the package: the incremental benefits ($75,600) exceed the incremental fees ($52,500) by $23,100 a year')}
  ]},
 {id:'comiskey', w:7, t:'Comiskey Fence Co.: should credit be extended to new customers?', src:'ICQ Module 7, Problems 23 and 24',
- g:`<p>Comiskey Fence Co. is evaluating extending credit to a new group of customers, who would provide $180,000 in additional credit sales. Collection expenses would rise by $15,700, and production and selling costs are 70% of sales. The company's receivables turnover is 5 times, no other asset buildup is required, and the firm's desired return on investment is 15%.</p>`,
+ g:`<ul><li>Comiskey Fence Co. is evaluating extending credit to a new group of customers.</li><li>Although these customers will provide $180,000 in additional credit sales, 12 percent are likely to be uncollectible.</li><li>The company will incur $15,700 in additional collection expenses.</li><li>Production and marketing expenses represent 70 percent of sales.</li><li>The company has a receivables turnover of five times.</li><li>No other asset buildup will be required to service the new customers.</li><li>The firm has a 15 percent desired return on investment.</li></ul>` +
+ calc(['A/R Turnover = Sales (on credit) ÷ Accounts Receivable = 365 days per year ÷ Average Collection Period',
+       'Accounts Receivable = Sales (on credit) ÷ A/R Turnover = Average Collection Period × Average Daily Sales']),
  parts:[
   {q:'a. If 12% of the new sales prove uncollectible, should Comiskey extend credit?', f:[{l:'Accounts uncollectible',a:21600,u:'$'},{l:'Annual incremental revenue',a:158400,u:'$'},{l:'Production and selling costs',a:126000,u:'$'},{l:'Annual income before taxes',a:16700,u:'$'},{l:'Investment in accounts receivable',a:36000,u:'$'},{l:'Return on incremental investment',a:46.4,u:'%'},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
    s:L('Uncollectible','12% \u00d7 180,000 = 21,600')+L('Incremental revenue','180,000 \u2212 21,600 = 158,400')+L('Production and selling','70% \u00d7 180,000 = 126,000')+L('Income before taxes','158,400 \u2212 15,700 \u2212 126,000 = 16,700')+L('Investment in AR','Sales 180,000 \u00f7 turnover 5 = 36,000')+L('Return','16,700 \u00f7 36,000 = 46.4%')+L('Conclusion','Yes, extend credit: 46.4% is well above the 15% desired return')},
@@ -864,13 +875,21 @@ const P = [
    s:L('AR turnover','365 \u00f7 120 days = 3.0417\u00d7')+L('New investment in AR','180,000 \u00f7 3.0417 = 59,178')+L('Return','16,700 (from part a) \u00f7 59,178 = 28.22%')+L('Conclusion','Yes, extend credit: 28.22% is greater than 15%')}
  ]},
 {id:'gic', w:7, t:'Annual return on an interest-paying security (GIC)', src:'ICQ Module 7, Annual Return example',
- g:`<p>You lend $100,000 for 90 days through a GIC (Guaranteed Investment Certificate). The borrower pays $4,000 in interest for the 90 days.</p>`,
+ g:`<ul><li>For the next 90 days, you lend $100,000 evidenced by a GIC (Guaranteed Investment Certificate).</li><li>The borrower has negotiated this 90 day loan with $4,000 in interest payment.</li><li>What is your return?</li></ul>` +
+ calc(['R<sub>ANNUAL</sub> = ( Interest payment ÷ Principal amount ) × ( 365 ÷ days )',
+       'R<sub>ANNUAL</sub> = ( I ÷ P ) × ( 365 ÷ d ) = ( $______ ÷ $________ ) × ( 365 ÷ __ ) = 0.___ = __._ %']),
  parts:[
   {q:'What is your annualized return?', f:[{l:'Annual return',a:16.22,u:'%',tol:.05}],
    s:L('Formula','R\u2090\u2099\u2099\u1d58\u2090\u2097 = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 days)')+L('Calculation','(4,000 \u00f7 100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')}
  ]},
 {id:'discyield', w:7, t:'Discount security: annualized yield vs. annualized effective yield', src:'ICQ Module 7, Rates of Return (Yield Calculations)',
- g:`<p>A financial security sells at 99.531% of its maturity value, maturing in 90 days (a discount-traded security).</p>`,
+ g:`<p>Annualized Yield: As an example, suppose a financial security sells at 99.531 % of its maturity value, with maturity occurring in 90 days. (Discount traded security)</p><p>The annualized yield that would be quoted in the marketplace is given by the formula:</p>` +
+ calc(['Annualized Yield&nbsp; r = ( $100 − P ) ÷ P × ( 365 ÷ d )',
+       'where&nbsp; P = Discounted price as percentage of maturity value',
+       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d = Number of days to maturity',
+       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = Annualized yield',
+       'r = ( $100 − $99.531 ) ÷ $99.531 × ( 365 ÷ 90 ) = 0.______ = ____ %']) +
+ `<p class="note">Calculator reminder, order of operations — annualized yield: 100 − 99.531 = &nbsp;÷ 99.531 = &nbsp;× 365 = &nbsp;÷ 90 =. Annualized effective yield: 100 − 99.531 = &nbsp;÷ 99.531 = &nbsp;+ 1 = &nbsp;y<sup>x</sup> ( 365 ÷ 90 ) = &nbsp;− 1 =.</p>`,
  parts:[
   {q:'Find the annualized yield, and the annualized effective yield that accounts for compounding.', f:[{l:'Annualized yield',a:1.91,u:'%',tol:.03},{l:'Annualized effective yield',a:1.92,u:'%',tol:.03}],
    s:L('Annualized yield formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Annualized yield','[(100 \u2212 99.531) \u00f7 99.531] \u00d7 (365 \u00f7 90) = 0.019110 = 1.91%')+L('Effective yield formula','(1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Effective yield','(1 + 0.004712)^(365\u00f790) \u2212 1 = 0.019248 = 1.92%')+L('Why they differ','The effective yield compounds the 90-day return over the periods in a year; the simple annualized yield does not')}
@@ -886,7 +905,12 @@ const P = [
    s:L('Average inventory with safety stock','EOQ \u00f7 2 + safety stock = 200 + 50 = 250 units')+L('New carrying cost','250 \u00d7 $0.20 = $50')}
  ]},
 {id:'higgins', w:7, t:'Higgins Athletic Wear: EOQ, average inventory and total inventory cost', src:'ICQ Module 7, Problem 41',
- g:`<p>Higgins Athletic Wear expects sales of 22,500 units a year, carrying costs of $1.50 per unit, and an ordering cost of $3.00 per order.</p>`,
+ g:`<p>Higgins Athletic Wear has expected sales of 22,500 units a year, carrying costs of $1.50 per unit, and an ordering cost of $3.00 per order.</p>` +
+ calc(['EOQ = √( 2 × S × O ÷ C )',
+       'where&nbsp; S = Total sales in units&nbsp;&nbsp; O = Ordering cost for each order&nbsp;&nbsp; C = Carrying cost per unit in dollars',
+       'TC = Order Cost + Carrying Cost = ( S × O ) ÷ Q&nbsp; +&nbsp; ( C × Q ) ÷ 2',
+       'where&nbsp; Q = Quantity per order&nbsp;&nbsp;&nbsp; Average inventory (units) = EOQ ÷ 2 + Safety stock']) +
+ `<p class="note">Calculator reminder: do the math inside each “root” first, then take the root of the result. For total cost, do the division in each fraction first, then add the results together.</p>`,
  parts:[
   {q:'a. What is the economic order quantity?', f:[{l:'EOQ',a:300,u:'units'}],
    s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 22,500 \u00d7 3 \u00f7 1.50) = \u221a90,000 = 300 units')},
@@ -940,7 +964,11 @@ const P = [
  ]}
 ,
 {id:'trade_credit8', w:8, t:'Trade credit: average accounts payable balance, and the effect of a sales expansion', src:'ICQ Module 8, worked example',
- g:`<p>A company has annual purchases of $7,300,000 and pays its suppliers on terms of net 30 days.</p>`,
+ g:`<p>If annual purchases of a company are $7.3 million and are paid on terms of net 30 days, the average accounts payable balance will be $_______.</p><p>An expansion in business, and thus purchases, by 20 percent to $8.76 million increases the accounts payable balance to $_______.</p>` +
+ wst(['Annual Purchases','÷ Days per year','= Average Daily Purchases','× Accounts Payable Period','= Average A/P Balance','Increase in short term financing'],[
+  ['$7,300,000','365','$________','____ days','$________',''],
+  ['$8,760,000','365','$________','____ days','$________','+ $________']]) +
+ `<p class="note">A/P period = Accounts payable ÷ Average daily purchases (COGS). Accounts Payable = Average Payables Period × Average Daily Purchases.</p>`,
  parts:[
   {q:'a. What is the average daily purchases, and the average accounts payable balance?', f:[{l:'Average daily purchases',a:20000,u:'$'},{l:'Average accounts payable balance',a:600000,u:'$'}],
    s:L('Average daily purchases','$7,300,000 \u00f7 365 = $20,000')+L('Average A/P balance','$20,000 \u00d7 30 days = $600,000')},
@@ -948,19 +976,28 @@ const P = [
    s:L('New average daily purchases','$8,760,000 \u00f7 365 = $24,000')+L('New average A/P balance','$24,000 \u00d7 30 days = $720,000')+L('Increase in financing','$720,000 \u2212 $600,000 = $120,000, and it arrives automatically as purchases grow')}
  ]},
 {id:'cash_discount_ex', w:8, t:'Cost of forgoing a cash discount: 2/10, net 30', src:'ICQ Module 8, worked example',
- g:`<p>A supplier offers credit terms of 2/10, net 30: a 2% discount if the invoice is paid within 10 days, otherwise the full amount is due in 30 days.</p>`,
+ g:`<p>A cash discount allows for a reduction in price if payment is made within a specified time (e.g. 2/10, n 30). On a $1,000 invoice, we could pay $980 up to the 10th day or wait 20 more days and pay the full $1,000.</p>` +
+ calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) )',
+       'K<sub>DIS</sub> = __% ÷ ( 100% − __% ) × 365 days ÷ ( __ days − __ days ) = ____ %']) +
+ `<p class="note">Notice that we calculated the rate without the need for any specific data on the invoice $.</p>`,
  parts:[
-  {q:'What is the annual cost of forgoing the discount (paying on day 30 instead of day 10)?', f:[{l:'K_DIS',a:37.24,u:'%',tol:.1}],
+  {q:'What is the annual cost of forgoing the discount (paying on day 30 instead of day 10)?', f:[{l:'Cost of forgoing the discount',a:37.24,u:'%',tol:.1}],
    s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (30 \u2212 10)] = 0.0204 \u00d7 18.25 = 0.3724 = 37.24%')}
  ]},
 {id:'promptly', w:8, t:'Paul Promptly: cost of not taking the cash discount, on his effective terms', src:'ICQ Module 8, Problem 4',
- g:`<p>Paul Promptly\u2019s suppliers offer trade credit terms of 3/10, net 70. Mr. Promptly never takes the discount, but \u2014 being cautious \u2014 always pays in 60 days rather than waiting the full 70 days allowed.</p>`,
+ g:`<ul><li>Paul Promptly is a very cautious businessman. His suppliers offer trade credit terms of 3/10, net 70.</li><li>Mr. Promptly never takes the discount offered, but he pays his suppliers in 60 days rather than the 70 days allowed so that he is sure the payments are never late.</li><li>What is Mr. Promptly’s cost of not taking the cash discount?</li></ul>` +
+ calc(['K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) )',
+       'K<sub>DIS</sub> = __% ÷ ( 100% − __% ) × 365 ÷ ( __ − __ ) = .____ = ____ %']) +
+ `<p class="note">In this problem, Mr. Promptly has the use of funds for only 50 extra days (60 − 10), instead of 60 extra days (70 − 10). His suppliers are offering terms of 3/10, net 70; however, because he is excessively cautious, he is in practical effect accepting terms of 3/10, net 60.</p>`,
  parts:[
-  {q:'What is Mr. Promptly\u2019s cost of not taking the cash discount?', f:[{l:'K_DIS',a:22.58,u:'%',tol:.1}],
+  {q:'What is Mr. Promptly\u2019s cost of not taking the cash discount?', f:[{l:'Cost of forgoing the discount',a:22.58,u:'%',tol:.1}],
    s:L('Note','Because Mr. Promptly pays on day 60 instead of day 70, he only has the use of the funds for 50 extra days (60 \u2212 10), not 60 (70 \u2212 10) \u2014 so his effective terms are 3/10, net 60')+L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (effective net days \u2212 discount days)]')+L('Calculation','[3% \u00f7 97%] \u00d7 [365 \u00f7 (60 \u2212 10)] = 0.0309 \u00d7 7.30 = 0.2258 = 22.58%')}
  ]},
 {id:'bautista', w:8, t:'Bautista Dog Food Company: net credit position', src:'ICQ Module 8, Problem 9',
- g:`<p>Bautista Dog Food Company normally takes 20 days to pay for average daily credit purchases of $9,000. Its average daily credit sales are $10,000, and it collects its own accounts in 25 days.</p>`,
+ g:`<p>Bautista Dog Food Company normally takes 20 days to pay for average daily credit purchases of $9,000. Its average daily sales are $10,000 and it collects accounts in 25 days.</p><p>a. What is its net credit position?</p><p>b. If the firm stretches its average payment period from 20 days to 32 days (and all else remains the same), what is the firm’s new net credit position?</p>` +
+ calc(['Accounts Receivable = Average daily credit sales × average collection period = $_______ × __ = $________',
+       'Accounts Payable = Average daily credit purchases × average payment period = $______ × __ = $________',
+       'Net credit position = Accounts receivable − Accounts payable = $________ − $________ = $________']),
  parts:[
   {q:'a. What is Bautista\u2019s net credit position?', f:[{l:'Accounts receivable',a:250000,u:'$'},{l:'Accounts payable',a:180000,u:'$'},{l:'Net credit position',a:70000,u:'$'}],
    s:L('Accounts receivable','$10,000 \u00d7 25 days = $250,000')+L('Accounts payable','$9,000 \u00d7 20 days = $180,000')+L('Net credit position','$250,000 \u2212 $180,000 = +$70,000 (Bautista extends more credit than it receives)')},
@@ -968,7 +1005,9 @@ const P = [
    s:L('Accounts receivable','Unchanged at $250,000')+L('New accounts payable','$9,000 \u00d7 32 days = $288,000')+L('New net credit position','$250,000 \u2212 $288,000 = ($38,000)')+L('Interpretation','Bautista has improved its cash position: instead of extending $70,000 more credit than it receives, it is now the net recipient of $38,000 in credit')}
  ]},
 {id:'stephen_rate', w:8, t:'Stephen Corporation: cost of interest-bearing bank financing', src:'ICQ Module 8, worked example',
- g:`<p>For the next 90 days, Stephen Corporation has a short-term financing need for $100,000.</p>`,
+ g:`<p>For the next 90 days, Stephen Corporation has a short-term financing need for $100,000. The Chief Financial Officer of the corporation has negotiated a 90 day loan with $4,000 in interest for this loan.</p><p>Calculate the annual cost for the interest rate for this interest bearing bank financing.</p>` +
+ calc(['R<sub>ANNUAL</sub> = I ÷ P × 365 ÷ d = $______ ÷ $________ × 365 ÷ __ = 0.____ = ____ %',
+       'Interest Cost in $ = P × r × ( d ÷ 365 ) = $________ × ____ % × ( __ ÷ 365 ) = $______']),
  parts:[
   {q:'a. The CFO negotiates a 90-day loan with $4,000 in interest payments. What is the annual interest rate on this financing?', f:[{l:'Annual interest rate',a:16.22,u:'%',tol:.1}],
    s:L('Formula','R_ANNUAL = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($4,000 \u00f7 $100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')},
@@ -976,7 +1015,10 @@ const P = [
    s:L('Formula','Interest cost ($) = Principal \u00d7 Rate \u00d7 (Days \u00f7 365)')+L('Calculation','$100,000 \u00d7 16.22% \u00d7 (90 \u00f7 365) = $3,999 \u2248 $4,000')}
  ]},
 {id:'stephen_comp', w:8, t:'Stephen Corporation: compensating balance loan', src:'ICQ Module 8, worked example',
- g:`<p>For the next year, Stephen Corporation has a short-term financing need for $8,000. The CFO negotiates a loan with a 20% compensating balance requirement, and must pay $600 in interest.</p>`,
+ g:`<p>For the next 1 year, Stephen Corporation has a short-term financing need for $8,000. The Chief Financial Officer of the corporation has negotiated a $10,000 loan with a 20% compensating balance requirement, and must pay $600 in interest for this loan.</p><p>What is the annual rate on this compensating balance loan? Use 365 days in a year. Do not round intermediate calculations. Round the final answer to 2 decimal places.</p>` +
+ calc(['Amount to be borrowed = Amount needed ÷ ( 1 − c ) = $______ ÷ ( 1 − 0.__ ) = $_______',
+       'R<sub>COMP</sub> = I ÷ ( P − B ) × 365 ÷ d = $____ ÷ ( $_______ − $______ ) × 365 ÷ 365 = 0.____ = ____ %',
+       'or&nbsp; R<sub>COMP</sub> = I ÷ ( 1 − c ) × ( 1 ÷ 100 ) × ( 365 ÷ d ) = ____ %']),
  parts:[
   {q:'a. Confirm the amount that must actually be borrowed, so that $8,000 is left usable after the compensating balance is set aside.', f:[{l:'Amount to be borrowed',a:10000,u:'$'}],
    s:L('Formula','Amount to be borrowed = Amount needed \u00f7 (1 \u2212 compensating balance %)')+L('Calculation','$8,000 \u00f7 (1 \u2212 0.20) = $8,000 \u00f7 0.80 = $10,000')},
@@ -984,13 +1026,20 @@ const P = [
    s:L('Compensating balance required','20% \u00d7 $10,000 = $2,000')+L('Formula','R_COMP = [Interest \u00f7 (Principal \u2212 Required balance)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$600 \u00f7 ($10,000 \u2212 $2,000)] \u00d7 (365 \u00f7 365) = 0.0750 = 7.50%')+L('Note','An equivalent algebraic form divides by (1 \u2212 c) instead of subtracting the balance directly \u2014 both give the same 7.50%')}
  ]},
 {id:'stephen_discounted', w:8, t:'Stephen Corporation: discounted loan', src:'ICQ Module 8, worked example',
- g:`<p>For the next 60 days, Stephen Corporation has a short-term financing need for $35,000. The CFO negotiates to pay $310 in interest, with the interest deducted up front (a discounted loan).</p>`,
+ g:`<p>For the next 60 days, Stephen Corporation has a short-term financing need for $35,000. The Chief Financial Officer of the corporation has negotiated to pay $310 in interest for this loan.</p><p>What is the annual rate of interest if the loan is discounted? Use 365 days in a year. Do not round intermediate calculations. Round the final answer to 2 decimal places.</p>` +
+ calc(['Annual interest rate on discounted loan',
+       'R<sub>DIS</sub> = I ÷ ( P − I ) × 365 ÷ d = $____ ÷ ( $_______ − $____ ) × 365 ÷ __ = 0.______ = ____ %']) +
+ `<p class="note">Rate on discounted paper when we know the PRINCIPAL (borrowed amount), INTEREST PAYMENT and TIME PERIOD.</p>`,
  parts:[
   {q:'What is the annual rate of interest on this discounted loan?', f:[{l:'Annual rate (R_DIS)',a:5.44,u:'%',tol:.1}],
    s:L('Formula','R_DIS = [Interest \u00f7 (Principal \u2212 Interest)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$310 \u00f7 ($35,000 \u2212 $310)] \u00d7 (365 \u00f7 60) = 0.008934 \u00d7 6.0833 = 0.0544 = 5.44%')}
  ]},
 {id:'chapman', w:8, t:'Chapman Records: yield on commercial paper sold at a discount', src:'ICQ Module 8, Problem 27',
- g:`<p>Chapman Records\u2019 commercial paper is currently selling at 98.512% of maturity value; it matures in 75 days. Use 365 days a year; do not round intermediate calculations.</p>`,
+ g:`<p>Chapman Records’ commercial paper is currently selling at 98.512 percent of maturity value; it matures in 75 days. What annualized yield is it offering to investors?</p><p class="note">Consider each $100 face or maturity value. The issuer receives (and investors pay) $98.512 today for every $100 of maturity value in 75 days from now.</p>` +
+ calc(['Annualized yield on discounted paper',
+       'R<sub>DIS</sub> = ( 100 − P ) ÷ P × 365 ÷ d = ( 100 − ______ ) ÷ ______ × 365 ÷ __ = 0.______ = ____ %',
+       'Effective annual yield',
+       'R<sub>EFF</sub> = [ 1 + ( 100 − P ) ÷ P ]<sup>(365/d)</sup> − 1 = 0.______ = ____ %']),
  parts:[
   {q:'a. What annualized yield is it offering investors?', f:[{l:'Annualized yield',a:7.35,u:'%',tol:.08}],
    s:L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.512) \u00f7 98.512] \u00d7 (365 \u00f7 75) = 0.015102 \u00d7 4.8667 = 0.0735 = 7.35%')},
@@ -998,11 +1047,21 @@ const P = [
    s:L('Formula','r_EFF = (1 + (100 \u2212 P) \u00f7 P)^(365 \u00f7 d) \u2212 1')+L('Calculation','(1.015102)^4.8667 \u2212 1 = 0.0757 = 7.57%')}
  ]},
 {id:'rockford', w:8, t:'Rockford Filing Ltd.: choosing the cheapest short-term financing alternative', src:'ICQ Module 8, Problem 35',
- g:`<p>Rockford Filing Ltd. requires $1,000,000 in financing for a 45-day period. Three alternatives are being considered:</p><ul><li>(a) A line of credit at 10% interest, with a 1% annual commitment fee to establish the line.</li><li>(b) Forgo trade discounts from suppliers on terms of 2/15, net 60.</li><li>(c) Issue commercial paper for 45 days at a discount of 1.25%.</li></ul>`,
+ g:`<p>Rockford Filing Ltd. requires $1 million in financing for a 45-day period. Three alternatives are being considered. Which alternative should be selected?</p><ul><li>a. Establish a line of credit with the bank at an interest rate of 10 percent. The bank will charge an annual commitment fee of 1 percent to establish the line of credit.</li><li>b. Forgo trade discounts from suppliers on terms of 2/15, net 60.</li><li>c. Issue commercial paper for 45 days at a discount of 1.25 percent.</li></ul>` +
+ wst(['Which formulas do we need? Compare annualized rate (not “effective” annualized)','Part'],[
+  ['Actual $ cost of interest bearing bank financing (loans), in dollars:&nbsp; Interest Cost in $ = P × r × ( d ÷ 365 )','a'],
+  ['Annual cost of interest bearing bank financing (loans), in percent:&nbsp; R<sub>ANNUAL</sub> = I ÷ P × ( 365 ÷ d )','a'],
+  ['Annual cost of forgoing an early pay cash discount on an invoice:&nbsp; K<sub>DIS</sub> = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) )','b'],
+  ['Annual return (yield) on securities sold at a discount:&nbsp; R<sub>DIS</sub> = ( 100 − P ) ÷ P × ( 365 ÷ d )','c']]) +
+ wst(['Part','Cost'],[
+  ['(a) Line of Credit including commitment fee','____ %'],
+  ['(b) Forgo trade discounts from suppliers','____ %'],
+  ['(c) Issue commercial paper','____ %']]) +
+ `<p class="note">CONCLUSION: Choose the ______________. It is the cheapest alternative.</p>`,
  parts:[
   {q:'a. What is the annual rate of interest on the line of credit, including the commitment fee?', f:[{l:'Annual commitment fee',a:10000,u:'$'},{l:'Interest expense',a:12328.77,u:'$',tol:5},{l:'Annual rate of interest',a:18.11,u:'%',tol:.1}],
    s:L('Commitment fee','1% \u00d7 $1,000,000 = $10,000')+L('Interest expense','$1,000,000 \u00d7 10% \u00d7 (45 \u00f7 365) = $12,328.77')+L('Formula','R_ANNUAL = [(Commitment fee + Interest expense) \u00f7 Principal] \u00d7 (365 \u00f7 Days)')+L('Calculation','[($10,000 + $12,328.77) \u00f7 $1,000,000] \u00d7 (365 \u00f7 45) = 0.1811 = 18.11%')},
-  {q:'b. What is the cost of forgoing the cash discount on terms of 2/15, net 60?', f:[{l:'K_DIS',a:16.55,u:'%',tol:.1}],
+  {q:'b. What is the cost of forgoing the cash discount on terms of 2/15, net 60?', f:[{l:'Cost of forgoing the discount',a:16.55,u:'%',tol:.1}],
    s:L('Formula','K_DIS = [d% \u00f7 (100% \u2212 d%)] \u00d7 [365 \u00f7 (net days \u2212 discount days)]')+L('Calculation','[2% \u00f7 98%] \u00d7 [365 \u00f7 (60 \u2212 15)] = 0.1655 = 16.55%')},
   {q:'c. The commercial paper sells at a discount of 1.25% (so its price is 100 \u2212 1.25 = 98.75, per $100 of maturity value). What annualized rate does this represent?', f:[{l:'Annualized rate',a:10.27,u:'%',tol:.1}],
    s:L('Price','100 \u2212 1.25 = 98.75')+L('Formula','r = [(100 \u2212 P) \u00f7 P] \u00d7 (365 \u00f7 d)')+L('Calculation','[(100 \u2212 98.75) \u00f7 98.75] \u00d7 (365 \u00f7 45) = 0.1027 = 10.27%')},

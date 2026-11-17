@@ -160,6 +160,28 @@ table.ws td.fcell{padding:3px 8px}
 .fields:empty{display:none}
 .calc{margin:6px 0 12px;padding:10px 12px;background:var(--wcs);border-radius:8px;font-size:.92rem}
 .calc div{padding:3px 0;font-variant-numeric:tabular-nums}
+.mx{font-family:"Cambria Math",Cambria,"STIX Two Math","STIX Two Text","Times New Roman",serif;font-size:1.08em;line-height:1.55}
+.mx i{font-style:italic}
+.mx .fr{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 .14em;text-align:center}
+.mx .fr>.nu{border-bottom:1.3px solid currentColor;padding:0 .22em .2em;line-height:1.35}
+.mx .fr>.de{padding:.2em .22em 0;line-height:1.35}
+.mx input.scratch{border:1px dashed var(--fieldline);border-radius:4px;padding:0 4px;margin:1px 2px;height:1.5em;
+  vertical-align:middle;background:transparent;text-align:center;font-size:.88em;max-width:7em;min-width:2.6em}
+.mx input.scratch:not(:placeholder-shown){border-style:solid}
+.mx input.scratch:focus{border-color:var(--wc);background:var(--wcs)}
+.mx .rc input.scratch{vertical-align:baseline}
+.mx .rt{display:inline-flex;align-items:stretch;vertical-align:middle;position:relative;margin:0 .06em}
+.mx .rt.rti{padding-left:.34em}
+.mx .rt>.ri{position:absolute;left:0;top:.08em;font-size:.62em;line-height:1}
+.mx .rs{display:flex;width:.72em;flex:none}
+.mx .pl{display:flex;width:.42em;flex:none}
+.mx .rs svg,.mx .pl svg{width:100%;height:100%;overflow:visible}
+.mx .rs path,.mx .pl path{fill:none;stroke:currentColor;stroke-width:1.3;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.mx .rc{border-top:1.3px solid currentColor;padding:.14em .2em 0 .1em}
+.mx .pa{display:inline-flex;align-items:stretch;vertical-align:middle}
+.mx .sp{font-size:.72em;vertical-align:super;line-height:1}
+.mx .sp .fr{margin:0 .04em}
+.ln .mx{font-size:1.05em}
 .partgiven{margin:0 0 12px}
 .parts{margin-top:10px;border-top:2px solid var(--rule)}
 .part{padding:16px 0 14px;border-bottom:1px dashed var(--rule)}
@@ -271,7 +293,112 @@ function wst(head, rows, totRows){
   h += '<tbody>' + rows.map((r,ri)=>`<tr class="${totRows.includes(ri)?'tot':''}">` + r.map(c=>cell(c,'td')).join('') + '</tr>').join('') + '</tbody></table></div>';
   return h;
 }
-const calc = lines => '<div class="calc">' + lines.map(l=>`<div>${l}</div>`).join('') + '</div>';
+/* ---------- handout-style formula rendering (Test 2) ----------
+   Turns linear notation ("I ÷ P × 365 ÷ d", "√( 2 × S × O ÷ C )") into stacked
+   fractions, radicals and superscripts like the professor's slides.
+   Source strings stay readable; conversion happens at display time. */
+const MXSVG = {
+  rad:'<svg viewBox="0 0 12 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6,14.2 L3.2,12.6 L6.6,23.4 L11.4,0.7 L12,0.7"/></svg>',
+  lp:'<svg viewBox="0 0 8 24" preserveAspectRatio="none" aria-hidden="true"><path d="M6.8,0.6 Q0.6,12 6.8,23.4"/></svg>',
+  rp:'<svg viewBox="0 0 8 24" preserveAspectRatio="none" aria-hidden="true"><path d="M1.2,0.6 Q7.4,12 1.2,23.4"/></svg>',
+  lb:'<svg viewBox="0 0 8 24" preserveAspectRatio="none" aria-hidden="true"><path d="M6.5,0.6 L2,0.6 L2,23.4 L6.5,23.4"/></svg>',
+  rb:'<svg viewBox="0 0 8 24" preserveAspectRatio="none" aria-hidden="true"><path d="M1.5,0.6 L6,0.6 L6,23.4 L1.5,23.4"/></svg>'
+};
+const mxFr = (n,d) => `<span class="fr"><span class="nu">${n}</span><span class="de">${d}</span></span>`;
+const mxRt = (x,idx) => `<span class="rt${idx?' rti':''}">${idx?`<span class="ri">${idx}</span>`:''}<span class="rs">${MXSVG.rad}</span><span class="rc">${x}</span></span>`;
+const mxPa = (x,o) => `<span class="pa"><span class="pl">${o==='['?MXSVG.lb:MXSVG.lp}</span><span class="pc">${x}</span><span class="pl">${o==='['?MXSVG.rb:MXSVG.rp}</span></span>`;
+const MX_OPS = '=+−×÷^√∛∜()[]';
+function mxTok(src){
+  const t=[]; let buf='';
+  const flush=()=>{ const v=buf.trim(); if(v) t.push({k:'a',v}); buf=''; };
+  for(let i=0;i<src.length;i++){
+    const ch=src[i];
+    if(ch==='(' && i>0 && /[A-Za-z]/.test(src[i-1])){            // f(date), d(date)
+      let d=0,j=i; for(;j<src.length;j++){ if(src[j]==='(') d++; else if(src[j]===')'){ d--; if(!d) break; } }
+      buf+=src.slice(i,j+1); i=j; continue;
+    }
+    if(ch==='ⁿ' && src[i+1]==='√'){ flush(); t.push({k:'o',v:'n√'}); i++; continue; }
+    if(MX_OPS.indexOf(ch)>=0){ flush(); t.push({k:'o',v:ch}); continue; }
+    buf+=ch;
+  }
+  flush(); return t;
+}
+function mxParse(tk){
+  let i=0;
+  const is=v=>tk[i]&&tk[i].k==='o'&&tk[i].v===v;
+  const eq=()=>{ const c=[add()]; while(is('=')){ i++; c.push(add()); } return c.length>1?{t:'eq',c}:c[0]; };
+  const add=()=>{ const c=[{op:null,n:mul()}]; while(is('+')||is('−')){ const op=tk[i++].v; c.push({op,n:mul()}); } return c.length>1?{t:'add',c}:c[0].n; };
+  const mul=()=>{ const c=[{op:null,n:un()}]; while(is('×')||is('÷')){ const op=tk[i++].v; c.push({op,n:un()}); } return c.length>1?{t:'mul',c}:c[0].n; };
+  const un=()=>{
+    if(is('√')||is('∛')||is('∜')||is('n√')){ const v=tk[i++].v; return {t:'rt',idx:{'√':'','∛':'3','∜':'4','n√':'n'}[v],c:un()}; }
+    if(is('−')||is('+')){ const v=tk[i++].v; return {t:'sg',v,c:un()}; }
+    return pw();
+  };
+  const pw=()=>{ const b=cat(); if(is('^')){ i++; return {t:'pw',b,e:un()}; } return b; };
+  const cat=()=>{ const c=[]; while(i<tk.length){ const x=tk[i]; if(x.k==='a'){ c.push({t:'a',v:x.v}); i++; } else if(x.v==='('||x.v==='['){ c.push(grp()); } else break; } return !c.length?{t:'a',v:''}:(c.length>1?{t:'cat',c}:c[0]); };
+  const grp=()=>{ const o=tk[i++].v, cl=o==='('?')':']'; const c=eq(); if(is(cl)) i++; return {t:'g',o,c}; };
+  const out=[];
+  while(i<tk.length){ const b=i; out.push(eq()); if(i===b){ out.push({t:'a',v:tk[i].v}); i++; } }
+  return out.length>1?{t:'cat',c:out}:(out[0]||{t:'a',v:''});
+}
+/* single-letter variables in italics, as on the slides */
+const MX_VAR=/(^|[\s(\[+−×÷=,:$-])([SOCQPIBdcrfnyRK])(?=$|[\s)\]+−×÷=,;:%(₀-ₜ-])/g;
+const mxIt = v => v.replace(MX_VAR,(m,a,b)=>a+'<i>'+b+'</i>').replace(MX_VAR,(m,a,b)=>a+'<i>'+b+'</i>').replace(/(^|[^A-Za-z])([SOCQ]{2})(?![A-Za-z])/g,'$1<i>$2</i>');
+const mxOneDiv = n => n && n.t==='mul' && n.c.filter(x=>x.op==='÷').length===1 && n.c[n.c.length-1].op==='÷';
+function mxR(n,bare){
+  if(!n) return '';
+  switch(n.t){
+    case 'a': return mxIt(n.v);
+    case 'cat': { let h=''; n.c.forEach((x,k)=>{ if(k && !(x.t==='g' && n.c[k-1].t==='g')) h+=' '; h+=mxR(x); }); return h; }
+    case 'g': {
+      if(bare || mxOneDiv(n.c)) return mxR(n.c);
+      const inner=mxR(n.c);
+      return /class="(fr|rt)/.test(inner) ? mxPa(inner,n.o) : n.o+inner+(n.o==='('?')':']');
+    }
+    case 'eq':  return n.c.map(x=>mxR(x)).join(' = ');
+    case 'add': return n.c.map((x,k)=>(k?' '+x.op+' ':'')+mxR(x.n)).join('');
+    case 'sg':  return n.v+mxR(n.c);
+    case 'pw':  return mxR(n.b)+'<sup class="sp">'+mxR(n.e,true)+'</sup>';
+    case 'rt':  return mxRt(mxR(n.c,true),n.idx);
+    case 'mul': {
+      const c=n.c;
+      if(mxOneDiv(n)){                                   // a × b × c ÷ d  ->  one fraction
+        const num=c.slice(0,-1).map((x,k)=>(k?' '+x.op+' ':'')+mxR(x.n,c.length===2)).join('');
+        return mxFr(num,mxR(c[c.length-1].n,true));
+      }
+      const parts=[];                                    // I ÷ P × 365 ÷ d  ->  fraction × fraction
+      c.forEach(x=>{
+        if(x.op==='÷' && parts.length){ const p=parts.pop(); parts.push({op:p.op,h:mxFr(p.n?mxR(p.n,true):p.h,mxR(x.n,true)),n:null}); }
+        else parts.push({op:x.op,h:mxR(x.n),n:x.n});
+      });
+      return parts.map((x,k)=>(k?' '+x.op+' ':'')+x.h).join('');
+    }
+  }
+  return '';
+}
+const mxPrep = s => s.replace(/\b([A-Za-z])_([A-Z]{2,})\b/g,'$1<sub>$2</sub>');
+function mxIsMath(seg){
+  const plain=seg.replace(/<[^>]+>/g,'');
+  if(/alculator|[“”]/.test(plain) || /^\s*(where|students|note)\b/i.test(plain)) return false;
+  if(/[÷√∛∜^]/.test(plain) || /<sup>\(/.test(seg)) return true;
+  return /=/.test(plain) && /[×−+]/.test(plain);
+}
+function mxSeg(seg){
+  let s=seg.replace(/<sup>\(([^<]*)\)<\/sup>/g,(m,x)=>'^('+x.replace(/\//g,' ÷ ')+')');
+  const prot=[];
+  s=s.replace(/<(sub|sup)\b[^>]*>[\s\S]*?<\/\1>|<[^>]+>|&[a-z#0-9]+;/gi,m=>{ prot.push(m); return String.fromCharCode(0xE000+prot.length-1); });
+  let h=mxR(mxParse(mxTok(s)));
+  h=h.replace(/[-]/g,ch=>prot[ch.charCodeAt(0)-0xE000]);
+  h=h.replace(/\s+(<sup|[²³¹⁰-⁹])/g,'$1').replace(/\s+([,.;:](?!\d))/g,'$1');
+  return '<span class="mx">'+h+'</span>';
+}
+function mathify(line){
+  line=mxPrep(String(line)).replace(/&nbsp;/g,' ');
+  if(/alculator/.test(line)) return line;                 // keystroke sequences stay literal
+  return line.split(/(;\s|\.\s(?=[A-Z])|<br\s*\/?>)/).map((seg,k)=> (k%2) ? seg : (mxIsMath(seg)?mxSeg(seg):seg)).join('');
+}
+
+const calc = lines => '<div class="calc">' + lines.map(l=>`<div>${mathify(l)}</div>`).join('') + '</div>';
 const L = (a,b) => `<div class="ln"><b>${a}</b><span>${b}</span></div>`;
 const M = ['Jan','Feb','Mar','Apr','May','Jun'];
 const monthFields = (vals, u, extra) => vals.map((v,i)=>Object.assign({l:M[i], a:v, u:u||'$'}, extra||{}));
@@ -797,13 +924,13 @@ const P = [
     '3 year security: ( __ % + __ % + __ % ) / 3 = {{f1}}',
     '4 year security: ( __ % + __ % + __ % + __ % ) / 4 = {{f2}}']),
    f:[{l:'2-year security',a:6.50,u:'%',tol:.02},{l:'3-year security',a:6.67,u:'%',tol:.02},{l:'4-year security',a:7.50,u:'%',tol:.02}],
-   s:L('2-year','(5% + 8%) \u00f7 2 = 6.50%')+L('3-year','(5% + 8% + 7%) \u00f7 3 = 6.67%')+L('4-year','(5% + 8% + 7% + 10%) \u00f7 4 = 7.50%')+'<p class="note">Calculator trap: typing 5% + 8% \u00f7 2 without brackets divides only the 8% first. Use brackets around the whole sum.</p>'},
+   s:L('2-year','( 5% + 8% ) / 2 = 6.50%')+L('3-year','( 5% + 8% + 7% ) / 3 = 6.67%')+L('4-year','( 5% + 8% + 7% + 10% ) / 4 = 7.50%')+'<p class="note">Calculator trap: typing 5% + 8% \u00f7 2 without brackets divides only the 8% first. Use brackets around the whole sum.</p>'},
   {q:'[b] Exact calculation, using “roots” (square root, cube root, fourth root)', gq:calc([
-    '2 year security: [ (1 + 0.__) (1 + 0.__) ]<sup>(1/2)</sup> − 1 = {{f0}}',
-    '3 year security: [ (1 + 0.__) (1 + 0.__) (1 + 0.__) ]<sup>(1/3)</sup> − 1 = {{f1}}',
-    '4 year security: [ (1 + 0.__) (1 + 0.__) (1 + 0.__) (1 + 0.__) ]<sup>(1/4)</sup> − 1 = {{f2}}']),
+    '2 year security = √[ (1 + 0.__) (1 + 0.__) ] − 1 = 0.______ = {{f0}}',
+    '3 year security = ∛[ (1 + 0.__) (1 + 0.__) (1 + 0.__) ] − 1 = 0.______ = {{f1}}',
+    '4 year security = ∜[ (1 + 0.__) (1 + 0.__) (1 + 0.__) (1 + 0.__) ] − 1 = 0.______ = {{f2}}']),
    f:[{l:'2-year security',a:6.49,u:'%',tol:.02},{l:'3-year security',a:6.66,u:'%',tol:.02},{l:'4-year security',a:7.48,u:'%',tol:.02}],
-   s:L('Formula','Exact rate = [(1+r\u2081)(1+r\u2082)\u22ef(1+r\u2099)]^(1/n) \u2212 1')+L('2-year','[(1.05)(1.08)]^(1/2) \u2212 1 = 0.0649 = 6.49%')+L('3-year','[(1.05)(1.08)(1.07)]^(1/3) \u2212 1 = 0.0666 = 6.66%')+L('4-year','[(1.05)(1.08)(1.07)(1.10)]^(1/4) \u2212 1 = 0.0748 = 7.48%')+'<p class="note">Calculator trap: multiply every bracket together first, THEN apply the root, THEN subtract 1. Doing the root on only the last number before multiplying gives a wrong, much larger answer.</p>'}
+   s:L('Formula','Exact rate = ⁿ√[ (1 + r₁) (1 + r₂) ⋯ (1 + rₙ) ] − 1')+L('2-year','√[ (1.05) (1.08) ] − 1 = 0.0649 = 6.49%')+L('3-year','∛[ (1.05) (1.08) (1.07) ] − 1 = 0.0666 = 6.66%')+L('4-year','∜[ (1.05) (1.08) (1.07) (1.10) ] − 1 = 0.0748 = 7.48%')+'<p class="note">Calculator trap: multiply every bracket together first, THEN apply the root, THEN subtract 1. Doing the root on only the last number before multiplying gives a wrong, much larger answer.</p>'}
  ]},
 {id:'hip-plans', w:6, t:'HIP Corporation: financing plans for current (and total) assets', src:'ICQ Module 6, Financing Plans for Current (and Total) Assets',
  g:`<p>The Hudovernik Interesting Products Corporation (“HIP” Corporation) produces goods for sale in the Toronto region. Assume we are comparing alternative financing plans for HIP’s Assets, which we know are comprised of current assets (otherwise known as “working capital”) and capital assets.</p><p>As seen below, a total of $1,000,000 worth of financing is required: $400,000 of working capital (i.e. the company’s “current assets”) and $600,000 of capital assets must be financed. To accomplish the financing of the $1,000,000 of assets, we will analyze the financing cost of 3 plans. Assume: short-term interest rates are 6% and long-term interest rates are 10%.</p>` +
@@ -875,7 +1002,7 @@ const P = [
  `<p>As of the close of business March 1, 20YY. Round final answers to 2 decimal places; do not round intermediate calculations.</p>`,
  parts:[
   {q:'Calculate the anticipated one-year interest rate for the 2nd year and the 3rd year, using the expectations hypothesis.', gq:calc([
-    'Expectations hypothesis: a long rate is the average of the expected one-year rates it spans, so ( 1 + y<sub>n</sub> )<sup>n</sup> = ( 1 + y<sub>n−1</sub> )<sup>n−1</sup> × ( 1 + f<sub>n</sub> )',
+    'Expectations hypothesis: a long rate is the average of the expected one-year rates it spans, so:', '( 1 + y<sub>n</sub> )<sup>n</sup> = ( 1 + y<sub>n−1</sub> )<sup>n−1</sup> × ( 1 + f<sub>n</sub> )',
     '2nd year: f<sub>2</sub> = ( 1 + 0.____ )<sup>2</sup> ÷ ( 1 + 0.____ ) − 1 = 0.____ = {{f0}}',
     '3rd year: f<sub>3</sub> = ( 1 + 0.____ )<sup>3</sup> ÷ ( 1 + 0.____ )<sup>2</sup> − 1 = 0.____ = {{f1}}']), f:[{l:'2nd year rate',a:5.92,u:'%',tol:.04},{l:'3rd year rate',a:6.96,u:'%',tol:.04}],
    s:L('Idea','A multi-year yield is the geometric average of the one-year rates expected over its life, so each forward rate can be backed out from two adjacent yields')+L('2nd year formula','(1 + y\u2082)\u00b2 \u00f7 (1 + y\u2081) \u2212 1')+L('2nd year','(1.0585)\u00b2 \u00f7 1.0578 \u2212 1 = 1.12042225 \u00f7 1.0578 \u2212 1 = 0.0592 = 5.92%')+L('3rd year formula','(1 + y\u2083)\u00b3 \u00f7 (1 + y\u2082)\u00b2 \u2212 1')+L('3rd year','(1.0622)\u00b3 \u00f7 (1.0585)\u00b2 \u2212 1 = 1.19844716 \u00f7 1.12042225 \u2212 1 = 0.0696 = 6.96%')}
@@ -965,13 +1092,13 @@ const P = [
    s:L('New investment in AR','180,000 \u00f7 1.5 = 120,000')+L('Return','16,700 (from part a) \u00f7 120,000 = 13.92%')+L('Conclusion','No: 13.92% is less than the desired 15%, so credit should not be extended on this basis')},
   {q:'d. (Problem 24) What if the average collection period is 120 days instead, with 12% uncollectible as in part a?', gq:calc([
     'First compute the new accounts receivable balance.',
-    'Accounts receivable = Average collection period × average daily sales = 120 days × $________ ÷ 365 = 120 days × $______ = $________',
+    'Accounts receivable = Average collection period × average daily sales = 120 days × ( $________ ÷ 365 ) = 120 days × $______ = $________',
     'OR:',
     'Accounts receivable turnover = 365 ÷ Average collection period = 365 days ÷ 120 days = {{f0}}',
     'Accounts receivable = Sales ÷ accounts receivable turnover = $________ ÷ ____ times = {{f1}}',
     'Return on incremental investment = $________ ÷ $________ = 0.____ = {{f2}}']) +
    `<p class="note">Conclusion: extend credit? {{f3}} — ____% is ______ than 15%.</p>`, f:[{l:'Accounts receivable turnover',a:3.04,u:'x',tol:.02},{l:'New investment in accounts receivable',a:59178,u:'$',tol:40},{l:'Return on incremental investment',a:28.22,u:'%',tol:.05},{l:'Extend credit?',a:'Yes',choice:['Yes','No']}],
-   s:L('AR turnover','365 \u00f7 120 days = 3.0417\u00d7')+L('New investment in AR','180,000 \u00f7 3.0417 = 59,178')+L('Return','16,700 (from part a) \u00f7 59,178 = 28.22%')+L('Conclusion','Yes, extend credit: 28.22% is greater than 15%')}
+   s:L('AR turnover','365 \u00f7 120 days = 3.0417 times')+L('New investment in AR','180,000 \u00f7 3.0417 = 59,178')+L('Return','16,700 (from part a) \u00f7 59,178 = 28.22%')+L('Conclusion','Yes, extend credit: 28.22% is greater than 15%')}
  ]},
 {id:'gic', w:7, t:'Annual return on an interest-paying security (GIC)', src:'ICQ Module 7, Annual Return example',
  g:`<ul><li>For the next 90 days, you lend $100,000 evidenced by a GIC (Guaranteed Investment Certificate).</li><li>The borrower has negotiated this 90 day loan with $4,000 in interest payment.</li><li>What is your return?</li></ul>` +
@@ -979,7 +1106,7 @@ const P = [
        'R<sub>ANNUAL</sub> = ( I ÷ P ) × ( 365 ÷ d ) = ( $______ ÷ $________ ) × ( 365 ÷ __ ) = {{p0f0}}']),
  parts:[
   {q:'What is your annualized return?', f:[{l:'Annual return',a:16.22,u:'%',tol:.05}],
-   s:L('Formula','R\u2090\u2099\u2099\u1d58\u2090\u2097 = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 days)')+L('Calculation','(4,000 \u00f7 100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')}
+   s:L('Formula','R_ANNUAL = (Interest \u00f7 Principal) \u00d7 (365 \u00f7 days)')+L('Calculation','(4,000 \u00f7 100,000) \u00d7 (365 \u00f7 90) = 0.04 \u00d7 4.0556 = 0.1622 = 16.22%')}
  ]},
 {id:'discyield', w:7, t:'Discount security: annualized yield vs. annualized effective yield', src:'ICQ Module 7, Rates of Return (Yield Calculations)',
  g:`<p>Annualized Yield: As an example, suppose a financial security sells at 99.531 % of its maturity value, with maturity occurring in 90 days. (Discount traded security)</p><p>The annualized yield that would be quoted in the marketplace is given by the formula:</p>` +
@@ -996,7 +1123,7 @@ const P = [
  ]},
 {id:'eoq-centennial', w:7, t:'Centennial Company: economic ordering quantity, total cost and safety stock', src:'ICQ Module 7, EOQ in-class example',
  g:`<ul><li>Assume the Centennial Company sells 2,000 units each year.</li><li>Every time the Centennial Company makes an order from its supplier, the cost is $8 per order.</li><li>When the Centennial Company stores the inventory in its warehouse, the annual cost of holding that inventory, or the “Carrying Cost of Inventory”, is $0.20 per unit per year.</li></ul>` +
- calc(['EOQ = √( 2 × S × O ÷ C )&nbsp;&nbsp; where S = Total sales in units, O = Ordering cost for each order, C = Carrying cost per unit in dollars']),
+ calc(['EOQ = √( 2 × S × O ÷ C )', 'where S = Total sales in units, O = Ordering cost for each order, C = Carrying cost per unit in dollars']),
  parts:[
   {q:'Economic Ordering Quantity: how many units should Centennial order each time?', gq:calc([
     'EOQ = √( 2 × ______ units × $____ per order ÷ $____ per unit ) = √( $________ units per order ÷ $____ per unit ) = √ ________ units² per order = {{f0}}']),
@@ -1023,7 +1150,7 @@ const P = [
          '____ units × $____ carrying cost per unit = {{f1}} total carrying cost']), f:[{l:'Average inventory',a:150,u:'units'},{l:'Total carrying cost',a:225,u:'$'}],
    s:L('Average inventory','EOQ \u00f7 2 = 300 \u00f7 2 = 150 units')+L('Total carrying cost','150 \u00d7 $1.50 = $225')},
   {q:'c. What is the total inventory cost?', gq:calc(['TC = SO ÷ Q + CQ ÷ 2 = ( ______ × $____ ) ÷ ____ + ( $____ × ____ ) ÷ 2',
-         '&nbsp;&nbsp;&nbsp;= {{f0}} orders × $____ + $____ × ____ units = {{f1}} + {{f2}} = {{f3}}']), f:[{l:'Number of orders',a:75,u:'x'},{l:'Order cost',a:225,u:'$'},{l:'Carrying cost',a:225,u:'$'},{l:'Total inventory cost',a:450,u:'$'}],
+         '&nbsp;&nbsp;&nbsp;= {{f0}} × $____ + $____ × ____ units = {{f1}} + {{f2}} = {{f3}}']), f:[{l:'Number of orders',a:75,u:'orders'},{l:'Order cost',a:225,u:'$'},{l:'Carrying cost',a:225,u:'$'},{l:'Total inventory cost',a:450,u:'$'}],
    s:L('Number of orders','22,500 \u00f7 300 = 75 orders')+L('Order cost','75 \u00d7 $3 = $225')+L('Carrying cost','$1.50 \u00d7 150 = $225')+L('TC','225 + 225 = $450')},
   {q:'d. If an additional 30 units are required as safety stock, what are the new average inventory and new total carrying cost?', gq:calc(['Average inventory = EOQ ÷ 2 + Safety stock = ____ ÷ 2 + ____ = {{f0}}',
          '____ units × $____ carrying cost per unit = {{f1}} total carrying cost']), f:[{l:'New average inventory',a:180,u:'units'},{l:'New total carrying cost',a:270,u:'$'}],
@@ -1035,7 +1162,7 @@ const P = [
  parts:[
   {q:'a-1. What is the EOQ for the second year?', gq:calc(['EOQ = √( 2SO ÷ C ) = √( 2 × ______ × $____ ÷ $____ ) = √ ________ = {{f0}}']), f:[{l:'Economic ordering quantity (EOQ)',a:400,u:'units'}],
    s:L('Formula','EOQ = \u221a(2 \u00d7 S \u00d7 O \u00f7 C)')+L('Calculation','\u221a(2 \u00d7 56,000 \u00d7 2 \u00f7 1.40) = \u221a160,000 = 400 units')},
-  {q:'a-2. How many orders will be placed during the second year?', gq:calc(['Number of orders = S ÷ EOQ = ______ ÷ ____ = {{f0}}']), f:[{l:'Number of orders',a:140,u:'x'}],
+  {q:'a-2. How many orders will be placed during the second year?', gq:calc(['Number of orders = S ÷ EOQ = ______ ÷ ____ = {{f0}}']), f:[{l:'Number of orders',a:140,u:'orders'}],
    s:L('Formula','Number of orders = Annual sales in units \u00f7 EOQ')+L('Calculation','56,000 \u00f7 400 = 140 orders')},
   {q:'a-3. What will average inventory be for the second year?', gq:calc(['Average inventory = EOQ ÷ 2 = ____ ÷ 2 = {{f0}}']), f:[{l:'Average inventory',a:200,u:'units'}],
    s:L('Formula','Average inventory = EOQ \u00f7 2')+L('Calculation','400 \u00f7 2 = 200 units')},
@@ -1186,7 +1313,7 @@ const P = [
  parts:[
   {q:'a. What is the annual rate of interest on the line of credit, including the commitment fee?', gq:calc([
     'Annual commitment fee = 1% × $________ = {{f0}}',
-    'Interest expense = $________ × 10 % × ____ ÷ 365 = {{f1}}',
+    'Interest expense = $________ × 10 % × ( ____ ÷ 365 ) = {{f1}}',
     'Annual rate of interest: R<sub>ANNUAL</sub> = I ÷ P × 365 ÷ d = ( $________ + $________ )* ÷ $________ × 365 ÷ ____ = 0.____ = {{f2}}']) +
    `<p class="note">* Note: the interest cost also includes the commitment fee.</p>`, f:[{l:'Annual commitment fee',a:10000,u:'$'},{l:'Interest expense',a:12328.77,u:'$',tol:5},{l:'Annual rate of interest',a:18.11,u:'%',tol:.1}],
    s:L('Commitment fee','1% \u00d7 $1,000,000 = $10,000')+L('Interest expense','$1,000,000 \u00d7 10% \u00d7 (45 \u00f7 365) = $12,328.77')+L('Formula','R_ANNUAL = [(Commitment fee + Interest expense) \u00f7 Principal] \u00d7 (365 \u00f7 Days)')+L('Calculation','[($10,000 + $12,328.77) \u00f7 $1,000,000] \u00d7 (365 \u00f7 45) = 0.1811 = 18.11%')},
@@ -1206,7 +1333,7 @@ const P = [
  parts:[
   {q:'a. What would be the rate of interest for the bank loan (including the fee)?', gq:calc([
     'Flat fee to establish the line = $________',
-    'Interest expense = $________ × 8 % × ____ ÷ 365 = $________',
+    'Interest expense = $________ × 8 % × ( ____ ÷ 365 ) = $________',
     'R<sub>ANNUAL</sub> = ( $________ + $________ )* ÷ $________ × 365 ÷ ____ = 0.____ = {{f0}}']) +
    `<p class="note">* Note: the interest cost also includes the fee.</p>`, f:[{l:'Rate of interest for bank loan',a:12.06,u:'%',tol:.1}],
    s:L('Interest expense','$500,000 \u00d7 8% \u00d7 (90 \u00f7 365) = $9,863.01')+L('Total financing cost','$5,000 fee + $9,863.01 interest = $14,863.01')+L('Formula','R_ANNUAL = (Total cost \u00f7 Principal) \u00d7 (365 \u00f7 Days)')+L('Calculation','($14,863.01 \u00f7 $500,000) \u00d7 (365 \u00f7 90) = 0.1206 = 12.06%')},
@@ -1235,7 +1362,7 @@ const P = [
 {id:'knowitall', w:8, t:'Prof. Know-It-All: annual rate on a discounted loan', src:'Connect quiz, Module 8 Q4',
  g:`<p>Prof. Know-It-All is going to borrow $5,000 for one year at 14% interest, with the loan discounted. Use 365 days in a year; do not round intermediate calculations; round the final answer to 2 decimal places.</p>`,
  parts:[
-  {q:'What is the annual rate of interest if the loan is discounted?', gq:calc(['Interest I = P × r × d ÷ 365 = $______ × ____ % × 365 ÷ 365 = $______',
+  {q:'What is the annual rate of interest if the loan is discounted?', gq:calc(['Interest I = P × r × ( d ÷ 365 ) = $______ × ____ % × ( 365 ÷ 365 ) = $______',
          'R<sub>DIS</sub> = I ÷ ( P − I ) × 365 ÷ d = $____ ÷ ( $______ − $____ ) × 365 ÷ ____ = 0.____ = {{f0}}']), f:[{l:'Annual rate of interest',a:16.28,u:'%',tol:.1}],
    s:L('Interest','$5,000 \u00d7 14% \u00d7 (365 \u00f7 365) = $700')+L('Formula','R_DIS = [Interest \u00f7 (Principal \u2212 Interest)] \u00d7 (365 \u00f7 Days)')+L('Calculation','[$700 \u00f7 ($5,000 \u2212 $700)] \u00d7 (365 \u00f7 365) = 700 \u00f7 4,300 = 0.1628 = 16.28%')}
  ]},
@@ -1310,45 +1437,45 @@ const FX = {
  earnre:['Earnings from retained earnings','Net income = ending RE − beginning RE + dividends'],
  em_debt:['Equity multiplier from debt ratio','1 ÷ (1 − debt-to-total-assets)'],
  sgr:['Sustainable growth rate','SGR = P(1 − D)(1 + D/E) ÷ [A/S₁ − P(1 − D)(1 + D/E)]'],
- endinv_level:['Ending inventory (level production)','Beginning inventory + Production − Sales'],
- invcarry:['Cost of carrying inventory','Ending inventory (units) × Cost per unit × Period financing rate'],
- monthlyrate:['Monthly financing rate','Annual financing rate ÷ 12 months'],
- intcost:['Total financing (interest) cost','Amount financed × Rate × Number of periods'],
- expclose:['Expected return, close estimate','Simple average of the relevant one-year yields over the period'],
- expexact:['Expected return, exact (geometric mean)','[(1+r₁)(1+r₂)⋯(1+rₙ)]^(1/n) − 1'],
- stlt_split:['Short-term / long-term financing split','% financed by a source = Amount financed by that source ÷ Total assets'],
+ endinv_level:['Ending inventory','Ending Inventory = Beginning Inventory + Production − Sales'],
+ invcarry:['Monthly financing cost of inventory','Monthly financing cost = Ending Inv. × Cost per Unit × Monthly financing rate'],
+ monthlyrate:['Monthly financing rate','Monthly financing rate = quoted Annual financing rate ÷ 12 months per year'],
+ intcost:['Total financing cost','Total financing cost = Amount In $ × Applicable Rate × Number of years'],
+ expclose:['Expected return, close estimate','2 year security = ( r₁ + r₂ ) / 2<br>3 year security = ( r₁ + r₂ + r₃ ) / 3'],
+ expexact:['Expected return, exact calculation (roots)','2 year security = √[ ( 1 + r₁ ) ( 1 + r₂ ) ] − 1<br>3 year security = ∛[ ( 1 + r₁ ) ( 1 + r₂ ) ( 1 + r₃ ) ] − 1<br>4 year security = ∜[ ( 1 + r₁ ) ( 1 + r₂ ) ( 1 + r₃ ) ( 1 + r₄ ) ] − 1'],
+ stlt_split:['Short-term / long-term financing percentage','Short term financing percentage = Short-term amount ÷ Total assets<br>Long term financing percentage = Long-term amount ÷ Total assets'],
  hedge_rule:['Perfectly hedged financing rule','Match short-term funds to temporary (self-liquidating) current assets only; finance permanent current assets and capital assets with long-term funds'],
- finplan_cost:['Total financing cost of a plan','(Short-term amount × short-term rate) + (Long-term amount × long-term rate)'],
- finplan_earn:['Effect of financing cost on earnings','Earnings = (EBIT − Interest expense) × (1 − Tax rate); a higher-cost plan (more long-term debt) lowers earnings'],
+ finplan_cost:['Total financing cost of a plan','Amount to be financed = Assets to be financed × % Short term or Long term<br>Total financing cost = Amount to be financed × Applicable Rate'],
+ finplan_earn:['Financing plans and the effect on earnings','Net Income before Taxes = EBIT − Interest Expense<br>Earnings (Net Income) = Net Income before Taxes − Taxes'],
  financed_amt:['Amount financed by a source','Add up every asset portion assigned to that source (e.g. all capital assets plus a share of current assets)'],
- forwardrate:['Anticipated one-year forward rate','(1 + yield for the longer bond)^(longer term) ÷ (1 + yield for the next-shorter bond)^(shorter term) − 1'],
- concbank_netfunds:['Net funds freed up','(Daily receipts × days of speedup) − Compensating balance required'],
- concbank_savings:['Annual savings from a cash management package','(Net funds freed up × opportunity cost of funds) − Annual fee for the service'],
- credit_income:['Incremental income before taxes (credit decision)','Added sales − Uncollectible accounts − Collection costs − Production and selling costs'],
- ar_investment:['Investment in accounts receivable','Credit sales ÷ Receivables turnover'],
- roi_incremental:['Return on incremental investment','Incremental income before taxes ÷ Investment in accounts receivable'],
- ar_turnover_acp:['Receivables turnover from the collection period','365 ÷ Average collection period (days)'],
- gicyield:['Annual return on an interest-paying security','(Interest payment ÷ Principal amount) × (365 ÷ Days to maturity)'],
- discyield_f:['Annualized yield (discount security)','[(100 − P) ÷ P] × (365 ÷ d), where P is the price as a % of maturity value and d is days to maturity'],
- effyield:['Annualized effective yield (discount security)','(1 + (100 − P) ÷ P)^(365 ÷ d) − 1'],
- eoq:['Economic order quantity (EOQ)','√(2 × S × O ÷ C), where S = annual sales in units, O = cost per order, C = carrying cost per unit'],
- eoq_tc:['Total inventory cost (TC)','(Number of orders × Order cost per order) + (Carrying cost per unit × Average inventory)'],
- eoq_safety:['Average inventory with safety stock','EOQ ÷ 2 + Safety stock'],
- num_orders:['Number of orders per year','Annual sales in units ÷ EOQ'],
- avg_inventory:['Average inventory (no safety stock)','EOQ ÷ 2'],
- inv_investment:['Investment in inventory','Cost of goods sold (or production cost) of the new sales ÷ Inventory turnover'],
- avgdaily_purch:['Average daily purchases','Annual purchases ÷ 365'],
- ap_balance:['Accounts payable balance','Average daily purchases × Accounts payable period (days)'],
- kdis:['Cost of forgoing a cash discount (K_DIS)','K_DIS = [d% ÷ (100% − d%)] × [365 ÷ (net period − discount period, in days)]'],
- ar_bal:['Accounts receivable balance','Average daily credit sales × Average collection period'],
- netcredit:['Net credit position','Accounts receivable balance − Accounts payable balance (positive = net credit extended; negative = net credit received)'],
- bankrate:['Annual rate on interest-bearing bank financing (R_ANNUAL)','R_ANNUAL = (Interest ÷ Principal) × (365 ÷ Days)'],
- bankcost:['Dollar cost of interest-bearing bank financing','Interest cost ($) = Principal × Rate × (Days ÷ 365)'],
- compbal_amt:['Amount to be borrowed with a compensating balance','Amount needed ÷ (1 − Compensating balance %)'],
- compbal_rate:['Annual rate on a compensating balance loan (R_COMP)','R_COMP = [Interest ÷ (Principal − Required balance)] × (365 ÷ Days)'],
- discloan_rate:['Annual rate on a discounted loan (R_DIS)','R_DIS = [Interest ÷ (Principal − Interest)] × (365 ÷ Days)'],
- commitfee:['Annual commitment fee (line of credit)','Commitment fee % × Amount of the line of credit'],
- bankeff:['Effective annual rate on interest-bearing financing','r_EFF = (1 + Interest ÷ Principal)^(365 ÷ Days) − 1']
+ forwardrate:['Anticipated one-year rate (expectations hypothesis)','f<sub>n</sub> = ( 1 + y<sub>n</sub> )<sup>n</sup> ÷ ( 1 + y<sub>n−1</sub> )<sup>n−1</sup> − 1<br>where y<sub>n</sub> = yield on the bond maturing in n years'],
+ concbank_netfunds:['Net funds freed up','Net funds freed up = Daily receipts × Days of speed up − Compensating balance requirement'],
+ concbank_savings:['Annual savings from a cash management package','Annual benefit = Net funds freed up × Opportunity cost of funds<br>Annual savings = Annual benefit − Annual new bank fee'],
+ credit_income:['Annual income before taxes (credit decision)','Annual income before taxes = Added sales − Accounts uncollectible − Collection costs − Production and selling costs'],
+ ar_investment:['Investment in accounts receivable','Accounts Receivable = Sales (on credit) ÷ A/R Turnover = Average Collection Period × Average Daily Sales'],
+ roi_incremental:['Return on incremental investment','Return on incremental investment = Annual income before taxes ÷ Investment in accounts receivable'],
+ ar_turnover_acp:['A/R turnover from the collection period','A/R Turnover = Sales (on credit) ÷ Accounts Receivable = 365 days per year ÷ Average Collection Period'],
+ gicyield:['Annual return from interest paying securities','R_ANNUAL = I ÷ P × 365 ÷ d<br>where I = interest payment, P = principal amount, d = days'],
+ discyield_f:['Annual return (yield) on securities sold at a discount','r = ( 100 − P ) ÷ P × 365 ÷ d<br>where P = price as a % of maturity value, d = days to maturity'],
+ effyield:['Annual effective return (yield) on securities sold at a discount','r_EFF = ( 1 + ( 100 − P ) ÷ P )^( 365 ÷ d ) − 1'],
+ eoq:['Economic ordering quantity (EOQ)','EOQ = √( 2 × S × O ÷ C )<br>where S = Total sales in units, O = Ordering cost for each order, C = Carrying cost per unit in dollars'],
+ eoq_tc:['Total cost of inventory (TC)','TC = Order Cost + Carrying Cost<br>TC = S × O ÷ Q + C × Q ÷ 2<br>where Q = Quantity per order'],
+ eoq_safety:['Average inventory with safety stock','Average inventory = EOQ ÷ 2 + Safety stock<br>New Carrying Cost = Average inventory in units × Carrying cost per unit'],
+ num_orders:['Number of orders per year','Number of orders = S ÷ Q'],
+ avg_inventory:['Average inventory (no safety stock)','Average inventory = EOQ ÷ 2'],
+ inv_investment:['Investment in inventory','Investment in inventory = Cost of goods sold ÷ Inventory turnover'],
+ avgdaily_purch:['Average daily purchases','Average Daily Purchases = Annual Purchases ÷ 365 days per year'],
+ ap_balance:['Accounts payable balance','Accounts Payable = Average Payables Period × Average Daily Purchases = Average Payables Period × ( Annual Purchases ÷ 365 days per year )'],
+ kdis:['Annual cost of forgoing an early-pay cash discount (K_DIS)','K_DIS = d% ÷ ( 100% − d% ) × 365 ÷ ( f(date) − d(date) )<br>where d% = discount %, d(date) = discount period in days, f(date) = final due date in days'],
+ ar_bal:['Accounts receivable balance','Accounts Receivable = Average daily credit sales × average collection period'],
+ netcredit:['Net credit position','Net Credit Position = Accounts Receivable − Accounts Payable<br>positive: net provider of trade credit; negative: net user of trade credit'],
+ bankrate:['Annual cost of interest-bearing bank financing (R_ANNUAL)','R_ANNUAL = I ÷ P × 365 ÷ d<br>where I = interest in $ (including any fees), P = principal, d = days'],
+ bankcost:['Actual $ cost of interest-bearing bank financing','Interest Cost in $ = P × r × ( d ÷ 365 )<br>where P = principal (amount borrowed), r = annual interest rate, d = days'],
+ compbal_amt:['Amount to be borrowed with a compensating balance','Amount to be borrowed = Amount needed ÷ ( 1 − c )<br>where c = compensating balance requirement, as a decimal'],
+ compbal_rate:['Annual interest rate on a compensating balance loan (R_COMP)','R_COMP = I ÷ ( P − B ) × 365 ÷ d<br>R_COMP = I ÷ ( 1 − c ) × 1 ÷ 100 × 365 ÷ d<br>where B = compensating balance in $, c = compensating balance as a decimal'],
+ discloan_rate:['Annual interest rate on a discounted loan (R_DIS)','R_DIS = I ÷ ( P − I ) × 365 ÷ d<br>where I = interest in $, P = principal, d = days'],
+ commitfee:['Annual commitment fee (line of credit)','Annual commitment fee = Commitment fee % × Amount of the line of credit'],
+ bankeff:['Effective annual rate on interest-bearing financing','R_EFF = ( 1 + I ÷ P )^( 365 ÷ d ) − 1<br>where I = interest in $, P = principal, d = days']
 };
 const FXMAP = {
  'kramer-val':[['eac','eps'],['dps','payout','pe','dy']],
@@ -1459,7 +1586,7 @@ function parseNum(s){
   if(!t) return NaN;
   let neg=false;
   if(/^\(.*\)$/.test(t)){ neg=true; t=t.slice(1,-1); }
-  t=t.replace(/[$,\s×x%]|days?|units?|times|m$/g,'').replace(/[–−]/g,'-');
+  t=t.replace(/[$,\s×x%]|days?|units?|orders?|times|m$/g,'').replace(/[–−]/g,'-');
   if(t.startsWith('(')&&t.endsWith(')')){neg=true;t=t.slice(1,-1);}
   const v=Number(t);
   return isNaN(v)?NaN:(neg?-Math.abs(v):v);
@@ -1473,6 +1600,7 @@ function defTol(f){
     case 'x': return .051;
     case 'days': return .6;
     case 'units': return .5;
+    case 'orders': return .5;
     default: return Math.max(.01, a*.005);
   }
 }
@@ -1494,10 +1622,11 @@ const fmt = f => {
   if(f.u==='x') s+='×';
   if(f.u==='days') s+=' days';
   if(f.u==='units') s+=' units';
+  if(f.u==='orders') s+=' orders';
   return a<0 ? '('+s+')' : s;
 };
 const pre = u => (u==='$'||u==='$M')?'$':'';
-const suf = u => ({'%':'%','x':'×','days':'days','units':'units','$M':'M'})[u]||'';
+const suf = u => ({'%':'%','x':'×','days':'days','units':'units','orders':'orders','$M':'M'})[u]||'';
 
 /* ---------- rendering ---------- */
 const $ = s=>document.querySelector(s);
@@ -1677,6 +1806,15 @@ function setField(p,pi,fi,res,raw,shown){
   fb.textContent = res?'Correct':(shown?'Answer: '+fmt(f):'Not quite, try again');
 }
 
+function mathifyDom(p){
+  if(!TESTS[2].weeks.includes(p.w)) return;
+  sheet.querySelectorAll('.fx .ln > b, .steps .ln > b').forEach(el=>{ el.innerHTML = mxPrep(el.innerHTML); });
+  sheet.querySelectorAll('.fx .ln > span, .steps .ln > span, .steps .note, .given .note').forEach(el=>{
+    if(el.querySelector('input,select,.mx')) return;
+    const h = el.innerHTML, m = mathify(h);
+    if(m !== h) el.innerHTML = m;
+  });
+}
 function activateBlanks(p){
   let k = 0;
   sheet.querySelectorAll('.given').forEach(box=>{
@@ -1746,6 +1884,7 @@ function wire(p){
       const pi = Number.isFinite(piN) ? piN : (host?+host.dataset.p:0);
       check(p,pi); });
   });
+  mathifyDom(p);
   activateBlanks(p);
   sheet.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(p,+b.dataset.check));
   sheet.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{

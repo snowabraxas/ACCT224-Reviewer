@@ -22,6 +22,7 @@ Everything lives in a single file, `index.html` — no build step. Open it direc
 - `FX` / `FXMAP` hold the formula library and which formulas apply to which problem part.
 - `WEEK_NUMS` / `WEEKS` / `TESTS` drive every week-aware piece of the UI, so adding a new week is mostly additive.
 - Worksheets are built with `wst()` (tables) and `calc()` (fill-in formula lines). A `{{fN}}` token inside a part's `gq`, or `{{pNfM}}` in a problem's given block, is replaced at render time by that field's own marked input; every other `____` run becomes an unmarked scratch input.
+- Test 2 formulas are written linearly in the source (`I ÷ P × 365 ÷ d`, `√( 2 × S × O ÷ C )`, `∛[ … ]`) and `mathify()` renders them at display time as stacked fractions, radicals and superscripts matching the professor's slides. It runs on worksheet lines, steps, notes and the formula panel; calculator keystroke notes and prose are left as they are.
 
 ## Adding a new week
 

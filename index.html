@@ -181,6 +181,11 @@ table.ws td.fcell{padding:3px 8px}
 .mx .pa{display:inline-flex;align-items:stretch;vertical-align:middle}
 .mx .sp{font-size:.72em;vertical-align:super;line-height:1}
 .mx .sp .fr{margin:0 .04em}
+.mx .pw{display:inline-flex;align-items:flex-start;vertical-align:baseline;margin-right:.03em}
+.mx .pw>.pb{margin-top:.35em}
+.mx .pw.pwf>.pb{margin-top:1.1em}
+.mx .pe{font-size:.68em;line-height:1.15;margin-left:.06em}
+.mx .pe .fr>.nu{padding-bottom:.08em}.mx .pe .fr>.de{padding-top:.08em}
 .ln .mx{font-size:1.05em}
 .partgiven{margin:0 0 12px}
 .parts{margin-top:10px;border-top:2px solid var(--rule)}
@@ -358,7 +363,7 @@ function mxR(n,bare){
     case 'eq':  return n.c.map(x=>mxR(x)).join(' = ');
     case 'add': return n.c.map((x,k)=>(k?' '+x.op+' ':'')+mxR(x.n)).join('');
     case 'sg':  return n.v+mxR(n.c);
-    case 'pw':  return mxR(n.b)+'<sup class="sp">'+mxR(n.e,true)+'</sup>';
+    case 'pw':  { const e=mxR(n.e,true), f=/class="fr"/.test(e); return '<span class="pw'+(f?' pwf':'')+'"><span class="pb">'+mxR(n.b)+'</span><span class="pe">'+(f?mxPa(e,'('):e)+'</span></span>'; }
     case 'rt':  return mxRt(mxR(n.c,true),n.idx);
     case 'mul': {
       const c=n.c;
